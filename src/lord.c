@@ -7,89 +7,56 @@
 
 /* Lord's libs */
 #include "helpers.h"
-#include "lex.h"
+#include "parser.h"
 
-struct Node *parse_fcall(struct Lex *lex)
+void lex_file(char *fpath)
 {
-	struct Node *sym, *arg;
+	struct Lex lex = {0};
+	char *s = NULL;
 
-	if (lex_peek(lex) != T_SYM)
-		return NULL;
+	if ((s = ftoa(fpath)) == NULL) {
+		puts("failed to open file");
+		return;
+	}
 
-	lex_next(lex);
-	sym = lex_node(lex);
+	lex.it = s;
+	while (lex_next(&lex) != T_EOF)
+		lex_print(&lex);
 
-	if (lex_peek(lex) != T_STR)
-		return sym;
-	lex_next(lex);
-	arg = lex_node(lex);
-
-	sym->ns[0] = arg;
-	return sym;
+	free(s);
 }
 
-struct Node *parse_fdef(struct Lex *lex)
+void parse_file(char *fpath)
 {
-	struct Node *sym, *eq, *fcall;
+	struct Lex lex = {0};
+	char *s = NULL;
 
-	if (lex_peek(lex) != T_SYM)
-		return NULL;
+	if ((s = ftoa(fpath)) == NULL) {
+		puts("failed to open file");
+		return;
+	}
 
-	lex_next(lex);
-	sym = lex_node(lex);
+	lex.it = s;
 
-	if (lex_peek(lex) != T_EQ)
-		return sym;
-	lex_next(lex);
-	eq = lex_node(lex);
-	eq->ns[0] = sym;
+	struct Node *ast = parse(&lex);
+	node_print(ast);
+	free_node(ast);
 
-	if ((fcall = parse_fcall(lex)) == NULL)
-		return eq;
-
-	eq->ns[1] = fcall;
-	return eq;
-}
-
-struct Node *parse(struct Lex *lex)
-{
-	return parse_fdef(lex);
+	free(s);
 }
 
 int main(int argc, char **argv)
 {
 	int opt = 0;
-	char *s = NULL;
-	struct Lex lex = {0};
 
 	while ((opt = getopt(argc, argv, "l:p:")) != -1) {
 		switch (opt) {
 		case 'l':
-			if ((s = ftoa(optarg)) == NULL) {
-				puts("failed to open file");
-				return 0;
-			}
-
-			lex.it = s;
-			while (lex_next(&lex) != T_EOF)
-				lex_print(&lex);
-
-			free(s);
+			lex_file(optarg);
 			break;
 
 		case 'p':
-			if ((s = ftoa(optarg)) == NULL) {
-				puts("failed to open file");
-				return 0;
-			}
-
-			lex.it = s;
-
-			struct Node *ast = parse(&lex);
-			node_print(ast);
-			free_node(ast);
-
-			free(s);
+			parse_file(optarg);
 			break;
 
 		default:
