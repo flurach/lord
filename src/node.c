@@ -1,11 +1,13 @@
 #include "node.h"
+#include "token.h"
 
 #define DEFAULT_NS_CAP 50
 
-struct Node *new_node(enum Token type, char *val)
+struct Node *new_node(struct Range range, enum Token type, char *val)
 {
 	struct Node *self = malloc(sizeof(struct Node));
 	*self = (struct Node){
+		.range = range,
 		.type = type,
 		.val = val,
 
@@ -54,7 +56,13 @@ void node_print(struct Node *self)
 	while (x++ < indent)
 		putchar('\t');
 
-	printf("%d '%s'\n", self->type, self->val);
+	printf(
+		"%s '%s' %lu..%lu\n",
+		Token_str[self->type],
+		self->val,
+		self->range.begin,
+		self->range.end
+	);
 
 	indent++;
 	for (size_t i = 0; i < self->ns_len; i++)

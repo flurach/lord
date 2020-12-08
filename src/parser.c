@@ -1,5 +1,6 @@
 #include "parser.h"
-
+#include "lex.h"
+#include "node.h"
 
 struct Node *parse(struct Lex *lex)
 {
@@ -10,23 +11,17 @@ struct Node *parse_fdef(struct Lex *lex)
 {
 	struct Node *sym, *eq, *fcall;
 
-	if (lex_peek(lex) != T_SYM)
+	if ((sym = parse_SYM(lex)) == NULL)
 		return NULL;
 
-	lex_next(lex);
-	sym = lex_node(lex);
-
-	if (lex_peek(lex) != T_EQ)
+	if ((eq = parse_EQ(lex)) == NULL)
 		return sym;
-	lex_next(lex);
-	eq = lex_node(lex);
 	node_push(eq, sym);
 
 	if ((fcall = parse_fcall(lex)) == NULL)
 		return eq;
 	node_push(eq, fcall);
 
-	eq->ns[1] = fcall;
 	return eq;
 }
 
@@ -34,17 +29,23 @@ struct Node *parse_fcall(struct Lex *lex)
 {
 	struct Node *sym, *arg;
 
-	if (lex_peek(lex) != T_SYM)
+	if ((sym = parse_SYM(lex)) == NULL)
 		return NULL;
 
-	lex_next(lex);
-	sym = lex_node(lex);
-
-	if (lex_peek(lex) != T_STR)
+	if ((arg = parse_STR(lex)) == NULL)
 		return sym;
-	lex_next(lex);
-	arg = lex_node(lex);
-
 	node_push(sym, arg);
+
 	return sym;
 }
+
+#define X(token)\
+struct Node *parse_##token(struct Lex *lex)\
+{\
+	if (lex_peek(lex) != T_##token)\
+		return NULL;\
+	lex_next(lex);\
+	return lex_node(lex);\
+}
+	LORD_TOKENS
+#undef X

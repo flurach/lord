@@ -1,15 +1,30 @@
 #ifndef LORD_TOKEN_H
 #define LORD_TOKEN_H
 
+#define LORD_TOKENS\
+	\
+	X(ERR)\
+	X(EOF)\
+	X(EOL)\
+	\
+	X(SYM)\
+	X(STR)\
+	\
+	X(EQ)\
+	\
+	X(LAST)
+
+
 enum Token {
-	T_ERR,
-	T_EOF,
-	T_EOL,
+	#define X(token) T_##token,
+		LORD_TOKENS
+	#undef X
+};
 
-	T_SYM,
-	T_STR,
-
-	T_EQ,
+static const char *Token_str[] = {
+	#define X(token) #token,
+		LORD_TOKENS
+	#undef X
 };
 
 #endif

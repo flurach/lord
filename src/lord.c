@@ -1,48 +1,40 @@
 /* C libs */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
 #include <unistd.h>
 
 /* Lord's libs */
 #include "helpers.h"
+#include "lex.h"
 #include "parser.h"
 
 void lex_file(char *fpath)
 {
-	struct Lex lex = {0};
 	char *s = NULL;
-
 	if ((s = ftoa(fpath)) == NULL) {
 		puts("failed to open file");
 		return;
 	}
 
-	lex.it = s;
-	while (lex_next(&lex) != T_EOF)
-		lex_print(&lex);
+	struct Lex *lex = new_lex(s);
+	while (lex_next(lex) != T_EOF)
+		lex_print(lex);
 
-	free(s);
+	free_lex(lex);
 }
 
 void parse_file(char *fpath)
 {
-	struct Lex lex = {0};
 	char *s = NULL;
-
 	if ((s = ftoa(fpath)) == NULL) {
 		puts("failed to open file");
 		return;
 	}
 
-	lex.it = s;
+	struct Lex *lex = new_lex(s);
+	struct Node *ast = parse(lex);
 
-	struct Node *ast = parse(&lex);
 	node_print(ast);
 	free_node(ast);
-
-	free(s);
+	free_lex(lex);
 }
 
 int main(int argc, char **argv)

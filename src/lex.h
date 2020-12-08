@@ -4,15 +4,28 @@
 #include <ctype.h>
 #include "node.h"
 
+/* lexer class */
 struct Lex {
-	char *it;
+	char *src;
+	size_t i;
+
+	struct Range range;
 	enum Token type;
-	char val[256];
+	char *val;
 };
 
-enum Token lex_next(struct Lex *lex);
-enum Token lex_peek(struct Lex *lex);
-void lex_print(struct Lex *lex);
-struct Node *lex_node(struct Lex *lex);
+/* constructor & destructor */
+struct Lex *new_lex(char *src);
+void free_lex(struct Lex *self);
+
+/* methods */
+char lex_curr(struct Lex *self);
+char lex_char(struct Lex *self);
+enum Token lex_next(struct Lex *self);
+enum Token lex_peek(struct Lex *self);
+struct Node *lex_node(struct Lex *self);
+
+/* debug */
+void lex_print(struct Lex *self);
 
 #endif

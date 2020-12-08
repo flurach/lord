@@ -5,9 +5,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include "token.h"
+#include "common.h"
 
 /* node class */
 struct Node {
+	struct Range range;
 	enum Token type;
 	char *val;
 
@@ -16,7 +18,7 @@ struct Node {
 };
 
 /* constructor & destructor */
-struct Node *new_node(enum Token type, char *val);
+struct Node *new_node(struct Range range, enum Token type, char *val);
 void free_node(struct Node *self);
 
 /* methods */
