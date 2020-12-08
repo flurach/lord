@@ -61,13 +61,5 @@ void lex_print(struct Lex *lex)
 
 struct Node *lex_node(struct Lex *lex)
 {
-	struct Node *node = malloc(sizeof(struct Node));
-
-	node->type = lex->type;
-	strcpy(node->val, lex->val);
-
-	node->ns[0] = NULL;
-	node->ns[1] = NULL;
-
-	return node;
+	return new_node(lex->type, strdup(lex->val));
 }
