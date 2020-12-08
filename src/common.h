@@ -3,8 +3,8 @@
 
 #include <stddef.h>
 
-struct Range {
+typedef struct {
 	size_t begin, end;
-};
+}  Range;
 
 #endif

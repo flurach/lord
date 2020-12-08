@@ -13,10 +13,9 @@ if not stated otherwise below, lord uses [the linux kernel coding style](https:/
 
 
 ## variables & macros
-1. abbreviate these but reserve the meaning.
-2. don't use UPPERCASE letters in `vars`.
-3. don't use lowercase letters in `MACROS`.
-4. don't use globals unless they're constant.
+1. don't use UPPERCASE letters in `vars`.
+2. don't use lowercase letters in `MACROS`.
+3. don't use globals unless they're constant.
 
 
 ## structs

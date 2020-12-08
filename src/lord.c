@@ -3,7 +3,7 @@
 
 /* Lord's libs */
 #include "helpers.h"
-#include "lex.h"
+#include "node.h"
 #include "parser.h"
 
 void lex_file(char *fpath)
@@ -14,11 +14,11 @@ void lex_file(char *fpath)
 		return;
 	}
 
-	struct Lex *lex = new_lex(s);
-	while (lex_next(lex) != T_EOF)
-		lex_print(lex);
+	Lexer *lexer = Lexer_new(s);
+	while (Lexer_next(lexer) != T_EOF)
+		Lexer_print(lexer);
 
-	free_lex(lex);
+	Lexer_free(lexer);
 }
 
 void parse_file(char *fpath)
@@ -29,12 +29,12 @@ void parse_file(char *fpath)
 		return;
 	}
 
-	struct Lex *lex = new_lex(s);
-	struct Node *ast = parse(lex);
+	Lexer *lexer = Lexer_new(s);
+	Node *ast = parse(lexer);
 
-	node_print(ast);
-	free_node(ast);
-	free_lex(lex);
+	Node_print(ast);
+	Node_free(ast);
+	Lexer_free(lexer);
 }
 
 int main(int argc, char **argv)

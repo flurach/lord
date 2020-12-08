@@ -3,52 +3,52 @@
 
 #define DEFAULT_NS_CAP 50
 
-struct Node *new_node(struct Range range, enum Token type, char *val)
+Node *Node_new(Range range, Token type, char *val)
 {
-	struct Node *self = malloc(sizeof(struct Node));
-	*self = (struct Node){
+	Node *self = malloc(sizeof(Node));
+	*self = (Node){
 		.range = range,
 		.type = type,
 		.val = val,
 
 		.ns_len = 0,
 		.ns_cap = DEFAULT_NS_CAP,
-		.ns = calloc(DEFAULT_NS_CAP, sizeof(struct Node*))
+		.ns = calloc(DEFAULT_NS_CAP, sizeof(Node*))
 	};
 	return self;
 }
 
-void free_node(struct Node *self)
+void Node_free(Node *self)
 {
 	if (self == NULL)
 		return;
 
 	for (size_t i = 0; i < self->ns_len; i++)
-		free_node(self->ns[i]);
+		Node_free(self->ns[i]);
 
 	free(self->ns);
 	free(self->val);
 	free(self);
 }
 
-void node_push(struct Node *self, struct Node *child)
+void Node_push(Node *self, Node *child)
 {
 	if (self->ns_len > self->ns_cap / 2) {
 		self->ns_cap *= 2;
-		self->ns = realloc(self->ns, self->ns_cap * sizeof(struct Node*));
+		self->ns = realloc(self->ns, self->ns_cap * sizeof(Node*));
 	}
 
 	self->ns[self->ns_len++] = child;
 }
 
-struct Node *node_pop(struct Node *self)
+Node *Node_pop(Node *self)
 {
 	if (self->ns_len > 0)
 		return self->ns[--self->ns_len];
 	return NULL;
 }
 
-void node_print(struct Node *self)
+void Node_print(Node *self)
 {
 	static int indent = 0;
 
@@ -66,6 +66,6 @@ void node_print(struct Node *self)
 
 	indent++;
 	for (size_t i = 0; i < self->ns_len; i++)
-		node_print(self->ns[i]);
+		Node_print(self->ns[i]);
 	indent--;
 }

@@ -1,14 +1,14 @@
 #ifndef LORD_PARSER_H
 #define LORD_PARSER_H
 
-#include "lex.h"
+#include "lexer.h"
 
-struct Node *parse(struct Lex *lex);
+Node *parse(Lexer *lexer);
 
-struct Node *parse_fdef(struct Lex *lex);
-struct Node *parse_fcall(struct Lex *lex);
+Node *parse_fdef(Lexer *lexer);
+Node *parse_fcall(Lexer *lexer);
 
-#define X(token) struct Node *parse_##token(struct Lex *lex);
+#define X(token) Node *parse_##token(Lexer *lexer);
 	LORD_TOKENS
 #undef X
 

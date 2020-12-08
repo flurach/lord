@@ -1,51 +1,49 @@
 #include "parser.h"
-#include "lex.h"
-#include "node.h"
 
-struct Node *parse(struct Lex *lex)
+Node *parse(Lexer *lexer)
 {
-	return parse_fdef(lex);
+	return parse_fdef(lexer);
 }
 
-struct Node *parse_fdef(struct Lex *lex)
+Node *parse_fdef(Lexer *lexer)
 {
-	struct Node *sym, *eq, *fcall;
+	Node *sym, *eq, *fcall;
 
-	if ((sym = parse_SYM(lex)) == NULL)
+	if ((sym = parse_SYM(lexer)) == NULL)
 		return NULL;
 
-	if ((eq = parse_EQ(lex)) == NULL)
+	if ((eq = parse_EQ(lexer)) == NULL)
 		return sym;
-	node_push(eq, sym);
+	Node_push(eq, sym);
 
-	if ((fcall = parse_fcall(lex)) == NULL)
+	if ((fcall = parse_fcall(lexer)) == NULL)
 		return eq;
-	node_push(eq, fcall);
+	Node_push(eq, fcall);
 
 	return eq;
 }
 
-struct Node *parse_fcall(struct Lex *lex)
+Node *parse_fcall(Lexer *lexer)
 {
-	struct Node *sym, *arg;
+	Node *sym, *arg;
 
-	if ((sym = parse_SYM(lex)) == NULL)
+	if ((sym = parse_SYM(lexer)) == NULL)
 		return NULL;
 
-	if ((arg = parse_STR(lex)) == NULL)
+	if ((arg = parse_STR(lexer)) == NULL)
 		return sym;
-	node_push(sym, arg);
+	Node_push(sym, arg);
 
 	return sym;
 }
 
 #define X(token)\
-struct Node *parse_##token(struct Lex *lex)\
+Node *parse_##token(Lexer *lexer)\
 {\
-	if (lex_peek(lex) != T_##token)\
+	if (Lexer_peek(lexer) != T_##token)\
 		return NULL;\
-	lex_next(lex);\
-	return lex_node(lex);\
+	Lexer_next(lexer);\
+	return Node_new(lexer->range, lexer->type, strdup(lexer->val));\
 }
 	LORD_TOKENS
 #undef X

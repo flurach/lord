@@ -8,24 +8,25 @@
 #include "common.h"
 
 /* node class */
+typedef struct Node Node;
 struct Node {
-	struct Range range;
-	enum Token type;
+	Range range;
+	Token type;
 	char *val;
 
 	size_t ns_len, ns_cap;
-	struct Node **ns;
+	Node **ns;
 };
 
 /* constructor & destructor */
-struct Node *new_node(struct Range range, enum Token type, char *val);
-void free_node(struct Node *self);
+Node *Node_new(Range range, Token type, char *val);
+void Node_free(Node *self);
 
 /* methods */
-void node_push(struct Node *self, struct Node *child);
-struct Node *node_pop(struct Node *self);
+void Node_push(Node *self, Node *child);
+Node *Node_pop(Node *self);
 
 /* debugging */
-void node_print(struct Node *self);
+void Node_print(Node *self);
 
 #endif
