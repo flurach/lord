@@ -53,9 +53,14 @@ Token Lexer_next(Lexer *self)
 
 	/* symbols */
 	else if (isalpha(Lexer_curr(self))) {
-		self->type = T_SYM;
 		while (isalpha(Lexer_curr(self)))
 			*vi++ = Lexer_char(self);
+		*vi = '\0';
+
+		if (strcmp(self->val, "fn") == 0)
+			self->type = T_FN;
+		else
+			self->type = T_SYM;
 	}
 
 	/* strings */

@@ -3,14 +3,23 @@
 
 #define LORD_TOKENS\
 	\
+	/* invisibles */\
 	X(ERR)\
 	X(EOF)\
 	X(EOL)\
 	\
+	/* literals */\
 	X(SYM)\
 	X(STR)\
 	\
+	/* keywords */\
+	X(FN)\
+	\
+	/* operators */\
 	X(EQ)\
+	\
+	/* AST specific */\
+	X(CALL)\
 	\
 	X(LAST)
 

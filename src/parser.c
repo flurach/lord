@@ -7,34 +7,41 @@ Node *parse(Lexer *lexer)
 
 Node *parse_fdef(Lexer *lexer)
 {
-	Node *sym, *eq, *fcall;
+	Node *fn, *sym, *eq, *call;
 
-	if ((sym = parse_SYM(lexer)) == NULL)
+	if ((fn = parse_FN(lexer)) == NULL)
 		return NULL;
 
+	if ((sym = parse_SYM(lexer)) == NULL)
+		return fn;
+	Node_push(fn, sym);
+
 	if ((eq = parse_EQ(lexer)) == NULL)
-		return sym;
-	Node_push(eq, sym);
+		return fn;
+	Node_push(fn, eq);
 
-	if ((fcall = parse_fcall(lexer)) == NULL)
-		return eq;
-	Node_push(eq, fcall);
+	if ((call = parse_call(lexer)) == NULL)
+		return fn;
+	Node_push(fn, call);
 
-	return eq;
+	return fn;
 }
 
-Node *parse_fcall(Lexer *lexer)
+Node *parse_call(Lexer *lexer)
 {
-	Node *sym, *arg;
+	Node *call, *sym, *arg;
 
 	if ((sym = parse_SYM(lexer)) == NULL)
 		return NULL;
 
 	if ((arg = parse_STR(lexer)) == NULL)
 		return sym;
-	Node_push(sym, arg);
 
-	return sym;
+	call = Node_new(sym->range, T_CALL, NULL);
+	Node_push(call, sym);
+	Node_push(call, arg);
+
+	return call;
 }
 
 #define X(token)\
