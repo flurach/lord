@@ -2,7 +2,31 @@
 
 Node *parse(Lexer *lexer)
 {
-	return parse_fdef(lexer);
+	Node *module = Node_new((Range){0, 0}, T_MOD, NULL);
+	Node *result;
+
+	while (result != NULL) {
+		if ((result = parse_ext(lexer)) != NULL)
+			Node_push(module, result);
+		else if ((result = parse_fdef(lexer)) != NULL)
+			Node_push(module, result);
+	}
+
+	return module;
+}
+
+Node *parse_ext(Lexer *lexer)
+{
+	Node *ext, *sym;
+
+	if ((ext = parse_EXT(lexer)) == NULL)
+		return NULL;
+
+	if ((sym = parse_SYM(lexer)) == NULL)
+		return ext;
+
+	Node_push(ext, sym);
+	return ext;
 }
 
 Node *parse_fdef(Lexer *lexer)

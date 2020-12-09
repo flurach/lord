@@ -14,11 +14,13 @@
 	\
 	/* keywords */\
 	X(FN)\
+	X(EXT)\
 	\
 	/* operators */\
 	X(EQ)\
 	\
 	/* AST specific */\
+	X(MOD)\
 	X(CALL)\
 	\
 	X(LAST)

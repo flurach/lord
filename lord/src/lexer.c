@@ -59,6 +59,8 @@ Token Lexer_next(Lexer *self)
 
 		if (strcmp(self->val, "fn") == 0)
 			self->token = T_FN;
+		else if (strcmp(self->val, "ext") == 0)
+			self->token = T_EXT;
 		else
 			self->token = T_SYM;
 	}
