@@ -10,7 +10,7 @@ typedef struct {
 	size_t i;
 
 	Range range;
-	Token type;
+	Token token;
 	char *val;
 } Lexer;
 

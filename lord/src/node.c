@@ -3,12 +3,12 @@
 
 #define DEFAULT_NS_CAP 50
 
-Node *Node_new(Range range, Token type, char *val)
+Node *Node_new(Range range, Token token, char *val)
 {
 	Node *self = malloc(sizeof(Node));
 	*self = (Node){
 		.range = range,
-		.type = type,
+		.token = token,
 		.val = val,
 
 		.ns_len = 0,
@@ -58,7 +58,7 @@ void Node_print(Node *self)
 
 	printf(
 		"%s '%s' %lu..%lu\n",
-		Token_str[self->type],
+		Token_str[self->token],
 		self->val,
 		self->range.begin,
 		self->range.end

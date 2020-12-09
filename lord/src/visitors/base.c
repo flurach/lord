@@ -7,7 +7,6 @@ Visitor *Visitor_new()
 	return self;
 }
 
-
 void Visitor_free(Visitor *self)
 {
 	free(self);
@@ -15,6 +14,6 @@ void Visitor_free(Visitor *self)
 
 void Visitor_visit(Visitor *self, Node *node)
 {
-	if (self->callbacks[node->type] != NULL)
-		self->callbacks[node->type](self, node);
+	if (self->callbacks[node->token] != NULL)
+		self->callbacks[node->token](self, node);
 }

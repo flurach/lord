@@ -8,7 +8,7 @@ Lexer *Lexer_new(char *src)
 		.i = 0,
 
 		.range = {0, 0},
-		.type = T_EOF,
+		.token = T_EOF,
 		.val = strdup(src)
 	};
 	self->val[0] = '\0';
@@ -58,14 +58,14 @@ Token Lexer_next(Lexer *self)
 		*vi = '\0';
 
 		if (strcmp(self->val, "fn") == 0)
-			self->type = T_FN;
+			self->token = T_FN;
 		else
-			self->type = T_SYM;
+			self->token = T_SYM;
 	}
 
 	/* strings */
 	else if (Lexer_curr(self) == '\'' || Lexer_curr(self) == '\"') {
-		self->type = T_STR;
+		self->token = T_STR;
 		const char pair = Lexer_char(self);
 		while (Lexer_curr(self) != pair && Lexer_curr(self) != '\0')
 			*vi++ = Lexer_char(self);
@@ -74,33 +74,33 @@ Token Lexer_next(Lexer *self)
 
 	/* operators */
 	else if (Lexer_curr(self) == '=') {
-		self->type = T_EQ;
+		self->token = T_EQ;
 		*vi++ = Lexer_char(self);
 	}
 
 	/* end of file */
 	else if (Lexer_curr(self) == '\0') {
-		self->type = T_EOF;
+		self->token = T_EOF;
 	}
 
 	self->range.end = self->i;
 	*vi = '\0';
-	return self->type;
+	return self->token;
 }
 
 Token Lexer_peek(Lexer *self)
 {
 	size_t i = self->i;
-	Token type = Lexer_next(self);
+	Token token = Lexer_next(self);
 	self->i = i;
-	return type;
+	return token;
 }
 
 void Lexer_print(Lexer *self)
 {
 	printf(
 		"%s '%s' %lu..%lu\n",
-		Token_str[self->type],
+		Token_str[self->token],
 		self->val,
 		self->range.begin,
 		self->range.end

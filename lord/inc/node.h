@@ -11,7 +11,7 @@
 typedef struct Node Node;
 struct Node {
 	Range range;
-	Token type;
+	Token token;
 	char *val;
 
 	size_t ns_len, ns_cap;
@@ -19,7 +19,7 @@ struct Node {
 };
 
 /* constructor & destructor */
-Node *Node_new(Range range, Token type, char *val);
+Node *Node_new(Range range, Token token, char *val);
 void Node_free(Node *self);
 
 /* methods */

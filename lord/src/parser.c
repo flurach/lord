@@ -44,13 +44,13 @@ Node *parse_call(Lexer *lexer)
 	return call;
 }
 
-#define X(token)\
-Node *parse_##token(Lexer *lexer)\
+#define X(t)\
+Node *parse_##t(Lexer *lexer)\
 {\
-	if (Lexer_peek(lexer) != T_##token)\
+	if (Lexer_peek(lexer) != T_##t)\
 		return NULL;\
 	Lexer_next(lexer);\
-	return Node_new(lexer->range, lexer->type, strdup(lexer->val));\
+	return Node_new(lexer->range, lexer->token, strdup(lexer->val));\
 }
 	LORD_TOKENS
 #undef X
