@@ -1,18 +1,15 @@
 #include "visitors/base.h"
 
-Visitor *Visitor_new(void *payload)
+Visitor *Visitor_new()
 {
 	Visitor *self = malloc(sizeof(Visitor));
 	memset(self, 0, sizeof(Visitor));
-	self->payload = payload;
 	return self;
 }
 
 
-void Visitor_free(Visitor *self, void (*payload_freer)(void *))
+void Visitor_free(Visitor *self)
 {
-	if (payload_freer != NULL)
-		payload_freer(self->payload);
 	free(self);
 }
 

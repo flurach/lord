@@ -2,7 +2,7 @@
 
 Visitor *SimpleVisitor_new()
 {
-	Visitor *self = Visitor_new(NULL);
+	Visitor *self = Visitor_new();
 
 	self->callbacks[T_FN]   = SimpleVisitor_FN;
 	self->callbacks[T_CALL] = SimpleVisitor_CALL;

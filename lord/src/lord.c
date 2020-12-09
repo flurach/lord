@@ -52,7 +52,7 @@ void simple_file(char *fpath)
 	Visitor *simple_visitor = SimpleVisitor_new();
 	Visitor_visit(simple_visitor, ast);
 
-	Visitor_free(simple_visitor, NULL);
+	Visitor_free(simple_visitor);
 	Node_free(ast);
 	Lexer_free(lexer);
 }

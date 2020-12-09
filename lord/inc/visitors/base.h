@@ -11,8 +11,8 @@ struct Visitor {
 };
 
 /* constructor & destructor */
-Visitor *Visitor_new(void *payload);
-void Visitor_free(Visitor *self, void (*payload_freer)(void *));
+Visitor *Visitor_new();
+void Visitor_free(Visitor *self);
 
 /* methods */
 void Visitor_visit(Visitor *self, Node *node);

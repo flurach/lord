@@ -1,5 +1,6 @@
 workspace "lord"
 	configurations { "debug", "release" }
+	warnings "extra"
 
 	BASE_DIR = path.getabsolute(".")
 	targetdir (BASE_DIR .. "/bin")
