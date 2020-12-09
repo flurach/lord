@@ -1,2 +1,2 @@
 idc:
-	gcc -Wall -Wextra src/*.c -o lord.out
+	gcc -Wall -Wextra `find src -type f -name "**.c"` -o lord.out

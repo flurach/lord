@@ -3,8 +3,9 @@
 
 /* Lord's libs */
 #include "helpers.h"
-#include "node.h"
 #include "parser.h"
+#include "visitors/all.h"
+#include "visitors/base.h"
 
 void lex_file(char *fpath)
 {
@@ -37,11 +38,30 @@ void parse_file(char *fpath)
 	Lexer_free(lexer);
 }
 
+void simple_file(char *fpath)
+{
+	char *s = NULL;
+	if ((s = ftoa(fpath)) == NULL) {
+		puts("failed to open file");
+		return;
+	}
+
+	Lexer *lexer = Lexer_new(s);
+	Node *ast = parse(lexer);
+
+	Visitor *simple_visitor = SimpleVisitor_new();
+	Visitor_visit(simple_visitor, ast);
+
+	Visitor_free(simple_visitor, NULL);
+	Node_free(ast);
+	Lexer_free(lexer);
+}
+
 int main(int argc, char **argv)
 {
 	int opt = 0;
 
-	while ((opt = getopt(argc, argv, "l:p:")) != -1) {
+	while ((opt = getopt(argc, argv, "l:p:s:")) != -1) {
 		switch (opt) {
 		case 'l':
 			lex_file(optarg);
@@ -49,6 +69,10 @@ int main(int argc, char **argv)
 
 		case 'p':
 			parse_file(optarg);
+			break;
+
+		case 's':
+			simple_file(optarg);
 			break;
 
 		default:
