@@ -48,8 +48,12 @@ void simple_file(char *fpath)
 
 	Lexer *lexer = Lexer_new(s);
 	Node *ast = parse(lexer);
+	CompState *state = CompState_new();
 
-	Visitor *simple_visitor = SimpleVisitor_new();
+	Visitor *literals_visitor = LiteralsVisitor_new(state);
+	Visitor_visit(literals_visitor, ast);
+
+	Visitor *simple_visitor = SimpleVisitor_new(state);
 	Visitor_visit(simple_visitor, ast);
 
 	Visitor_free(simple_visitor);

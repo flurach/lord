@@ -2,5 +2,6 @@
 #define LORD_VISITORS_ALL_H
 
 #include "simple.h"
+#include "literals.h"
 
 #endif

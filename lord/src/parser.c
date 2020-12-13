@@ -3,13 +3,15 @@
 Node *parse(Lexer *lexer)
 {
 	Node *module = Node_new((Range){0, 0}, T_MOD, NULL);
-	Node *result;
 
-	while (result != NULL) {
+	while (1) {
+		Node *result = NULL;
 		if ((result = parse_ext(lexer)) != NULL)
 			Node_push(module, result);
 		else if ((result = parse_fdef(lexer)) != NULL)
 			Node_push(module, result);
+		else
+			break;
 	}
 
 	return module;

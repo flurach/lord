@@ -1,9 +1,10 @@
 #include "visitors/base.h"
 
-Visitor *Visitor_new()
+Visitor *Visitor_new(CompState *state)
 {
 	Visitor *self = malloc(sizeof(Visitor));
 	memset(self, 0, sizeof(Visitor));
+	self->state = state;
 	return self;
 }
 

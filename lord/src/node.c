@@ -7,6 +7,7 @@ Node *Node_new(Range range, Token token, char *val)
 {
 	Node *self = malloc(sizeof(Node));
 	*self = (Node){
+		.id = 0,
 		.range = range,
 		.token = token,
 		.val = val,

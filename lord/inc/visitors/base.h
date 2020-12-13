@@ -2,16 +2,17 @@
 #define LORD_VISITORS_BASE_H
 
 #include "../node.h"
+#include "comp_state.h"
 
 /* visitor class */
 typedef struct Visitor Visitor;
 struct Visitor {
-	void *payload;
+	CompState *state;
 	void (*callbacks[T_LAST])(Visitor*, Node*);
 };
 
 /* constructor & destructor */
-Visitor *Visitor_new();
+Visitor *Visitor_new(CompState *state);
 void Visitor_free(Visitor *self);
 
 /* methods */

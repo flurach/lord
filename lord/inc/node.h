@@ -10,6 +10,7 @@
 /* node class */
 typedef struct Node Node;
 struct Node {
+	int id;
 	Range range;
 	Token token;
 	char *val;

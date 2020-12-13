@@ -5,9 +5,10 @@
 #include "base.h"
 
 /* constructor */
-Visitor *SimpleVisitor_new();
+Visitor *SimpleVisitor_new(CompState *state);
 
 /* methods */
+void SimpleVisitor_compile_literals(Visitor *self);
 void SimpleVisitor_MOD(Visitor *self, Node *node);
 void SimpleVisitor_EXT(Visitor *self, Node *node);
 void SimpleVisitor_FN(Visitor *self, Node *node);
