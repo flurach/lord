@@ -2,10 +2,9 @@
 #include <unistd.h>
 
 /* Lord's libs */
-#include "helpers.h"
-#include "parser.h"
+#include <helpers.h>
+#include <parser.h>
 #include "visitors/all.h"
-#include "visitors/base.h"
 
 void lex_file(char *fpath)
 {

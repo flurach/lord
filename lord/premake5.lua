@@ -1,5 +1,5 @@
 project "lord"
-	kind "ConsoleApp"
+	kind "SharedLib"
 	language "C"
 
 	includedirs { "inc" }

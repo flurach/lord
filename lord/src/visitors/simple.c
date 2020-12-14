@@ -18,7 +18,7 @@ void SimpleVisitor_compile_literals(Visitor *self)
 
 	size_t i;
 	for (i = 0; i < self->state->ls_len; i++) {
-		printf(".l%d:\n", i);
+		printf(".l%lu:\n", i);
 		printf("  .string \"%s\"\n", self->state->ls[i]->val);
 	}
 

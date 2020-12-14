@@ -14,3 +14,4 @@ workspace "lord"
 
 
 include "lord"
+include "cli"
