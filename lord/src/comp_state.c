@@ -2,6 +2,9 @@
 
 #define LORD_COMPSTATE_DEFAULT_LS_CAP 50
 
+/*!
+ * Constructor
+ */
 CompState *CompState_new()
 {
 	CompState *self = malloc(sizeof(CompState));
