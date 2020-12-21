@@ -8,6 +8,7 @@ Visitor *LiteralsVisitor_new(CompState *state)
 	self->callbacks[T_FN]   = LiteralsVisitor_FN;
 	self->callbacks[T_CALL] = LiteralsVisitor_CALL;
 	self->callbacks[T_STR]  = LiteralsVisitor_STR;
+	self->callbacks[T_SEMI] = LiteralsVisitor_SEMI;
 
 	return self;
 }
@@ -35,4 +36,10 @@ void LiteralsVisitor_STR(Visitor *self, Node *node)
 		self->state,
 		Lit_new(strdup(node->val))
 	);
+}
+
+void LiteralsVisitor_SEMI(Visitor *self, Node *node)
+{
+	Visitor_visit(self, node->ns[0]);
+	Visitor_visit(self, node->ns[1]);
 }

@@ -12,5 +12,6 @@ void LiteralsVisitor_MOD(Visitor *self, Node *node);
 void LiteralsVisitor_FN(Visitor *self, Node *node);
 void LiteralsVisitor_CALL(Visitor *self, Node *node);
 void LiteralsVisitor_STR(Visitor *self, Node *node);
+void LiteralsVisitor_SEMI(Visitor *self, Node *node);
 
 #endif

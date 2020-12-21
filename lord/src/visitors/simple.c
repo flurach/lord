@@ -8,6 +8,7 @@ Visitor *SimpleVisitor_new(CompState *state)
 	self->callbacks[T_EXT]  = SimpleVisitor_EXT;
 	self->callbacks[T_FN]   = SimpleVisitor_FN;
 	self->callbacks[T_CALL] = SimpleVisitor_CALL;
+	self->callbacks[T_SEMI] = SimpleVisitor_SEMI;
 
 	return self;
 }
@@ -55,4 +56,10 @@ void SimpleVisitor_CALL(Visitor *self, Node *node)
 {
 	printf("  leaq .l%d(%%rip), %%rdi\n", node->ns[1]->id);
 	printf("  call %s@PLT\n", node->ns[0]->val);
+}
+
+void SimpleVisitor_SEMI(Visitor *self, Node *node)
+{
+	Visitor_visit(self, node->ns[0]);
+	Visitor_visit(self, node->ns[1]);
 }

@@ -18,6 +18,7 @@
 	\
 	/* operators */\
 	X(EQ)\
+	X(SEMI)\
 	\
 	/* AST specific */\
 	X(MOD)\

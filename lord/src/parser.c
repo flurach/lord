@@ -33,7 +33,7 @@ Node *parse_ext(Lexer *lexer)
 
 Node *parse_fdef(Lexer *lexer)
 {
-	Node *fn, *sym, *eq, *call;
+	Node *fn, *sym, *eq, *semibind;
 
 	if ((fn = parse_FN(lexer)) == NULL)
 		return NULL;
@@ -46,9 +46,9 @@ Node *parse_fdef(Lexer *lexer)
 		return fn;
 	Node_push(fn, eq);
 
-	if ((call = parse_call(lexer)) == NULL)
+	if ((semibind = parse_semibind(lexer)) == NULL)
 		return fn;
-	Node_push(fn, call);
+	Node_push(fn, semibind);
 
 	return fn;
 }
@@ -68,6 +68,24 @@ Node *parse_call(Lexer *lexer)
 	Node_push(call, arg);
 
 	return call;
+}
+
+Node *parse_semibind(Lexer *lexer)
+{
+	Node *lcall, *semi, *semibind;
+
+	if ((lcall = parse_call(lexer)) == NULL)
+		return NULL;
+
+	if ((semi = parse_SEMI(lexer)) == NULL)
+		return lcall;
+	Node_push(semi, lcall);
+
+	if ((semibind = parse_semibind(lexer)) == NULL)
+		return semi;
+	Node_push(semi, semibind);
+
+	return semi;
 }
 
 #define X(t)\

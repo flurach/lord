@@ -79,6 +79,10 @@ Token Lexer_next(Lexer *self)
 		self->token = T_EQ;
 		*vi++ = Lexer_char(self);
 	}
+	else if (Lexer_curr(self) == ';') {
+		self->token = T_SEMI;
+		*vi++ = Lexer_char(self);
+	}
 
 	/* end of file */
 	else if (Lexer_curr(self) == '\0') {
