@@ -1,0 +1,3 @@
+# `cli` Documentation
+
+Currently empty.

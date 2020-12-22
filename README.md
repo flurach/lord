@@ -12,4 +12,4 @@ $ premake5 gmake
 $ make
 ```
 
-this build the `bin/lord` executable.
+this builds the `bin/lord` executable.

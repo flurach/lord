@@ -1,0 +1,3 @@
+# `lc` Documentation
+
+Currently empty.

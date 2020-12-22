@@ -1,0 +1,3 @@
+# Resources
+
+Currently empty, shouldn't too long to fill tho. Sit tight...
