@@ -1,4 +1,4 @@
-bin/
-docs/refs
+_bin/
+_docs/refs
 **Makefile
 tags

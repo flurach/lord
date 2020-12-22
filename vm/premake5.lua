@@ -1,4 +1,4 @@
-project "lord"
+project "vm"
 	kind "SharedLib"
 	language "C"
 

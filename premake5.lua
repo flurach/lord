@@ -3,8 +3,8 @@ workspace "lord"
 	warnings "extra"
 
 	BASE_DIR = path.getabsolute(".")
-	targetdir (BASE_DIR .. "/bin")
-	objdir (BASE_DIR .. "/bin/obj")
+	targetdir (BASE_DIR .. "/_bin")
+	objdir (BASE_DIR .. "/_bin/obj")
 
 	filter "configurations:debug"
 		symbols "on"
@@ -13,5 +13,6 @@ workspace "lord"
 		optimize "on"
 
 
-include "lord"
+include "vm"
+include "lc"
 include "cli"
