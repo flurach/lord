@@ -7,9 +7,9 @@ if not stated otherwise below, lord uses [the linux kernel coding style](https:/
 
 
 ## file structure
-1. use that editorconfig file even if you can't for some reason.
+1. use that `.editorconfig` file even if you can't for some reason.
 2. surround header files with `#ifndef` blocks.
-3. all source files except `src/lord.c` must have a corresponding header file.
+3. all source files except `cli/cli.c` must have a corresponding header file.
 
 
 ## variables & macros
