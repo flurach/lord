@@ -1,7 +1,10 @@
-<p align="center"><img src="logo.jpg" width="160px"/></p>
 <h1 align="center">
+	<img src="logo.jpg" width="160px"/>
+	<br/>
 	Lord
-	<p align="center"><i>My pet programming language.</i></p>
+	<p style="font-size: 16px;" align="center">
+		<i>My pet programming language.</i>
+	</p>
 </h1>
 
 
