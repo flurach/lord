@@ -3,9 +3,7 @@
 	<br/>
 	Lord
 	<br/>
-	<span style="font-size: 16px">
-		<i>My pet programming language.</i>
-	</span>
+	<i style="font-size: 16px">My pet programming language.</i>
 </h1>
 
 
