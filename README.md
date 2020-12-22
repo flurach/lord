@@ -1,7 +1,7 @@
 <p align="center"><img src="logo.jpg" width="160px"/></p>
 
 
-## Lord
+# Lord
 
 > My pet programming language.
 
