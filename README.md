@@ -1,11 +1,9 @@
-<h1 align="center">
-	<img src="logo.jpg" width="160px"/>
-	<br/>
-	Lord
-	<p style="font-size: 16px;" align="center">
-		<i>My pet programming language.</i>
-	</p>
-</h1>
+<p align="center"><img src="logo.jpg" width="160px"/></p>
+
+
+## Lord
+
+> My pet programming language.
 
 
 ## Building
