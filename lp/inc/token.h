@@ -1,5 +1,5 @@
-#ifndef LORD_TOKEN_H
-#define LORD_TOKEN_H
+#ifndef LORD_LP_TOKEN_H
+#define LORD_LP_TOKEN_H
 
 #define LORD_TOKENS\
 	\

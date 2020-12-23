@@ -1,5 +1,5 @@
-#ifndef LORD_NODE_H
-#define LORD_NODE_H
+#ifndef LORD_LP_NODE_H
+#define LORD_LP_NODE_H
 
 #include <stdio.h>
 #include <stdlib.h>

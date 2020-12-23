@@ -1,5 +1,5 @@
-#ifndef LORD_PARSER_H
-#define LORD_PARSER_H
+#ifndef LORD_LP_PARSER_H
+#define LORD_LP_PARSER_H
 
 #include "lexer.h"
 

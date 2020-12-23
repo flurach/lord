@@ -1,5 +1,5 @@
-#ifndef LORD_LEX_H
-#define LORD_LEX_H
+#ifndef LORD_LP_LEX_H
+#define LORD_LP_LEX_H
 
 #include <ctype.h>
 #include "node.h"

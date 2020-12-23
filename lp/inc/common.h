@@ -1,5 +1,5 @@
-#ifndef LORD_COMMON_H
-#define LORD_COMMON_H
+#ifndef LORD_LP_COMMON_H
+#define LORD_LP_COMMON_H
 
 #include <stddef.h>
 
