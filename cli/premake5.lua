@@ -4,7 +4,7 @@ project "cli"
 	targetname "lord"
 
 	includedirs {
-		"inc",
+		"src",
 		(BASE_DIR .. "/lc/src"),
 		(BASE_DIR .. "/lp/src"),
 		(BASE_DIR .. "/vm/src"),
