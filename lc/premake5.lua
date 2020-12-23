@@ -3,7 +3,6 @@ project "lc"
 	language "C"
 
 	includedirs {
-		"inc",
-		(BASE_DIR .. "/lp/inc")
+		(BASE_DIR .. "/lp/src")
 	}
 	files { "src/**.c" }
