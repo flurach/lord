@@ -1,0 +1,3 @@
+# `lp` Documentation
+
+Currently empty.

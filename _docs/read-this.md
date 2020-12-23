@@ -9,11 +9,12 @@ Here, let me show you how simple it is!
 Every folder within the root directory, is a __module__.
 Unless it starts with an `_` character.
 
-Currenly there are 3 modules:
+Currenly there are 4 modules:
 
-* [cli](mods/cli), Lord's command line interface
-* [lc](mods/lc),   The Lord compiler.
 * [vm](mods/vm),   Lord's virtual machine.
+* [lp](mods/lp),   The Lord parser.
+* [lc](mods/lc),   The Lord compiler.
+* [cli](mods/cli), Lord's command line interface
 
 You can click on the links to go to the respective modules' documentation.
 
