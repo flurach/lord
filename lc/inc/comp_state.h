@@ -2,8 +2,8 @@
  *  @brief This file implements the lord lexer.
  */
 
-#ifndef LORD_COMP_STATE_H
-#define LORD_COMP_STATE_H
+#ifndef LORD_LC_COMP_STATE_H
+#define LORD_LC_COMP_STATE_H
 
 #include "lit.h"
 

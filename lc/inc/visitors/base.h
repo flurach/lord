@@ -1,5 +1,5 @@
-#ifndef LORD_VISITORS_BASE_H
-#define LORD_VISITORS_BASE_H
+#ifndef LORD_LC_VISITORS_BASE_H
+#define LORD_LC_VISITORS_BASE_H
 
 #include "node.h"
 #include "comp_state.h"

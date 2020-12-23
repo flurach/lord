@@ -1,5 +1,5 @@
-#ifndef LORD_VISITORS_SIMPLE_H
-#define LORD_VISITORS_SIMPLE_H
+#ifndef LORD_LC_VISITORS_SIMPLE_H
+#define LORD_LC_VISITORS_SIMPLE_H
 
 /* abstract */
 #include "base.h"

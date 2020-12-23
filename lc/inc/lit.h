@@ -1,5 +1,5 @@
-#ifndef LORD_LIT_H
-#define LORD_LIT_H
+#ifndef LORD_LC_LIT_H
+#define LORD_LC_LIT_H
 
 #include <stdlib.h>
 #include <string.h>
