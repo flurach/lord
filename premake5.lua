@@ -14,5 +14,6 @@ workspace "lord"
 
 
 include "vm"
+include "lp"
 include "lc"
 include "cli"

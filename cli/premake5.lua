@@ -6,7 +6,8 @@ project "cli"
 	includedirs {
 		"inc",
 		(BASE_DIR .. "/lc/inc"),
+		(BASE_DIR .. "/lp/inc"),
 		(BASE_DIR .. "/vm/inc"),
 	}
 	files { "src/**.c" }
-	links { "lc", "vm" }
+	links { "lc", "lp", "vm" }

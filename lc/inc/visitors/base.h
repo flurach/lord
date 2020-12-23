@@ -1,7 +1,7 @@
 #ifndef LORD_VISITORS_BASE_H
 #define LORD_VISITORS_BASE_H
 
-#include "../node.h"
+#include "node.h"
 #include "comp_state.h"
 
 /* visitor class */
