@@ -4,7 +4,7 @@
 /* Lord's libs */
 #include <helpers.h>
 #include <parser.h>
-#include "visitors/all.h"
+#include <visitors/all.h>
 
 void lex_file(char *fpath)
 {
