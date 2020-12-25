@@ -96,5 +96,5 @@ Node *parse_##t(Lexer *lexer)\
 	Lexer_next(lexer);\
 	return Node_new(lexer->range, lexer->token, strdup(lexer->val));\
 }
-	LORD_TOKENS
+	LORD_LP_TOKENS
 #undef X

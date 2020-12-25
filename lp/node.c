@@ -24,7 +24,8 @@ void Node_free(Node *self)
 	if (self == NULL)
 		return;
 
-	for (size_t i = 0; i < self->ns_len; i++)
+	size_t i;
+	for (i = 0; i < self->ns_len; i++)
 		Node_free(self->ns[i]);
 
 	free(self->ns);
@@ -51,10 +52,10 @@ Node *Node_pop(Node *self)
 
 void Node_print(Node *self)
 {
-	static int indent = 0;
+	static size_t indent = 0;
 
-	int x = 0;
-	while (x++ < indent)
+	size_t i = 0;
+	while (i++ < indent)
 		putchar('\t');
 
 	printf(
@@ -66,7 +67,7 @@ void Node_print(Node *self)
 	);
 
 	indent++;
-	for (size_t i = 0; i < self->ns_len; i++)
+	for (i = 0; i < self->ns_len; i++)
 		Node_print(self->ns[i]);
 	indent--;
 }

@@ -6,6 +6,9 @@
 #include <parser.h>
 #include <visitors/all.h>
 
+extern int  getopt(int, char**, char*);
+extern char *optarg;
+
 void lex_file(char *fpath)
 {
 	char *s = NULL;

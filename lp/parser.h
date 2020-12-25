@@ -11,7 +11,7 @@ Node *parse_call(Lexer *lexer);
 Node *parse_semibind(Lexer *lexer);
 
 #define X(token) Node *parse_##token(Lexer *lexer);
-	LORD_TOKENS
+	LORD_LP_TOKENS
 #undef X
 
 #endif

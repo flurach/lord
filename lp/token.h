@@ -1,27 +1,69 @@
 #ifndef LORD_LP_TOKEN_H
 #define LORD_LP_TOKEN_H
 
-#define LORD_TOKENS\
+#define LORD_LP_TOKENS\
 	\
 	/* invisibles */\
 	X(ERR)\
 	X(EOF)\
 	X(EOL)\
+	X(INDENT)\
+	X(DEDENT)\
+	X(COMMENT)\
 	\
 	/* literals */\
 	X(SYM)\
+	X(INT)\
+	X(FLT)\
 	X(STR)\
 	\
 	/* keywords */\
-	X(FN)\
 	X(EXT)\
+	X(FN)\
+	X(TYPE)\
+	X(AS)\
 	\
 	/* operators */\
 	X(EQ)\
+	X(LBRAC)\
+	X(RBRAC)\
+	X(DOT)\
+	X(DDOT)\
+	\
+	/* punctuation */\
+	X(LPAR)\
+	X(RPAR)\
+	X(LCRL)\
+	X(RCRL)\
+	X(COMA)\
 	X(SEMI)\
+	X(COLN)\
+	\
+	/* maths */\
+	X(ADD)\
+	X(SUB)\
+	X(MUL)\
+	X(DIV)\
+	X(MOD)\
+	X(AEQ)\
+	X(SEQ)\
+	X(MEQ)\
+	X(DEQ)\
+	X(MOQ)\
+	\
+	/* logic */\
+	X(AND)\
+	X(ORR)\
+	X(NOT)\
+	X(NEQ)\
+	X(EEQ)\
+	X(LSS)\
+	X(GTR)\
+	X(LEQ)\
+	X(GEQ)\
 	\
 	/* AST specific */\
-	X(MOD)\
+	X(MODULE)\
 	X(CALL)\
 	\
 	X(LAST)
@@ -29,13 +71,13 @@
 
 typedef enum {
 	#define X(token) T_##token,
-		LORD_TOKENS
+		LORD_LP_TOKENS
 	#undef X
 } Token;
 
 static const char *Token_str[] = {
 	#define X(token) #token,
-		LORD_TOKENS
+		LORD_LP_TOKENS
 	#undef X
 };
 

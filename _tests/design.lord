@@ -34,7 +34,9 @@ putchar [my_str]		# unlike C, this makes more sense (prints 'H')
 
 # arrays
 ## there's only one type of array, and it is always fix sized
-my_int_arr = {0, 1, 2, 3, 4, 5}
+my_int_arr = [0, 1, 2, 3, 4, 5]
+my_other_arr = [i64; 5]			# you can allocate arrays like this
+					# this is an array of 5 integers
 
 ## arrays are actually pointers
 printf "%d\n" [my_int_arr]
