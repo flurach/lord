@@ -25,6 +25,7 @@
 	X(ELSE)\
 	X(FOR)\
 	X(IN)\
+	X(TO)\
 	X(TYPE)\
 	X(AS)\
 	\
@@ -33,7 +34,6 @@
 	X(LBRC)\
 	X(RBRC)\
 	X(DOT)\
-	X(DDOT)\
 	\
 	/* punctuation */\
 	X(LPAR)\

@@ -110,6 +110,8 @@ Token Lexer_next(Lexer *self)
 			self->token = T_FOR;
 		else if (strcmp(self->val, "in") == 0)
 			self->token = T_IN;
+		else if (strcmp(self->val, "to") == 0)
+			self->token = T_TO;
 		else if (strcmp(self->val, "type") == 0)
 			self->token = T_TYPE;
 		else if (strcmp(self->val, "as") == 0)
@@ -165,12 +167,7 @@ Token Lexer_next(Lexer *self)
 	}
 	else if (Lexer_curr(self) == '.') {
 		*vi++ = Lexer_char(self);
-		if (Lexer_curr(self) == '.') {
-			self->token = T_DDOT;
-			*vi++ = Lexer_char(self);
-		} else {
-			self->token = T_DOT;
-		}
+		self->token = T_DOT;
 	}
 
 	/* punctuation */

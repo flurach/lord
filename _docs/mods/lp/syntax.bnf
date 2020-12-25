@@ -1,0 +1,81 @@
+<stmt> ::= <for>
+         | <if>
+         | <fdef>
+         | <call>
+         | <bind>
+         | <logic>
+         | <PASS>
+
+<for> ::= <FOR> <forcond> <fbody>
+
+<forcond> ::= <bind> <SEMI> <logic> <SEMI> <bind>
+            | <SYM> <IN> <range>
+            | <logic>
+
+<type> ::= <TYPE> <SYM> <EQ> <INDENT> {<typedsym> sepby <EOL>} <DEDENT>
+
+<if> ::= <IF> <logic> <fbody> [<else>]
+
+<else> ::= <ELSE> (<if>|<fbody>)
+
+<logic> ::= <eqcmp> (<AND>|<OR>) <logic>
+          | <eqcmp>
+
+<eqcmp> ::= <difcmp> (<EEQ>|<NEQ>) <eqcmp>
+          | <difcmp>
+
+<difcmp> ::= <expr> (<LSS>|<GTR>|<LEQ>|<GEQ>) <difcmp>
+           | <expr>
+
+<fdef> ::= <FN> <SYM> {<SYM>} <EQ> <fbody>
+
+<fbody> ::= <INDENT> {<stmt>} <DEDENT>
+          | <expr>
+
+<bind> ::= <typedsym> (<EQ>|<AEQ>|<SEQ>|<MEQ>|<DEQ>|<MOQ>) <logic>
+
+<typedsym> ::= <SYM> [<COLN> <typeanno>]
+
+<typeanno> ::= <dotop> [<LBRC> [<expr>] <RBRC>]
+             | <LBRC> <dotop> <RBRC>
+
+<call> :: <dotop> {<lit>}
+
+<expr> ::= <term> (<ADD>|<SUB>) <expr>
+         | <term>
+
+<term> ::= <fact> (<MUL>|<DIV>|<MOD>) <term>
+         | <fact>
+
+<fact> ::= <LPAR> <expr> <RPAR>
+         | <cast>
+
+<cast> ::= <lit> <AS> <typeanno>
+         | <lit>
+
+<lit> ::= <NOT> <fact>
+        | <init>
+        | <num>
+        | <STR>
+        | <CHR>
+        | <ptr>
+        | <arr>
+        | <range>
+
+<init> ::= <dotop> <initbody>
+         | <dotop>
+
+<initbody> ::= <LCRL> {<typedsym> sepby <COMA>} <RCRL>
+
+<dotop> ::= <SYM> <DOT> <dotop>
+          | <SYM>
+
+<ptr> ::= <LBRC> <expr> <RBRC>
+
+<num> ::= <SUB> <num>
+        | <INT>
+        | <FLT>
+
+<arr> ::= <LCRL> {<logic> sepby <COMA>} <RCLR>
+
+<range> ::= <num> <TO> <num>

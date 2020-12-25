@@ -34,9 +34,9 @@ putchar [my_str]		# unlike C, this makes more sense (prints 'H')
 
 # arrays
 ## there's only one type of array, and it is always fix sized
-my_int_arr = [0, 1, 2, 3, 4, 5]
-my_other_arr = [i64; 5]			# you can allocate arrays like this
-					# this is an array of 5 integers
+my_int_arr = {0, 1, 2, 3, 4, 5}
+my_other_arr: i64[5]	   	# you can allocate arrays like this
+				# this is an array of 5 integers
 
 ## arrays are actually pointers
 printf "%d\n" [my_int_arr]
@@ -62,10 +62,10 @@ printf "%d\n" my_rect.area
 # loops
 ## there's only one loop, and that is the for loop
 
-for i = 0; i < 10; i++
+for i = 0; i < 10; i += 1
 	printf "%d\n" i
 
-for i in [0..10]
+for i in 0 to 10
 	printf "%d\n" i
 
 i = 0
