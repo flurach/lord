@@ -1,15 +1,18 @@
 workspace "lord"
 	configurations { "debug", "release" }
+
+	toolset "clang"
+	cdialect "C89"
 	warnings "extra"
 
-	ROOT_DIR = path.getabsolute(".")
-	targetdir (ROOT_DIR .. "/_bin")
-	objdir (ROOT_DIR .. "/_bin/obj")
+	targetdir "_bin"
+	objdir "_bin/obj"
 
 	filter "configurations:debug"
 		symbols "on"
 
 	filter "configurations:release"
+		defines { "NDEBUG" }
 		optimize "on"
 
 	project "lp"
@@ -19,14 +22,12 @@ workspace "lord"
 		includedirs { "lp" }
 		files { "lp/**.c" }
 
-
 	project "lc"
 		kind "SharedLib"
 		language "C"
 
 		includedirs { "lc", "lp" }
 		files { "lc/**.c" }
-
 
 	project "cli"
 		kind "ConsoleApp"
