@@ -1,5 +1,5 @@
-# demonstrate how ; works
+# demonstrate how indentation works
 ext puts
 fn main =
-	puts "Hail the Lord";
+	puts "Hail the Lord"
 	puts "He whom shall free you"

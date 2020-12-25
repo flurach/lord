@@ -2,7 +2,14 @@
 
 char *strdup(char *s)
 {
-	return strcpy(malloc(strlen(s)), s);
+	if (s == NULL)
+		return NULL;
+
+	size_t s_len = strlen(s);
+	if (s_len == 0)
+		return NULL;
+
+	return strcpy(malloc(s_len), s);
 }
 
 Lexer *Lexer_new(char *src)
@@ -11,6 +18,8 @@ Lexer *Lexer_new(char *src)
 	*self = (Lexer){
 		.src = src,
 		.i = 0,
+		.i_len = 0,
+		.i_dep = 0,
 
 		.range = {0, 0},
 		.token = T_EOF,
@@ -44,7 +53,7 @@ Token Lexer_next(Lexer *self)
 	char *vi = self->val;
 
 	/* skip whitespace */
-	while (isspace(Lexer_curr(self)))
+	while (Lexer_curr(self) == '\t' || Lexer_curr(self) == ' ')
 		Lexer_char(self);
 
 	self->range.begin = self->i;
@@ -53,7 +62,32 @@ Token Lexer_next(Lexer *self)
 	if (Lexer_curr(self) == '#') {
 		while (Lexer_curr(self) != '\n' && Lexer_curr(self) != '\0')
 			Lexer_char(self);
+		Lexer_char(self);
 		return Lexer_next(self);
+	}
+
+	/* indentation */
+	else if (Lexer_curr(self) == '\n') {
+		while (Lexer_curr(self) == '\n')
+			Lexer_char(self);
+
+		size_t new_i_len = 0;
+		while (Lexer_curr(self) == '\t' || Lexer_curr(self) == ' ') {
+			Lexer_char(self);
+			new_i_len++;
+		}
+
+		if (new_i_len > self->i_len) {
+			self->token = T_INDENT;
+			self->i_dep++;
+		} else if (new_i_len < self->i_len) {
+			self->token = T_DEDENT;
+			self->i_dep--;
+		} else {
+			self->token = T_EOL;
+		}
+
+		self->i_len = new_i_len;
 	}
 
 	/* keywords, logic & symbols */
@@ -247,7 +281,13 @@ Token Lexer_next(Lexer *self)
 
 	/* end of file */
 	else if (Lexer_curr(self) == '\0') {
-		self->token = T_EOF;
+		/* leading dedents */
+		if (self->i_dep != 0) {
+			self->token = T_DEDENT;
+			self->i_dep--;
+		} else {
+			self->token = T_EOF;
+		}
 	}
 
 	self->range.end = self->i;

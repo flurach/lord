@@ -8,6 +8,7 @@
 typedef struct {
 	char *src;
 	size_t i;
+	size_t i_len, i_dep;
 
 	Range range;
 	Token token;
@@ -26,5 +27,8 @@ Token Lexer_peek(Lexer *self);
 
 /* debug */
 void Lexer_print(Lexer *self);
+
+/* helper function */
+char *strdup(char *s);
 
 #endif
