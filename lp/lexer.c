@@ -56,24 +56,56 @@ Token Lexer_next(Lexer *self)
 		return Lexer_next(self);
 	}
 
-	/* symbols */
+	/* keywords, logic & symbols */
 	else if (isalpha(Lexer_curr(self))) {
-		while (isalpha(Lexer_curr(self)))
+		while (isalnum(Lexer_curr(self)) || Lexer_curr(self) == '_')
 			*vi++ = Lexer_char(self);
 		*vi = '\0';
 
-		if (strcmp(self->val, "fn") == 0)
-			self->token = T_FN;
+		if (strcmp(self->val, "pass") == 0)
+			self->token = T_PASS;
 		else if (strcmp(self->val, "ext") == 0)
 			self->token = T_EXT;
+		else if (strcmp(self->val, "fn") == 0)
+			self->token = T_FN;
+		else if (strcmp(self->val, "if") == 0)
+			self->token = T_IF;
+		else if (strcmp(self->val, "else") == 0)
+			self->token = T_ELSE;
+		else if (strcmp(self->val, "for") == 0)
+			self->token = T_FOR;
+		else if (strcmp(self->val, "in") == 0)
+			self->token = T_IN;
+		else if (strcmp(self->val, "type") == 0)
+			self->token = T_TYPE;
+		else if (strcmp(self->val, "as") == 0)
+			self->token = T_AS;
+		else if (strcmp(self->val, "and") == 0)
+			self->token = T_AND;
+		else if (strcmp(self->val, "or") == 0)
+			self->token = T_ORR;
+		else if (strcmp(self->val, "not") == 0)
+			self->token = T_NOT;
 		else
 			self->token = T_SYM;
 	}
 
+	/* numbers */
+	else if (isdigit(Lexer_curr(self))) {
+		self->token = T_INT;
+		while (isdigit(Lexer_curr(self)) || Lexer_curr(self) == '.')  {
+			if (self->token == T_INT && Lexer_curr(self) == '.')
+				self->token = T_FLT;
+			else if (Lexer_curr(self) == '.')
+				break;
+			*vi++ = Lexer_char(self);
+		}
+	}
+
 	/* strings */
 	else if (Lexer_curr(self) == '\'' || Lexer_curr(self) == '\"') {
-		self->token = T_STR;
 		const char pair = Lexer_char(self);
+		self->token = pair == '\'' ? T_CHR : T_STR;
 		while (Lexer_curr(self) != pair && Lexer_curr(self) != '\0')
 			*vi++ = Lexer_char(self);
 		Lexer_char(self);
@@ -81,12 +113,136 @@ Token Lexer_next(Lexer *self)
 
 	/* operators */
 	else if (Lexer_curr(self) == '=') {
-		self->token = T_EQ;
+		*vi++ = Lexer_char(self);
+		if (Lexer_curr(self) == '=') {
+			self->token = T_EEQ;
+			*vi++ = Lexer_char(self);
+		} else {
+			self->token = T_EQ;
+		}
+	}
+	else if (Lexer_curr(self) == '[') {
+		self->token = T_LBRC;
+		*vi++ = Lexer_char(self);
+	}
+	else if (Lexer_curr(self) == ']') {
+		self->token = T_RBRC;
+		*vi++ = Lexer_char(self);
+	}
+	else if (Lexer_curr(self) == '.') {
+		*vi++ = Lexer_char(self);
+		if (Lexer_curr(self) == '.') {
+			self->token = T_DDOT;
+			*vi++ = Lexer_char(self);
+		} else {
+			self->token = T_DOT;
+		}
+	}
+
+	/* punctuation */
+	else if (Lexer_curr(self) == '(') {
+		self->token = T_LPAR;
+		*vi++ = Lexer_char(self);
+	}
+	else if (Lexer_curr(self) == ')') {
+		self->token = T_RPAR;
+		*vi++ = Lexer_char(self);
+	}
+	else if (Lexer_curr(self) == '{') {
+		self->token = T_LCRL;
+		*vi++ = Lexer_char(self);
+	}
+	else if (Lexer_curr(self) == '}') {
+		self->token = T_RCRL;
+		*vi++ = Lexer_char(self);
+	}
+	else if (Lexer_curr(self) == ',') {
+		self->token = T_COMA;
 		*vi++ = Lexer_char(self);
 	}
 	else if (Lexer_curr(self) == ';') {
 		self->token = T_SEMI;
 		*vi++ = Lexer_char(self);
+	}
+	else if (Lexer_curr(self) == ':') {
+		self->token = T_COLN;
+		*vi++ = Lexer_char(self);
+	}
+
+	/* maths */
+	else if (Lexer_curr(self) == '+') {
+		*vi++ = Lexer_char(self);
+		if (Lexer_curr(self) == '=') {
+			self->token = T_AEQ;
+			*vi++ = Lexer_char(self);
+		} else {
+			self->token = T_ADD;
+		}
+	}
+	else if (Lexer_curr(self) == '-') {
+		*vi++ = Lexer_char(self);
+		if (Lexer_curr(self) == '=') {
+			self->token = T_SEQ;
+			*vi++ = Lexer_char(self);
+		} else {
+			self->token = T_SUB;
+		}
+	}
+	else if (Lexer_curr(self) == '*') {
+		*vi++ = Lexer_char(self);
+		if (Lexer_curr(self) == '=') {
+			self->token = T_MEQ;
+			*vi++ = Lexer_char(self);
+		} else {
+			self->token = T_MUL;
+		}
+	}
+	else if (Lexer_curr(self) == '/') {
+		*vi++ = Lexer_char(self);
+		if (Lexer_curr(self) == '=') {
+			self->token = T_DEQ;
+			*vi++ = Lexer_char(self);
+		} else {
+			self->token = T_DIV;
+		}
+	}
+	else if (Lexer_curr(self) == '%') {
+		*vi++ = Lexer_char(self);
+		if (Lexer_curr(self) == '=') {
+			self->token = T_MOQ;
+			*vi++ = Lexer_char(self);
+		} else {
+			self->token = T_MOD;
+		}
+	}
+
+	/* logic */
+	else if (Lexer_curr(self) == '!') {
+		*vi++ = Lexer_char(self);
+		if (Lexer_curr(self) == '=') {
+			self->token = T_NEQ;
+			*vi++ = Lexer_char(self);
+		} else {
+			self->token = T_NOT;
+		}
+	}
+	else if (Lexer_curr(self) == '<') {
+		*vi++ = Lexer_char(self);
+		if (Lexer_curr(self) == '=') {
+			self->token = T_LEQ;
+			*vi++ = Lexer_char(self);
+		} else {
+			self->token = T_LSS;
+		}
+	}
+	else if (Lexer_curr(self) == '>') {
+		*vi++ = Lexer_char(self);
+		if (Lexer_curr(self) == '=') {
+			self->token = T_GEQ;
+			*vi++ = Lexer_char(self);
+		} else {
+			self->token = T_GTR;
+		}
 	}
 
 	/* end of file */

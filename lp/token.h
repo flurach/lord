@@ -9,24 +9,29 @@
 	X(EOL)\
 	X(INDENT)\
 	X(DEDENT)\
-	X(COMMENT)\
 	\
 	/* literals */\
 	X(SYM)\
 	X(INT)\
 	X(FLT)\
 	X(STR)\
+	X(CHR)\
 	\
 	/* keywords */\
+	X(PASS)\
 	X(EXT)\
 	X(FN)\
+	X(IF)\
+	X(ELSE)\
+	X(FOR)\
+	X(IN)\
 	X(TYPE)\
 	X(AS)\
 	\
 	/* operators */\
 	X(EQ)\
-	X(LBRAC)\
-	X(RBRAC)\
+	X(LBRC)\
+	X(RBRC)\
 	X(DOT)\
 	X(DDOT)\
 	\
