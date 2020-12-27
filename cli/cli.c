@@ -6,6 +6,14 @@
 #include <parser.h>
 #include <visitors/all.h>
 
+/* Ext libs */
+#include <readline/readline.h>
+#include <readline/history.h>
+
+/* cli state */
+int repl = 0;
+
+/* getopt */
 extern int  getopt(int, char**, char*);
 extern char *optarg;
 
@@ -40,6 +48,35 @@ void parse_file(char *fpath)
 	Lexer_free(lexer);
 }
 
+void parse_repl()
+{
+	Lexer *lexer;
+	Node *ast;
+
+	while (1) {
+		char *src = readline(" > ");
+		if (src && *src)
+			add_history(src);
+		else
+			break;
+
+		if (strcmp(src, "exit") == 0) {
+			free(src);
+			break;
+		}
+
+		lexer = Lexer_new(src);
+		ast = parse(lexer);
+
+		if (ast) {
+			Node_print(ast);
+			Node_free(ast);
+		}
+
+		Lexer_free(lexer);
+	}
+}
+
 void simple_file(char *fpath)
 {
 	char *s = NULL;
@@ -67,18 +104,25 @@ int main(int argc, char **argv)
 {
 	int opt = 0;
 
-	while ((opt = getopt(argc, argv, "l:p:s:")) != -1) {
+	while ((opt = getopt(argc, argv, "il::p::s::")) != -1) {
 		switch (opt) {
 		case 'l':
 			lex_file(optarg);
 			break;
 
 		case 'p':
-			parse_file(optarg);
+			if (repl)
+				parse_repl();
+			else
+				parse_file(optarg);
 			break;
 
 		case 's':
 			simple_file(optarg);
+			break;
+
+		case 'i':
+			repl = !repl;
 			break;
 
 		default:

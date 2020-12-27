@@ -1,17 +1,5 @@
 #include "lexer.h"
 
-char *strdup(char *s)
-{
-	if (s == NULL)
-		return NULL;
-
-	size_t s_len = strlen(s);
-	if (s_len == 0)
-		return NULL;
-
-	return strcpy(malloc(s_len), s);
-}
-
 Lexer *Lexer_new(char *src)
 {
 	Lexer *self = malloc(sizeof(Lexer));

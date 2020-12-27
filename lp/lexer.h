@@ -3,6 +3,7 @@
 
 #include <ctype.h>
 #include "node.h"
+#include "helpers.h"
 
 /* lexer class */
 typedef struct {

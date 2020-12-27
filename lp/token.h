@@ -69,6 +69,8 @@
 	\
 	/* AST specific */\
 	X(MODULE)\
+	X(STMTS)\
+	X(ARR)\
 	X(CALL)\
 	\
 	X(LAST)

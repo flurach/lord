@@ -1,3 +1,4 @@
 _bin/
 Makefile
 *.make
+tags

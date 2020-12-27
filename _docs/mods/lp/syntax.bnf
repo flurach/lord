@@ -1,7 +1,6 @@
 <stmt> ::= <for>
          | <if>
          | <fdef>
-         | <call>
          | <bind>
          | <logic>
          | <PASS>
@@ -12,7 +11,7 @@
             | <SYM> <IN> <range>
             | <logic>
 
-<type> ::= <TYPE> <SYM> <EQ> <INDENT> {<typedsym> sepby <EOL>} <DEDENT>
+<type> ::= <TYPE> <SYM> <EQ> <fbody>
 
 <if> ::= <IF> <logic> <fbody> [<else>]
 
@@ -55,12 +54,11 @@
 
 <lit> ::= <NOT> <fact>
         | <init>
-        | <num>
+        | <range>
         | <STR>
         | <CHR>
         | <ptr>
         | <arr>
-        | <range>
 
 <init> ::= <dotop> <initbody>
          | <dotop>
@@ -72,10 +70,11 @@
 
 <ptr> ::= <LBRC> <expr> <RBRC>
 
+<range> ::= <num> <TO> <num>
+          | <num>
+
 <num> ::= <SUB> <num>
         | <INT>
         | <FLT>
 
 <arr> ::= <LCRL> {<logic> sepby <COMA>} <RCLR>
-
-<range> ::= <num> <TO> <num>

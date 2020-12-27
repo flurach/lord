@@ -47,7 +47,7 @@ Node *parse_range(Lexer *lexer);
 /* higher-order parsers */
 Node *parse_many(Lexer *lexer, Node *(*parser)(Lexer*));
 Node *parse_sepby(Lexer *lexer, Node *(*parser)(Lexer*), Node *(*delim)(Lexer*));
-Node *parse_either(Lexer *lexer, size_t count, Node *(*parser)(Lexer*));
+Node *parse_either(Lexer *lexer, size_t count, Node *(*parsers[])(Lexer*));
 
 /* primitive parsers */
 #define X(token) Node *parse_##token(Lexer *lexer);

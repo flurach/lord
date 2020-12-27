@@ -37,4 +37,4 @@ workspace "lord"
 
 		includedirs { "cli", "lc", "lp" }
 		files { "cli/**.c" }
-		links { "lc", "lp" }
+		links { "lc", "lp", "readline" }
