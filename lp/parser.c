@@ -201,16 +201,52 @@ Node *parse_fdef(Lexer *lexer)
 	return fn;
 }
 
-/* INCOMPLETE */
 Node *parse_fbody(Lexer *lexer)
 {
-	return NULL;
+	Node *indent, *stmts, *dedent;
+	Node *expr;
+
+	if ((expr = parse_expr(lexer)) != NULL)
+		return expr;
+
+	if ((indent = parse_INDENT(lexer)) == NULL)
+		return NULL;
+
+	stmts = parse_many(lexer, parse_stmt);
+
+	if ((dedent = parse_DEDENT(lexer)) == NULL)
+		return stmts;
+	Node_push(stmts, dedent);
+
+	return stmts;
 }
 
-/* INCOMPLETE */
 Node *parse_bind(Lexer *lexer)
 {
-	return NULL;
+	Node *typedsym, *op, *logic;
+
+	Lexer backup = *lexer;
+	if ((typedsym = parse_typedsym(lexer)) == NULL)
+		return NULL;
+
+	Node *(*ops[])(Lexer*) = {
+		parse_EQ,
+		parse_AEQ,
+		parse_SEQ,
+		parse_MEQ,
+		parse_DEQ,
+		parse_MOQ
+	};
+
+	if ((op = parse_either(lexer, 6, ops)) == NULL)
+		return typedsym;
+	Node_push(op, typedsym);
+
+	if ((logic = parse_logic(lexer)) == NULL)
+		return op;
+	Node_push(op, logic);
+
+	return op;
 }
 
 /* INCOMPLETE */

@@ -7,9 +7,8 @@
 
 <for> ::= <FOR> <forcond> <fbody>
 
-<forcond> ::= <bind> <SEMI> <logic> <SEMI> <bind>
-            | <SYM> <IN> <range>
-            | <logic>
+<forcond> ::= <SYM> <IN> <range>
+            | {<logic> sepby <SEMI>}
 
 <type> ::= <TYPE> <SYM> <EQ> <fbody>
 
@@ -26,55 +25,66 @@
 <difcmp> ::= <expr> (<LSS>|<GTR>|<LEQ>|<GEQ>) <difcmp>
            | <expr>
 
-<fdef> ::= <FN> <SYM> {<SYM>} <EQ> <fbody>
+<fdef> ::= <FN> <dot> {<SYM>} <EQ> <fbody>
 
 <fbody> ::= <INDENT> {<stmt>} <DEDENT>
-          | <expr>
+          | <logic>
 
+# name: Type = something
 <bind> ::= <typedsym> (<EQ>|<AEQ>|<SEQ>|<MEQ>|<DEQ>|<MOQ>) <logic>
+         | <typedsym>
 
-<typedsym> ::= <SYM> [<COLN> <typeanno>]
+# "name: Type" or "name"
+<typedsym> ::= <dot> <COLN> <typeanno>
+             | <dot>
 
-<typeanno> ::= <dotop> [<LBRC> [<expr>] <RBRC>]
-             | <LBRC> <dotop> <RBRC>
+# "i64" or "Module.Type[5]" or "[pointer]"
+<typeanno> ::= <LBRC> <dot> <RBRC>
+             | <dot> <LBRC> <logic> <RBRC>
+             | <dot>
 
-<call> :: <dotop> {<lit>}
-
+# maths
 <expr> ::= <term> (<ADD>|<SUB>) <expr>
          | <term>
-
 <term> ::= <fact> (<MUL>|<DIV>|<MOD>) <term>
          | <fact>
-
-<fact> ::= <LPAR> <expr> <RPAR>
+<fact> ::= <LPAR> <logic> <RPAR>
          | <cast>
 
-<cast> ::= <lit> <AS> <typeanno>
-         | <lit>
+# something as OtherType
+<cast> ::= <not> <AS> <typeanno>
+         | <not>
 
-<lit> ::= <NOT> <fact>
-        | <init>
-        | <range>
+# "!something" or "not something"
+<not> ::= <not> <lit>
+        | <lit>
+
+# constant literals
+<lit> ::= <range>
+        | <num>
         | <STR>
         | <CHR>
         | <ptr>
         | <arr>
+        | <call>
 
-<init> ::= <dotop> <initbody>
-         | <dotop>
-
-<initbody> ::= <LCRL> {<typedsym> sepby <COMA>} <RCRL>
-
-<dotop> ::= <SYM> <DOT> <dotop>
-          | <SYM>
-
-<ptr> ::= <LBRC> <expr> <RBRC>
-
+# X to Y
 <range> ::= <num> <TO> <num>
-          | <num>
 
+# (-)value
 <num> ::= <SUB> <num>
         | <INT>
         | <FLT>
 
+# [expr]
+<ptr> ::= <LBRC> <expr> <RBRC>
+
+# { logic1, logic2, ... }
 <arr> ::= <LCRL> {<logic> sepby <COMA>} <RCLR>
+
+# func_name arg1 arg2 ...
+<call> ::= <dot> [{<fact>}]
+
+# "type.field" or "type"
+<dot> ::= <SYM> <DOT> <dot>
+        | <SYM>
