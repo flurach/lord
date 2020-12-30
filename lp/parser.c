@@ -262,12 +262,6 @@ Node *parse_typeanno(Lexer *lexer)
 }
 
 /* INCOMPLETE */
-Node *parse_call(Lexer *lexer)
-{
-	return NULL;
-}
-
-/* INCOMPLETE */
 Node *parse_expr(Lexer *lexer)
 {
 	return NULL;
@@ -292,43 +286,13 @@ Node *parse_cast(Lexer *lexer)
 }
 
 /* INCOMPLETE */
+Node *parse_not(Lexer *lexer)
+{
+	return NULL;
+}
+
+/* INCOMPLETE */
 Node *parse_lit(Lexer *lexer)
-{
-	return NULL;
-}
-
-/* INCOMPLETE */
-Node *parse_init(Lexer *lexer)
-{
-	return NULL;
-}
-
-/* INCOMPLETE */
-Node *parse_initbody(Lexer *lexer)
-{
-	return NULL;
-}
-
-Node *parse_dotop(Lexer *lexer)
-{
-	Node *sym, *dot, *dotop;
-
-	if ((sym = parse_SYM(lexer)) == NULL)
-		return NULL;
-
-	if ((dot = parse_DOT(lexer)) == NULL)
-		return sym;
-	Node_push(dot, sym);
-
-	if ((dotop = parse_dotop(lexer)) == NULL)
-		return dot;
-	Node_push(dot, dotop);
-
-	return dot;
-}
-
-/* INCOMPLETE */
-Node *parse_ptr(Lexer *lexer)
 {
 	return NULL;
 }
@@ -370,9 +334,45 @@ Node *parse_num(Lexer *lexer)
 }
 
 /* INCOMPLETE */
+Node *parse_ptr(Lexer *lexer)
+{
+	return NULL;
+}
+
+/* INCOMPLETE */
 Node *parse_arr(Lexer *lexer)
 {
 	return NULL;
+}
+
+/* INCOMPLETE */
+Node *parse_call(Lexer *lexer)
+{
+	return NULL;
+}
+
+/* INCOMPLETE */
+Node *parse_arg(Lexer *lexer)
+{
+	return NULL;
+}
+
+Node *parse_dot(Lexer *lexer)
+{
+	Node *sym, *dot, *dotop;
+
+	if ((sym = parse_SYM(lexer)) == NULL)
+		return NULL;
+
+	if ((dot = parse_DOT(lexer)) == NULL)
+		return sym;
+	Node_push(dot, sym);
+
+	if ((dotop = parse_dotop(lexer)) == NULL)
+		return dot;
+	Node_push(dot, dotop);
+
+	return dot;
 }
 
 Node *parse_many(Lexer *lexer, Node *(*parser)(Lexer*))

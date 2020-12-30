@@ -28,26 +28,29 @@ Node *parse_bind(Lexer *lexer);
 Node *parse_typedsym(Lexer *lexer);
 Node *parse_typeanno(Lexer *lexer);
 
-Node *parse_call(Lexer *lexer);
-
 Node *parse_expr(Lexer *lexer);
 Node *parse_term(Lexer *lexer);
 Node *parse_fact(Lexer *lexer);
 
 Node *parse_cast(Lexer *lexer);
+Node *parse_not(Lexer *lexer);
 Node *parse_lit(Lexer *lexer);
-Node *parse_init(Lexer *lexer);
-Node *parse_initbody(Lexer *lexer);
-Node *parse_dotop(Lexer *lexer);
-Node *parse_ptr(Lexer *lexer);
-Node *parse_num(Lexer *lexer);
-Node *parse_arr(Lexer *lexer);
+
 Node *parse_range(Lexer *lexer);
+Node *parse_num(Lexer *lexer);
+Node *parse_ptr(Lexer *lexer);
+Node *parse_arr(Lexer *lexer);
+
+Node *parse_call(Lexer *lexer);
+Node *parse_arg(Lexer *lexer);
+
+Node *parse_dot(Lexer *lexer);
 
 /* higher-order parsers */
 Node *parse_many(Lexer *lexer, Node *(*parser)(Lexer*));
 Node *parse_sepby(Lexer *lexer, Node *(*parser)(Lexer*), Node *(*delim)(Lexer*));
 Node *parse_either(Lexer *lexer, size_t count, Node *(*parsers[])(Lexer*));
+Node *parse_seq(Lexer *lexer, size_t count, Node *(*parsers[])(Lexer*));
 
 /* primitive parsers */
 #define X(token) Node *parse_##token(Lexer *lexer);
