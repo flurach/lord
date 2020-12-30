@@ -71,7 +71,7 @@ Node *parse_type(Lexer *lexer)
 
 Node *parse_if(Lexer *lexer)
 {
-	Node *_if, *logic, *fbody *_else;
+	Node *_if, *logic, *fbody, *_else;
 
 	if ((_if = parse_IF(lexer)) == NULL)
 		return NULL;
@@ -91,17 +91,17 @@ Node *parse_else(Lexer *lexer)
 {
 	Node *_else, *_if_or_fbody;
 
-	Node *(*parsers[])(Lexer*) = {
-		parse_if,
-		parse_fbody;
-	};
-
 	if ((_else = parse_ELSE(lexer)) == NULL)
 		return NULL;
 
+	Node *(*parsers[])(Lexer*) = {
+		parse_if,
+		parse_fbody
+	};
+
 	if ((_if_or_fbody = parse_either(lexer, 2, parsers)) == NULL)
 		return _else;
-	Node_push(_else, _if);
+	Node_push(_else, _if_or_fbody);
 
 	return _else;
 }
@@ -261,40 +261,100 @@ Node *parse_typeanno(Lexer *lexer)
 	return NULL;
 }
 
-/* INCOMPLETE */
 Node *parse_expr(Lexer *lexer)
 {
-	return NULL;
+	Node *term, *op, *expr;
+
+	if ((term = parse_term(lexer)) == NULL)
+		return NULL;
+
+	Node *(*ops[])(Lexer*) = {
+		parse_ADD,
+		parse_SUB
+	};
+	if ((op = parse_either(lexer, 2, ops)) == NULL)
+		return term;
+	Node_push(op, term);
+
+	if ((expr = parse_expr(lexer)) != NULL)
+		Node_push(op, expr);
+
+	return op;
 }
 
-/* INCOMPLETE */
 Node *parse_term(Lexer *lexer)
 {
-	return NULL;
+	Node *fact, *op, *term;
+
+	if ((fact = parse_fact(lexer)) == NULL)
+		return NULL;
+
+	Node *(*ops[])(Lexer*) = {
+		parse_MUL,
+		parse_DIV,
+		parse_MOD
+	};
+	if ((op = parse_either(lexer, 3, ops)) == NULL)
+		return fact;
+	Node_push(op, fact);
+
+	if ((term = parse_expr(lexer)) != NULL)
+		Node_push(op, term);
+
+	return op;
 }
 
-/* INCOMPLETE */
 Node *parse_fact(Lexer *lexer)
 {
-	return NULL;
+	Node *(*ops[])(Lexer*) = {
+		parse_LPAR,
+		parse_logic,
+		parse_RPAR,
+	};
+
+	Node *result;
+	if ((result = parse_seq(lexer, 3, ops)) != NULL)
+		return result;
+
+	return parse_cast(lexer);
 }
 
-/* INCOMPLETE */
 Node *parse_cast(Lexer *lexer)
 {
-	return NULL;
+	Node *(*seq[])(Lexer*) = {
+		parse_not,
+		parse_AS,
+		parse_typeanno
+	};
+
+	Node *result;
+	if ((result = parse_seq(lexer, 3, seq)) != NULL)
+		return result;
+
+	return parse_not(lexer);
 }
 
-/* INCOMPLETE */
 Node *parse_not(Lexer *lexer)
 {
-	return NULL;
+	Node *(*seq[])(Lexer*) = {
+		parse_NOT,
+		parse_lit
+	};
+
+	Node *result;
+	if ((result = parse_seq(lexer, 2, seq)) != NULL)
+		return result;
+
+	return parse_lit(lexer);
 }
 
-/* INCOMPLETE */
 Node *parse_lit(Lexer *lexer)
 {
-	return NULL;
+	Node *(*either[])(Lexer*) = {
+		parse_call,
+		parse_arg
+	};
+	return parse_either(lexer, 2, either);
 }
 
 Node *parse_range(Lexer *lexer)
@@ -333,28 +393,63 @@ Node *parse_num(Lexer *lexer)
 	return sub;
 }
 
-/* INCOMPLETE */
 Node *parse_ptr(Lexer *lexer)
 {
-	return NULL;
+	Node *(*seq[])(Lexer*) = {
+		parse_LBRC,
+		parse_logic,
+		parse_RBRC,
+	};
+	return parse_seq(lexer, 3, seq);
 }
 
-/* INCOMPLETE */
 Node *parse_arr(Lexer *lexer)
 {
-	return NULL;
+	Node *lcrl, *items, *rcrl;
+
+	if ((lcrl = parse_LCRL(lexer)) == NULL)
+		return NULL;
+	Node_free(lcrl);
+
+	items = parse_sepby(lexer, parse_logic, parse_COMA);
+
+	if ((rcrl = parse_RCRL(lexer)) != NULL)
+		Node_free(lcrl);
+
+	items->token = T_ARR;
+	return items;
 }
 
-/* INCOMPLETE */
 Node *parse_call(Lexer *lexer)
 {
-	return NULL;
+	Node *dot, *args;
+
+	if ((dot = parse_dot(lexer)) == NULL)
+		return NULL;
+
+	args = parse_many(lexer, parse_arg);
+	Node_push(dot, args);
+
+	return args;
 }
 
-/* INCOMPLETE */
 Node *parse_arg(Lexer *lexer)
 {
-	return NULL;
+	Node *res;
+	Node *(*seq[])(Lexer*) = { parse_LPAR, parse_logic, parse_RPAR };
+	if ((res = parse_seq(lexer, 3, seq)) != NULL)
+		return res;
+
+	Node *(*either[])(Lexer*) = {
+		parse_range,
+		parse_num,
+		parse_STR,
+		parse_CHR,
+		parse_ptr,
+		parse_arr,
+		parse_SYM,
+	};
+	return parse_either(lexer, sizeof(either)/sizeof(either[0]), either);
 }
 
 Node *parse_dot(Lexer *lexer)
@@ -368,7 +463,7 @@ Node *parse_dot(Lexer *lexer)
 		return sym;
 	Node_push(dot, sym);
 
-	if ((dotop = parse_dotop(lexer)) == NULL)
+	if ((dotop = parse_dot(lexer)) == NULL)
 		return dot;
 	Node_push(dot, dotop);
 
@@ -412,6 +507,25 @@ Node *parse_either(Lexer *lexer, size_t count, Node *(*parsers[])(Lexer*))
 	}
 
 	return NULL;
+}
+
+Node *parse_seq(Lexer *lexer, size_t count, Node *(*parsers[])(Lexer*))
+{
+	Node *seq = Node_new((Range){0, 0}, T_STMTS, NULL);
+	size_t i;
+
+	Lexer backup = *lexer;
+	for (i = 0; i < count; i++) {
+		Node *result = parsers[i](lexer);
+		if (result == NULL) {
+			*lexer = backup;
+			Node_free(seq);
+			return NULL;
+		}
+		Node_push(seq, result);
+	}
+
+	return seq;
 }
 
 #define X(t)\
