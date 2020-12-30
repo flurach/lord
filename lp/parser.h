@@ -11,6 +11,7 @@ Node *parse_stmt(Lexer *lexer);
 
 Node *parse_for(Lexer *lexer);
 Node *parse_forcond(Lexer *lexer);
+Node *parse_forlogic(Lexer *lexer);
 
 Node *parse_type(Lexer *lexer);
 
@@ -25,6 +26,7 @@ Node *parse_fdef(Lexer *lexer);
 Node *parse_fbody(Lexer *lexer);
 
 Node *parse_bind(Lexer *lexer);
+Node *parse_bindsym(Lexer *lexer);
 Node *parse_typedsym(Lexer *lexer);
 Node *parse_typeanno(Lexer *lexer);
 

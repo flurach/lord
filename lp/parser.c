@@ -14,6 +14,7 @@ Node *parse_stmt(Lexer *lexer)
 		parse_bind,
 		parse_logic,
 		parse_PASS,
+		parse_EOL
 	};
 
 	return parse_either(
@@ -41,10 +42,30 @@ Node *parse_for(Lexer *lexer)
 	return _for;
 }
 
-/* INCOMPLETE */
 Node *parse_forcond(Lexer *lexer)
 {
-	return NULL;
+	Node *(*seq[])(Lexer*) = {
+		parse_SYM,
+		parse_IN,
+		parse_range
+	};
+
+	Node *result;
+	if ((result = parse_seq(lexer, 3, seq)) != NULL)
+		return result;
+
+	return parse_sepby(lexer, parse_forlogic, parse_SEMI);
+}
+
+Node *parse_forlogic(Lexer *lexer)
+{
+	Node *(*seq[])(Lexer*) = {
+		parse_SYM,
+		parse_IN,
+		parse_range
+	};
+
+	return parse_seq(lexer, 3, seq);
 }
 
 Node *parse_type(Lexer *lexer)
@@ -80,6 +101,10 @@ Node *parse_if(Lexer *lexer)
 		return _if;
 	Node_push(_if, logic);
 
+	if ((fbody = parse_fbody(lexer)) == NULL)
+		return _if;
+	Node_push(_if, fbody);
+
 	if ((_else = parse_else(lexer)) == NULL)
 		return _if;
 	Node_push(_if, _else);
@@ -110,14 +135,13 @@ Node *parse_logic(Lexer *lexer)
 {
 	Node *eqcmp, *and_or_orr, *logic;
 
+	if ((eqcmp = parse_eqcmp(lexer)) == NULL)
+		return NULL;
+
 	Node *(*parsers[])(Lexer*) = {
 		parse_AND,
 		parse_ORR
 	};
-
-	if ((eqcmp = parse_eqcmp(lexer)) == NULL)
-		return NULL;
-
 	if ((and_or_orr = parse_either(lexer, 2, parsers)) == NULL)
 		return eqcmp;
 	Node_push(and_or_orr, eqcmp);
@@ -133,14 +157,13 @@ Node *parse_eqcmp(Lexer *lexer)
 {
 	Node *difcmp, *eeq_or_neq, *eqcmp;
 
+	if ((difcmp = parse_difcmp(lexer)) == NULL)
+		return NULL;
+
 	Node *(*parsers[])(Lexer*) = {
 		parse_EEQ,
 		parse_NEQ
 	};
-
-	if ((difcmp = parse_difcmp(lexer)) == NULL)
-		return NULL;
-
 	if ((eeq_or_neq = parse_either(lexer, 2, parsers)) == NULL)
 		return difcmp;
 	Node_push(eeq_or_neq, difcmp);
@@ -156,16 +179,15 @@ Node *parse_difcmp(Lexer *lexer)
 {
 	Node *expr, *cmp, *difcmp;
 
+	if ((expr = parse_expr(lexer)) == NULL)
+		return NULL;
+
 	Node *(*parsers[])(Lexer*) = {
 		parse_LSS,
 		parse_GTR,
 		parse_LEQ,
 		parse_GEQ
 	};
-
-	if ((expr = parse_expr(lexer)) == NULL)
-		return NULL;
-
 	if ((cmp = parse_either(lexer, 2, parsers)) == NULL)
 		return expr;
 	Node_push(cmp, expr);
@@ -188,7 +210,8 @@ Node *parse_fdef(Lexer *lexer)
 		return NULL;
 	Node_push(fn, sym);
 
-	Node_push(fn, parse_many(lexer, parse_SYM));
+	args = parse_many(lexer, parse_SYM);
+	Node_push(fn, args);
 
 	if ((eq = parse_EQ(lexer)) == NULL)
 		return fn;
@@ -209,7 +232,7 @@ Node *parse_fbody(Lexer *lexer)
 	if ((expr = parse_expr(lexer)) != NULL)
 		return expr;
 
-	if ((indent = parse_INDENT(lexer)) == NULL)
+	if ((indent = parse_INDENT(lexer)) != NULL)
 		return NULL;
 
 	stmts = parse_many(lexer, parse_stmt);
@@ -223,42 +246,72 @@ Node *parse_fbody(Lexer *lexer)
 
 Node *parse_bind(Lexer *lexer)
 {
-	Node *typedsym, *op, *logic;
+	Node *result;
 
-	Lexer backup = *lexer;
-	if ((typedsym = parse_typedsym(lexer)) == NULL)
-		return NULL;
+	Node *(*seq1[])(Lexer*) = {
+		parse_typedsym,
+		parse_bindsym,
+		parse_logic
+	};
+	if ((result = parse_seq(lexer, 3, seq1)) != NULL)
+		return result;
 
-	Node *(*ops[])(Lexer*) = {
+	Node *(*seq2[])(Lexer*) = {
+		parse_SYM,
+		parse_bindsym,
+		parse_logic
+	};
+	if ((result = parse_seq(lexer, 3, seq2)) != NULL)
+		return result;
+
+	return NULL;
+}
+
+Node *parse_bindsym(Lexer *lexer)
+{
+	Node *(*either[])(Lexer*) = {
 		parse_EQ,
 		parse_AEQ,
 		parse_SEQ,
 		parse_MEQ,
 		parse_DEQ,
-		parse_MOQ
+		parse_MOQ,
 	};
-
-	if ((op = parse_either(lexer, 6, ops)) == NULL)
-		return typedsym;
-	Node_push(op, typedsym);
-
-	if ((logic = parse_logic(lexer)) == NULL)
-		return op;
-	Node_push(op, logic);
-
-	return op;
+	return parse_either(lexer, sizeof(either)/sizeof(either[0]), either);
 }
 
-/* INCOMPLETE */
 Node *parse_typedsym(Lexer *lexer)
 {
-	return NULL;
+	Node *(*seq[])(Lexer*) = {
+		parse_dot,
+		parse_COLN,
+		parse_typeanno
+	};
+	return parse_seq(lexer, 3, seq);
 }
 
-/* INCOMPLETE */
 Node *parse_typeanno(Lexer *lexer)
 {
-	return NULL;
+	Node *result;
+
+	Node *(*seq1[])(Lexer*) = {
+		parse_LBRC,
+		parse_dot,
+		parse_RBRC
+	};
+	if ((result = parse_seq(lexer, 3, seq1)) != NULL)
+		return result;
+
+	Node *(*seq2[])(Lexer*) = {
+		parse_dot,
+		parse_LBRC,
+		parse_logic,
+		parse_RBRC
+	};
+	if ((result = parse_seq(lexer, 4, seq2)) != NULL)
+		return result;
+
+	return parse_dot(lexer);
 }
 
 Node *parse_expr(Lexer *lexer)
@@ -430,12 +483,13 @@ Node *parse_call(Lexer *lexer)
 	args = parse_many(lexer, parse_arg);
 	Node_push(dot, args);
 
-	return args;
+	return dot;
 }
 
 Node *parse_arg(Lexer *lexer)
 {
 	Node *res;
+
 	Node *(*seq[])(Lexer*) = { parse_LPAR, parse_logic, parse_RPAR };
 	if ((res = parse_seq(lexer, 3, seq)) != NULL)
 		return res;

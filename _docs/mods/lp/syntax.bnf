@@ -8,7 +8,9 @@
 <for> ::= <FOR> <forcond> <fbody>
 
 <forcond> ::= <SYM> <IN> <range>
-            | {<logic> sepby <SEMI>}
+            | {<forstmt>}
+
+<forlogic> ::= <logic> sepby <SEMI>
 
 <type> ::= <TYPE> <SYM> <EQ> <fbody>
 
@@ -31,12 +33,13 @@
           | <logic>
 
 # name: Type = something
-<bind> ::= <typedsym> (<EQ>|<AEQ>|<SEQ>|<MEQ>|<DEQ>|<MOQ>) <logic>
-         | <typedsym>
+<bind> ::= <typedsym> <bindsym> <logic>
+         | <SYM> <bindsym> <logic>
+
+<bindsym> ::= <EQ> | <AEQ> | <SEQ> | <MEQ> | <DEQ> | <MOQ>
 
 # "name: Type" or "name"
 <typedsym> ::= <dot> <COLN> <typeanno>
-             | <dot>
 
 # "i64" or "Module.Type[5]" or "[pointer]"
 <typeanno> ::= <LBRC> <dot> <RBRC>

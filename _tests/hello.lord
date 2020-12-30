@@ -1,3 +1,6 @@
 # hello world program
-ext puts
-fn main = puts "Hail the Lord"
+
+x
+
+fn main =
+	puts "Hail the Lord"
