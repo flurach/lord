@@ -32,6 +32,30 @@ void lex_file(char *fpath)
 	Lexer_free(lexer);
 }
 
+void lex_repl()
+{
+	Lexer *lexer;
+
+	while (1) {
+		char *src = readline(" > ");
+		if (src && *src)
+			add_history(src);
+		else
+			break;
+
+		if (strcmp(src, "exit") == 0) {
+			free(src);
+			break;
+		}
+
+		lexer = Lexer_new(src);
+		while (Lexer_next(lexer) != T_EOF)
+			Lexer_print(lexer);
+
+		Lexer_free(lexer);
+	}
+}
+
 void parse_file(char *fpath)
 {
 	char *s = NULL;
@@ -104,14 +128,17 @@ int main(int argc, char **argv)
 {
 	int opt = 0;
 
-	while ((opt = getopt(argc, argv, "il:p:s:")) != -1) {
+	while ((opt = getopt(argc, argv, "l:p:s:")) != -1) {
 		switch (opt) {
 		case 'l':
-			lex_file(optarg);
+			if (optarg == NULL)
+				lex_repl();
+			else
+				lex_file(optarg);
 			break;
 
 		case 'p':
-			if (repl)
+			if (optarg == NULL)
 				parse_repl();
 			else
 				parse_file(optarg);
@@ -119,10 +146,6 @@ int main(int argc, char **argv)
 
 		case 's':
 			simple_file(optarg);
-			break;
-
-		case 'i':
-			repl = !repl;
 			break;
 
 		default:

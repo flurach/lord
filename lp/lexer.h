@@ -2,6 +2,7 @@
 #define LORD_LP_LEX_H
 
 #include <ctype.h>
+#include <stdbool.h>
 #include "node.h"
 #include "helpers.h"
 
@@ -14,6 +15,9 @@ typedef struct {
 	Range range;
 	Token token;
 	char *val;
+
+	bool cached;
+	Token cache;
 } Lexer;
 
 /* constructor & destructor */

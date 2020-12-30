@@ -8,7 +8,7 @@
 <for> ::= <FOR> <forcond> <fbody>
 
 <forcond> ::= <SYM> <IN> <range>
-            | {<forstmt>}
+            | {<forlogic>}
 
 <forlogic> ::= <logic> sepby <SEMI>
 
@@ -34,6 +34,7 @@
 
 # name: Type = something
 <bind> ::= <typedsym> <bindsym> <logic>
+         | <typedsym>
          | <SYM> <bindsym> <logic>
 
 <bindsym> ::= <EQ> | <AEQ> | <SEQ> | <MEQ> | <DEQ> | <MOQ>

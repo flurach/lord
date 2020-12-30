@@ -1,6 +1,5 @@
 # hello world program
-
-x
+# PROBLEMATIC
 
 fn main =
 	puts "Hail the Lord"

@@ -11,7 +11,10 @@ Lexer *Lexer_new(char *src)
 
 		.range = {0, 0},
 		.token = T_EOF,
-		.val = strdup(src)
+		.val = strdup(src),
+
+		.cached = false,
+		.cache = T_EOF
 	};
 	self->val[0] = '\0';
 	return self;
@@ -38,6 +41,7 @@ char Lexer_char(Lexer *self)
 
 Token Lexer_next(Lexer *self)
 {
+	self->cached = false;
 	char *vi = self->val;
 
 	/* skip whitespace */
@@ -282,9 +286,15 @@ Token Lexer_next(Lexer *self)
 
 Token Lexer_peek(Lexer *self)
 {
+	if (self->cached)
+		return self->cache;
+
 	size_t i = self->i;
 	Token token = Lexer_next(self);
 	self->i = i;
+
+	self->cached = true;
+	self->cache = token;
 	return token;
 }
 

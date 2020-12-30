@@ -59,13 +59,12 @@ Node *parse_forcond(Lexer *lexer)
 
 Node *parse_forlogic(Lexer *lexer)
 {
-	Node *(*seq[])(Lexer*) = {
-		parse_SYM,
-		parse_IN,
-		parse_range
+	Node *(*either[])(Lexer*) = {
+		parse_bind,
+		parse_logic
 	};
 
-	return parse_seq(lexer, 3, seq);
+	return parse_either(lexer, 2, either);
 }
 
 Node *parse_type(Lexer *lexer)
@@ -234,12 +233,12 @@ Node *parse_fbody(Lexer *lexer)
 
 	if ((indent = parse_INDENT(lexer)) != NULL)
 		return NULL;
+	Node_free(indent);
 
 	stmts = parse_many(lexer, parse_stmt);
 
-	if ((dedent = parse_DEDENT(lexer)) == NULL)
-		return stmts;
-	Node_push(stmts, dedent);
+	if ((dedent = parse_DEDENT(lexer)) != NULL)
+		Node_free(dedent);
 
 	return stmts;
 }
@@ -254,6 +253,9 @@ Node *parse_bind(Lexer *lexer)
 		parse_logic
 	};
 	if ((result = parse_seq(lexer, 3, seq1)) != NULL)
+		return result;
+
+	if ((result = parse_typedsym(lexer)) != NULL)
 		return result;
 
 	Node *(*seq2[])(Lexer*) = {
@@ -467,7 +469,7 @@ Node *parse_arr(Lexer *lexer)
 	items = parse_sepby(lexer, parse_logic, parse_COMA);
 
 	if ((rcrl = parse_RCRL(lexer)) != NULL)
-		Node_free(lcrl);
+		Node_free(rcrl);
 
 	items->token = T_ARR;
 	return items;
@@ -574,6 +576,7 @@ Node *parse_seq(Lexer *lexer, size_t count, Node *(*parsers[])(Lexer*))
 		if (result == NULL) {
 			*lexer = backup;
 			Node_free(seq);
+			Node_free(result);
 			return NULL;
 		}
 		Node_push(seq, result);
