@@ -22,10 +22,12 @@ struct Node {
 /* constructor & destructor */
 Node *Node_new(Range range, Token token, char *val);
 void Node_free(Node *self);
+void Node_dryfree(Node *self);
 
 /* methods */
 void Node_push(Node *self, Node *child);
 Node *Node_pop(Node *self);
+Node *Node_binarify(Node *self);
 
 /* debugging */
 void Node_print(Node *self);

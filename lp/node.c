@@ -21,13 +21,15 @@ Node *Node_new(Range range, Token token, char *val)
 
 void Node_free(Node *self)
 {
-	if (self == NULL)
-		return;
-
 	size_t i;
 	for (i = 0; i < self->ns_len; i++)
 		Node_free(self->ns[i]);
 
+	Node_dryfree(self);
+}
+
+void Node_dryfree(Node *self)
+{
 	free(self->ns);
 	free(self->val);
 	free(self);
@@ -48,6 +50,17 @@ Node *Node_pop(Node *self)
 	if (self->ns_len > 0)
 		return self->ns[--self->ns_len];
 	return NULL;
+}
+
+Node *Node_binarify(Node *self)
+{
+	Node *tmp = self->ns[1];
+
+	Node_push(tmp, self->ns[0]);
+	Node_push(tmp, self->ns[2]);
+	Node_dryfree(self);
+
+	return tmp;
 }
 
 void Node_print(Node *self)

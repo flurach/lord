@@ -1,6 +1,7 @@
 <stmt> ::= <for>
          | <if>
          | <fdef>
+         | <type>
          | <bind>
          | <logic>
          | <PASS>
@@ -90,7 +91,7 @@
         | <CHR>
         | <ptr>
         | <arr>
-	| <SYM>
+	| <dot>
 
 # "type.field" or "type"
 <dot> ::= <SYM> <DOT> <dot>

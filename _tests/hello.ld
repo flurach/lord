@@ -1,5 +1,2 @@
 # hello world program
-# PROBLEMATIC
-
-fn main =
-	puts "Hail the Lord"
+fn main = puts "Hail the Lord"

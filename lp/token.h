@@ -72,6 +72,12 @@
 	X(STMTS)\
 	X(ARR)\
 	X(CALL)\
+	X(ARGS)\
+	X(BIND)\
+	X(TYPEANNO)\
+	X(PTR_ACCESS)\
+	X(EXPR)\
+	X(CAST)\
 	\
 	X(LAST)
 

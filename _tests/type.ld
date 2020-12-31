@@ -1,5 +1,4 @@
 # data types
-# PROBLEMATIC
 
 type Rectangle =
 	width:  i64
