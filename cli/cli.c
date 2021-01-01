@@ -4,7 +4,6 @@
 /* Lord's libs */
 #include <helpers.h>
 #include <parser.h>
-#include <visitors/all.h>
 
 /* Ext libs */
 #include <readline/readline.h>
@@ -103,32 +102,13 @@ void parse_repl()
 
 void simple_file(char *fpath)
 {
-	char *s = NULL;
-	if ((s = ftoa(fpath)) == NULL) {
-		puts("failed to open file");
-		return;
-	}
-
-	Lexer *lexer = Lexer_new(s);
-	Node *ast = parse(lexer);
-	CompState *state = CompState_new();
-
-	Visitor *literals_visitor = LiteralsVisitor_new(state);
-	Visitor_visit(literals_visitor, ast);
-
-	Visitor *simple_visitor = SimpleVisitor_new(state);
-	Visitor_visit(simple_visitor, ast);
-
-	Visitor_free(simple_visitor);
-	Node_free(ast);
-	Lexer_free(lexer);
 }
 
 int main(int argc, char **argv)
 {
 	int opt = 0;
 
-	while ((opt = getopt(argc, argv, "l:p:s:")) != -1) {
+	while ((opt = getopt(argc, argv, "l:p:c:")) != -1) {
 		switch (opt) {
 		case 'l':
 			if (optarg == NULL)
@@ -144,8 +124,8 @@ int main(int argc, char **argv)
 				parse_file(optarg);
 			break;
 
-		case 's':
-			simple_file(optarg);
+		case 'c':
+			compile_file(optarg);
 			break;
 
 		default:

@@ -1,8 +1,9 @@
-#ifndef LORD_LC_VISITORS_BASE_H
-#define LORD_LC_VISITORS_BASE_H
+#ifndef LORD_LC_COMMON_VISITOR_H
+#define LORD_LC_COMMON_VISITOR_H
 
 #include "node.h"
-#include "comp_state.h"
+struct CompState;
+typedef struct CompState CompState;
 
 /* visitor class */
 typedef struct Visitor Visitor;
