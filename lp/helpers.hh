@@ -1,11 +1,10 @@
-#ifndef LORD_LP_HELPERS_H
-#define LORD_LP_HELPERS_H
+#ifndef LORD_LP_HELPERS_HH
+#define LORD_LP_HELPERS_HH
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <iostream>
+#include <fstream>
+#include <optional>
 
-char *ftoa(char *fpath);
-char *strdup(char *s);
+std::optional<std::string> ftoa(char *fpath);
 
 #endif

@@ -1,7 +1,7 @@
-#ifndef LORD_LC_COMMON_VISITOR_H
-#define LORD_LC_COMMON_VISITOR_H
+#ifndef LORD_LC_COMMON_VISITOR_HH
+#define LORD_LC_COMMON_VISITOR_HH
 
-#include "node.h"
+#include "node.hh"
 struct CompState;
 typedef struct CompState CompState;
 

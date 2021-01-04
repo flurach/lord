@@ -2,8 +2,8 @@
 #include <unistd.h>
 
 /* Lord's libs */
-#include <helpers.h>
-#include <parser.h>
+#include <helpers.hh>
+#include <parser.hh>
 
 /* Ext libs */
 #include <readline/readline.h>
@@ -12,29 +12,19 @@
 /* cli state */
 int repl = 0;
 
-/* getopt */
-extern int  getopt(int, char**, char*);
-extern char *optarg;
-
 void lex_file(char *fpath)
 {
-	char *s = NULL;
-	if ((s = ftoa(fpath)) == NULL) {
+	if (auto s = ftoa(fpath)) {
+		Lexer lexer = Lexer(*s);
+		while (lexer.next() != T_EOF)
+			lexer.print();
+	} else {
 		puts("failed to open file");
-		return;
 	}
-
-	Lexer *lexer = Lexer_new(s);
-	while (Lexer_next(lexer) != T_EOF)
-		Lexer_print(lexer);
-
-	Lexer_free(lexer);
 }
 
 void lex_repl()
 {
-	Lexer *lexer;
-
 	while (1) {
 		char *src = readline(" > ");
 		if (src && *src)
@@ -47,35 +37,26 @@ void lex_repl()
 			break;
 		}
 
-		lexer = Lexer_new(src);
-		while (Lexer_next(lexer) != T_EOF)
-			Lexer_print(lexer);
-
-		Lexer_free(lexer);
+		Lexer lexer = Lexer(src);
+		while (lexer.next() != T_EOF)
+			lexer.print();
 	}
 }
 
 void parse_file(char *fpath)
 {
-	char *s = NULL;
-	if ((s = ftoa(fpath)) == NULL) {
+	if (auto s = ftoa(fpath)) {
+		Lexer lexer = Lexer(*s);
+		Node *ast = parse(&lexer);
+		ast->print();
+		delete ast;
+	} else {
 		puts("failed to open file");
-		return;
 	}
-
-	Lexer *lexer = Lexer_new(s);
-	Node *ast = parse(lexer);
-
-	Node_print(ast);
-	Node_free(ast);
-	Lexer_free(lexer);
 }
 
 void parse_repl()
 {
-	Lexer *lexer;
-	Node *ast;
-
 	while (1) {
 		char *src = readline(" > ");
 		if (src && *src)
@@ -88,15 +69,11 @@ void parse_repl()
 			break;
 		}
 
-		lexer = Lexer_new(src);
-		ast = parse(lexer);
-
-		if (ast) {
-			Node_print(ast);
-			Node_free(ast);
-		}
-
-		Lexer_free(lexer);
+		Lexer lexer = Lexer(src);
+		Node *ast = parse(&lexer);
+		ast->print();
+		delete ast;
+		free(src);
 	}
 }
 
@@ -109,7 +86,7 @@ int main(int argc, char **argv)
 {
 	int opt = 0;
 
-	while ((opt = getopt(argc, argv, "l:p:c:")) != -1) {
+	while ((opt = getopt(argc, argv, "l::p::c::")) != -1) {
 		switch (opt) {
 		case 'l':
 			if (optarg == NULL)

@@ -1,8 +1,8 @@
-#include "visitor.h"
+#include "visitor.hh"
 
 Visitor *Visitor_new(CompState *state)
 {
-	Visitor *self = malloc(sizeof(Visitor));
+	Visitor *self = (Visitor*)malloc(sizeof(Visitor));
 
 	size_t i;
 	for (i = 0; i < T_LAST; i++)

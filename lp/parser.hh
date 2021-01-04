@@ -1,7 +1,7 @@
-#ifndef LORD_LP_PARSER_H
-#define LORD_LP_PARSER_H
+#ifndef LORD_LP_PARSER_HH
+#define LORD_LP_PARSER_HH
 
-#include "lexer.h"
+#include "lexer.hh"
 
 /* interface */
 Node *parse(Lexer *lexer);
@@ -51,8 +51,8 @@ Node *parse_dot(Lexer *lexer);
 /* higher-order parsers */
 Node *parse_many(Lexer *lexer, Node *(*parser)(Lexer*));
 Node *parse_sepby(Lexer *lexer, Node *(*parser)(Lexer*), Node *(*delim)(Lexer*));
-Node *parse_either(Lexer *lexer, size_t count, Node *(*parsers[])(Lexer*));
-Node *parse_seq(Lexer *lexer, size_t count, Node *(*parsers[])(Lexer*));
+Node *parse_either(Lexer *lexer, std::vector<Node *(*)(Lexer*)> parsers);
+Node *parse_seq(Lexer *lexer, std::vector<Node *(*)(Lexer*)> parsers);
 
 /* primitive parsers */
 #define X(token) Node *parse_##token(Lexer *lexer);

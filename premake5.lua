@@ -2,6 +2,7 @@ workspace "lord"
 	configurations { "debug", "release" }
 
 	toolset "clang"
+	cppdialect "C++17"
 	warnings "extra"
 	fatalwarnings "extra"
 

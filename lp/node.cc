@@ -1,69 +1,39 @@
-#include "node.h"
-#include "token.h"
+#include "node.hh"
 
-#define DEFAULT_NS_CAP 50
-
-Node *Node_new(Range range, Token token, char *val)
+Node::Node(Range range, Token token, std::string val)
+	: range(range), token(token), val(val)
 {
-	Node *self = malloc(sizeof(Node));
-	*self = (Node){
-		.id = 0,
-		.range = range,
-		.token = token,
-		.val = val,
-
-		.ns_len = 0,
-		.ns_cap = DEFAULT_NS_CAP,
-		.ns = calloc(DEFAULT_NS_CAP, sizeof(Node*))
-	};
-	return self;
 }
 
-void Node_free(Node *self)
+void Node::push(Node *child)
 {
-	size_t i;
-	for (i = 0; i < self->ns_len; i++)
-		Node_free(self->ns[i]);
-
-	Node_dryfree(self);
+	ns.push_back(child);
 }
 
-void Node_dryfree(Node *self)
+Node *Node::pop()
 {
-	free(self->ns);
-	free(self->val);
-	free(self);
+	auto last = ns.back();
+	ns.pop_back();
+	return last;
 }
 
-void Node_push(Node *self, Node *child)
+bool Node::binarify()
 {
-	if (self->ns_len > self->ns_cap / 2) {
-		self->ns_cap *= 2;
-		self->ns = realloc(self->ns, self->ns_cap * sizeof(Node*));
-	}
+	if (ns.size() != 3)
+		return false;
 
-	self->ns[self->ns_len++] = child;
+	auto fst = pop();
+	auto snd = pop();
+	auto trd = pop();
+
+	snd->push(fst);
+	snd->push(trd);
+	*this = *snd;
+
+	return true;
 }
 
-Node *Node_pop(Node *self)
-{
-	if (self->ns_len > 0)
-		return self->ns[--self->ns_len];
-	return NULL;
-}
-
-Node *Node_binarify(Node *self)
-{
-	Node *tmp = self->ns[1];
-
-	Node_push(tmp, self->ns[0]);
-	Node_push(tmp, self->ns[2]);
-	Node_dryfree(self);
-
-	return tmp;
-}
-
-void Node_print(Node *self)
+void Node::print()
 {
 	static size_t indent = 0;
 
@@ -71,16 +41,18 @@ void Node_print(Node *self)
 	while (i++ < indent)
 		putchar('\t');
 
-	printf(
-		"%s '%s' %lu..%lu\n",
-		Token_str[self->token],
-		self->val,
-		self->range.begin,
-		self->range.end
-	);
+	std::cout
+		<< Token_str[token]
+		<< " '"
+		<< val
+		<< "' "
+		<< range.begin
+		<< ".."
+		<< range.end
+		<< std::endl;
 
 	indent++;
-	for (i = 0; i < self->ns_len; i++)
-		Node_print(self->ns[i]);
+	for (i = 0; i < ns.size(); i++)
+		ns[i]->print();
 	indent--;
 }

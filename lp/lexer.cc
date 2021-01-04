@@ -1,310 +1,286 @@
-#include "lexer.h"
+#include "lexer.hh"
 
-Lexer *Lexer_new(char *src)
+Lexer::Lexer(std::string src)
 {
-	Lexer *self = malloc(sizeof(Lexer));
-	*self = (Lexer){
-		.src = src,
-		.i = 0,
-		.i_len = 0,
-		.i_dep = 0,
-
-		.range = {0, 0},
-		.token = T_EOF,
-		.val = strdup(src),
-
-		.cached = false,
-		.cache = T_EOF
-	};
-	self->val[0] = '\0';
-	return self;
+	this->src = src;
 }
 
-void Lexer_free(Lexer *self)
+char Lexer::curr()
 {
-	free(self->val);
-	free(self->src);
-	free(self);
+	return this->src[this->i];
 }
 
-char Lexer_curr(Lexer *self)
+char Lexer::ch()
 {
-	return self->src[self->i];
-}
-
-char Lexer_char(Lexer *self)
-{
-	if (self->src[self->i] != '\0')
-		return self->src[self->i++];
+	if (this->src[this->i] != '\0')
+		return src[this->i++];
 	return '\0';
 }
 
-Token Lexer_next(Lexer *self)
+Token Lexer::next()
 {
-	self->cached = false;
-	char *vi = self->val;
+	this->cached = false;
+	this->val = "";
 
 	/* skip whitespace */
-	while (Lexer_curr(self) == '\t' || Lexer_curr(self) == ' ')
-		Lexer_char(self);
+	while (curr() == '\t' || curr() == ' ')
+		ch();
 
-	self->range.begin = self->i;
+	this->range.begin = this->i;
 
 	/* comments */
-	if (Lexer_curr(self) == '#') {
-		while (Lexer_curr(self) != '\n' && Lexer_curr(self) != '\0')
-			Lexer_char(self);
-		Lexer_char(self);
-		return Lexer_next(self);
+	if (curr() == '#') {
+		while (curr() != '\n' && curr() != '\0')
+			ch();
+		ch();
+		return next();
 	}
 
 	/* indentation */
-	else if (Lexer_curr(self) == '\n') {
-		while (Lexer_curr(self) == '\n')
-			Lexer_char(self);
+	else if (curr() == '\n') {
+		while (curr() == '\n')
+			ch();
 
 		size_t new_i_len = 0;
-		while (Lexer_curr(self) == '\t' || Lexer_curr(self) == ' ') {
-			Lexer_char(self);
+		while (curr() == '\t' || curr() == ' ') {
+			ch();
 			new_i_len++;
 		}
 
-		if (new_i_len > self->i_len) {
-			self->token = T_INDENT;
-			self->i_dep++;
-		} else if (new_i_len < self->i_len) {
-			self->token = T_DEDENT;
-			self->i_dep--;
+		if (new_i_len > this->i_len) {
+			this->token = T_INDENT;
+			this->i_dep++;
+		} else if (new_i_len < this->i_len) {
+			this->token = T_DEDENT;
+			this->i_dep--;
 		} else {
-			self->token = T_EOL;
+			this->token = T_EOL;
 		}
 
-		self->i_len = new_i_len;
+		this->i_len = new_i_len;
 	}
 
 	/* keywords, logic & symbols */
-	else if (isalpha(Lexer_curr(self))) {
-		while (isalnum(Lexer_curr(self)) || Lexer_curr(self) == '_')
-			*vi++ = Lexer_char(self);
-		*vi = '\0';
+	else if (isalpha(curr())) {
+		while (isalnum(curr()) || curr() == '_')
+			this->val.push_back(ch());
 
-		if (strcmp(self->val, "pass") == 0)
-			self->token = T_PASS;
-		else if (strcmp(self->val, "ext") == 0)
-			self->token = T_EXT;
-		else if (strcmp(self->val, "fn") == 0)
-			self->token = T_FN;
-		else if (strcmp(self->val, "if") == 0)
-			self->token = T_IF;
-		else if (strcmp(self->val, "else") == 0)
-			self->token = T_ELSE;
-		else if (strcmp(self->val, "for") == 0)
-			self->token = T_FOR;
-		else if (strcmp(self->val, "in") == 0)
-			self->token = T_IN;
-		else if (strcmp(self->val, "to") == 0)
-			self->token = T_TO;
-		else if (strcmp(self->val, "type") == 0)
-			self->token = T_TYPE;
-		else if (strcmp(self->val, "as") == 0)
-			self->token = T_AS;
-		else if (strcmp(self->val, "and") == 0)
-			self->token = T_AND;
-		else if (strcmp(self->val, "or") == 0)
-			self->token = T_ORR;
-		else if (strcmp(self->val, "not") == 0)
-			self->token = T_NOT;
+		if (this->val == "pass")
+			this->token = T_PASS;
+		else if (this->val == "fn")
+			this->token = T_FN;
+		else if (this->val == "if")
+			this->token = T_IF;
+		else if (this->val == "else")
+			this->token = T_ELSE;
+		else if (this->val == "for")
+			this->token = T_FOR;
+		else if (this->val == "in")
+			this->token = T_IN;
+		else if (this->val == "to")
+			this->token = T_TO;
+		else if (this->val == "type")
+			this->token = T_TYPE;
+		else if (this->val == "as")
+			this->token = T_AS;
+		else if (this->val == "and")
+			this->token = T_AND;
+		else if (this->val == "or")
+			this->token = T_ORR;
+		else if (this->val == "not")
+			this->token = T_NOT;
 		else
-			self->token = T_SYM;
+			this->token = T_SYM;
 	}
 
 	/* numbers */
-	else if (isdigit(Lexer_curr(self))) {
-		self->token = T_INT;
-		while (isdigit(Lexer_curr(self)) || Lexer_curr(self) == '.')  {
-			if (self->token == T_INT && Lexer_curr(self) == '.')
-				self->token = T_FLT;
-			else if (Lexer_curr(self) == '.')
+	else if (isdigit(curr())) {
+		this->token = T_INT;
+		while (isdigit(curr()) || curr() == '.')  {
+			if (this->token == T_INT && curr() == '.')
+				this->token = T_FLT;
+			else if (curr() == '.')
 				break;
-			*vi++ = Lexer_char(self);
+			this->val.push_back(ch());
 		}
 	}
 
 	/* strings */
-	else if (Lexer_curr(self) == '\'' || Lexer_curr(self) == '\"') {
-		const char pair = Lexer_char(self);
-		self->token = pair == '\'' ? T_CHR : T_STR;
-		while (Lexer_curr(self) != pair && Lexer_curr(self) != '\0')
-			*vi++ = Lexer_char(self);
-		Lexer_char(self);
+	else if (curr() == '\'' || curr() == '\"') {
+		const char pair = ch();
+		this->token = pair == '\'' ? T_CHR : T_STR;
+		while (curr() != pair && curr() != '\0')
+			this->val.push_back(ch());
+		ch();
 	}
 
 	/* operators */
-	else if (Lexer_curr(self) == '=') {
-		*vi++ = Lexer_char(self);
-		if (Lexer_curr(self) == '=') {
-			self->token = T_EEQ;
-			*vi++ = Lexer_char(self);
+	else if (curr() == '=') {
+		this->val.push_back(ch());
+		if (curr() == '=') {
+			this->token = T_EEQ;
+			this->val.push_back(ch());
 		} else {
-			self->token = T_EQ;
+			this->token = T_EQ;
 		}
 	}
-	else if (Lexer_curr(self) == '[') {
-		self->token = T_LBRC;
-		*vi++ = Lexer_char(self);
+	else if (curr() == '[') {
+		this->token = T_LBRC;
+		this->val.push_back(ch());
 	}
-	else if (Lexer_curr(self) == ']') {
-		self->token = T_RBRC;
-		*vi++ = Lexer_char(self);
+	else if (curr() == ']') {
+		this->token = T_RBRC;
+		this->val.push_back(ch());
 	}
-	else if (Lexer_curr(self) == '.') {
-		*vi++ = Lexer_char(self);
-		self->token = T_DOT;
+	else if (curr() == '.') {
+		this->val.push_back(ch());
+		this->token = T_DOT;
 	}
 
 	/* punctuation */
-	else if (Lexer_curr(self) == '(') {
-		self->token = T_LPAR;
-		*vi++ = Lexer_char(self);
+	else if (curr() == '(') {
+		this->token = T_LPAR;
+		this->val.push_back(ch());
 	}
-	else if (Lexer_curr(self) == ')') {
-		self->token = T_RPAR;
-		*vi++ = Lexer_char(self);
+	else if (curr() == ')') {
+		this->token = T_RPAR;
+		this->val.push_back(ch());
 	}
-	else if (Lexer_curr(self) == '{') {
-		self->token = T_LCRL;
-		*vi++ = Lexer_char(self);
+	else if (curr() == '{') {
+		this->token = T_LCRL;
+		this->val.push_back(ch());
 	}
-	else if (Lexer_curr(self) == '}') {
-		self->token = T_RCRL;
-		*vi++ = Lexer_char(self);
+	else if (curr() == '}') {
+		this->token = T_RCRL;
+		this->val.push_back(ch());
 	}
-	else if (Lexer_curr(self) == ',') {
-		self->token = T_COMA;
-		*vi++ = Lexer_char(self);
+	else if (curr() == ',') {
+		this->token = T_COMA;
+		this->val.push_back(ch());
 	}
-	else if (Lexer_curr(self) == ';') {
-		self->token = T_SEMI;
-		*vi++ = Lexer_char(self);
+	else if (curr() == ';') {
+		this->token = T_SEMI;
+		this->val.push_back(ch());
 	}
-	else if (Lexer_curr(self) == ':') {
-		self->token = T_COLN;
-		*vi++ = Lexer_char(self);
+	else if (curr() == ':') {
+		this->token = T_COLN;
+		this->val.push_back(ch());
 	}
 
 	/* maths */
-	else if (Lexer_curr(self) == '+') {
-		*vi++ = Lexer_char(self);
-		if (Lexer_curr(self) == '=') {
-			self->token = T_AEQ;
-			*vi++ = Lexer_char(self);
+	else if (curr() == '+') {
+		this->val.push_back(ch());
+		if (curr() == '=') {
+			this->token = T_AEQ;
+			this->val.push_back(ch());
 		} else {
-			self->token = T_ADD;
+			this->token = T_ADD;
 		}
 	}
-	else if (Lexer_curr(self) == '-') {
-		*vi++ = Lexer_char(self);
-		if (Lexer_curr(self) == '=') {
-			self->token = T_SEQ;
-			*vi++ = Lexer_char(self);
+	else if (curr() == '-') {
+		this->val.push_back(ch());
+		if (curr() == '=') {
+			this->token = T_SEQ;
+			this->val.push_back(ch());
 		} else {
-			self->token = T_SUB;
+			this->token = T_SUB;
 		}
 	}
-	else if (Lexer_curr(self) == '*') {
-		*vi++ = Lexer_char(self);
-		if (Lexer_curr(self) == '=') {
-			self->token = T_MEQ;
-			*vi++ = Lexer_char(self);
+	else if (curr() == '*') {
+		this->val.push_back(ch());
+		if (curr() == '=') {
+			this->token = T_MEQ;
+			this->val.push_back(ch());
 		} else {
-			self->token = T_MUL;
+			this->token = T_MUL;
 		}
 	}
-	else if (Lexer_curr(self) == '/') {
-		*vi++ = Lexer_char(self);
-		if (Lexer_curr(self) == '=') {
-			self->token = T_DEQ;
-			*vi++ = Lexer_char(self);
+	else if (curr() == '/') {
+		this->val.push_back(ch());
+		if (curr() == '=') {
+			this->token = T_DEQ;
+			this->val.push_back(ch());
 		} else {
-			self->token = T_DIV;
+			this->token = T_DIV;
 		}
 	}
-	else if (Lexer_curr(self) == '%') {
-		*vi++ = Lexer_char(self);
-		if (Lexer_curr(self) == '=') {
-			self->token = T_MOQ;
-			*vi++ = Lexer_char(self);
+	else if (curr() == '%') {
+		this->val.push_back(ch());
+		if (curr() == '=') {
+			this->token = T_MOQ;
+			this->val.push_back(ch());
 		} else {
-			self->token = T_MOD;
+			this->token = T_MOD;
 		}
 	}
 
 	/* logic */
-	else if (Lexer_curr(self) == '!') {
-		*vi++ = Lexer_char(self);
-		if (Lexer_curr(self) == '=') {
-			self->token = T_NEQ;
-			*vi++ = Lexer_char(self);
+	else if (curr() == '!') {
+		this->val.push_back(ch());
+		if (curr() == '=') {
+			this->token = T_NEQ;
+			this->val.push_back(ch());
 		} else {
-			self->token = T_NOT;
+			this->token = T_NOT;
 		}
 	}
-	else if (Lexer_curr(self) == '<') {
-		*vi++ = Lexer_char(self);
-		if (Lexer_curr(self) == '=') {
-			self->token = T_LEQ;
-			*vi++ = Lexer_char(self);
+	else if (curr() == '<') {
+		this->val.push_back(ch());
+		if (curr() == '=') {
+			this->token = T_LEQ;
+			this->val.push_back(ch());
 		} else {
-			self->token = T_LSS;
+			this->token = T_LSS;
 		}
 	}
-	else if (Lexer_curr(self) == '>') {
-		*vi++ = Lexer_char(self);
-		if (Lexer_curr(self) == '=') {
-			self->token = T_GEQ;
-			*vi++ = Lexer_char(self);
+	else if (curr() == '>') {
+		this->val.push_back(ch());
+		if (curr() == '=') {
+			this->token = T_GEQ;
+			this->val.push_back(ch());
 		} else {
-			self->token = T_GTR;
+			this->token = T_GTR;
 		}
 	}
 
 	/* end of file */
-	else if (Lexer_curr(self) == '\0') {
+	else if (curr() == '\0') {
 		/* leading dedents */
-		if (self->i_dep != 0) {
-			self->token = T_DEDENT;
-			self->i_dep--;
+		if (this->i_dep != 0) {
+			this->token = T_DEDENT;
+			this->i_dep--;
 		} else {
-			self->token = T_EOF;
+			this->token = T_EOF;
 		}
 	}
 
-	self->range.end = self->i;
-	*vi = '\0';
-	return self->token;
+	this->range.end = this->i;
+	return this->token;
 }
 
-Token Lexer_peek(Lexer *self)
+Token Lexer::peek()
 {
-	if (self->cached)
-		return self->cache;
+	if (this->cached)
+		return this->cache;
 
-	size_t i = self->i;
-	Token token = Lexer_next(self);
-	self->i = i;
+	size_t i = this->i;
+	Token token = next();
+	this->i = i;
 
-	self->cached = true;
-	self->cache = token;
+	this->cached = true;
+	this->cache = token;
 	return token;
 }
 
-void Lexer_print(Lexer *self)
+void Lexer::print()
 {
-	printf(
-		"%s '%s' %lu..%lu\n",
-		Token_str[self->token],
-		self->val,
-		self->range.begin,
-		self->range.end
-	);
+	std::cout
+		<< Token_str[token]
+		<< " '"
+		<< val
+		<< "' "
+		<< range.begin
+		<< ".."
+		<< range.end
+		<< std::endl;
 }

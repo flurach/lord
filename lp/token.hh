@@ -1,5 +1,5 @@
-#ifndef LORD_LP_TOKEN_H
-#define LORD_LP_TOKEN_H
+#ifndef LORD_LP_TOKEN_HH
+#define LORD_LP_TOKEN_HH
 
 #define LORD_LP_TOKENS\
 	\
@@ -19,7 +19,6 @@
 	\
 	/* keywords */\
 	X(PASS)\
-	X(EXT)\
 	X(FN)\
 	X(IF)\
 	X(ELSE)\

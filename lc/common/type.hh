@@ -1,5 +1,5 @@
-#ifndef LORD_LC_COMMON_TYPE_H
-#define LORD_LC_COMMON_TYPE_H
+#ifndef LORD_LC_COMMON_TYPE_HH
+#define LORD_LC_COMMON_TYPE_HH
 
 #define LORC_LC_COMMON_PRIMTYPES\
 	\
@@ -30,7 +30,7 @@ typedef enum {
 static const char *PrimType_str[] = {
 	#define X(pt) #pt,
 		LORD_LC_COMMON_PRIMTYPES
-	#undef
+	#undef X
 };
 
 typedef struct {
