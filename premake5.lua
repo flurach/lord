@@ -2,7 +2,6 @@ workspace "lord"
 	configurations { "debug", "release" }
 
 	toolset "clang"
-	cdialect "C89"
 	warnings "extra"
 	fatalwarnings "extra"
 
@@ -18,24 +17,24 @@ workspace "lord"
 
 	project "lp"
 		kind "SharedLib"
-		language "C"
+		language "C++"
 
 		includedirs { "lp" }
-		files { "lp/**.c" }
+		files { "lp/**.cc" }
 
 	project "lc"
 		kind "SharedLib"
-		language "C"
+		language "C++"
 
 		includedirs { "lc", "lp" }
-		files { "lc/**.c" }
+		files { "lc/**.cc" }
 
 	project "cli"
 		kind "ConsoleApp"
-		language "C"
+		language "C++"
 
 		targetname "lord"
 
 		includedirs { "cli", "lc", "lp" }
-		files { "cli/**.c" }
+		files { "cli/**.cc" }
 		links { "lc", "lp", "readline" }
