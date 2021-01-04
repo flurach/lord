@@ -4,6 +4,7 @@ workspace "lord"
 	toolset "clang"
 	cdialect "C89"
 	warnings "extra"
+	fatalwarnings "extra"
 
 	targetdir "_bin"
 	objdir "_bin/obj"

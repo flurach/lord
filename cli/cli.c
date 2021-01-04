@@ -100,8 +100,9 @@ void parse_repl()
 	}
 }
 
-void simple_file(char *fpath)
+void compile_file(char *fpath)
 {
+	(void)fpath;
 }
 
 int main(int argc, char **argv)
