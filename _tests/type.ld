@@ -8,4 +8,4 @@ fn Rectangle.area self =
 	self.width * self.height
 
 my_rect = Rectangle 5 5
-printf "%d\n" my_rect.area
+printf "%d\n" (my_rect.area)

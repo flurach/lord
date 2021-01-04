@@ -22,9 +22,9 @@ bool Node::binarify()
 	if (ns.size() != 3)
 		return false;
 
-	auto fst = pop();
-	auto snd = pop();
 	auto trd = pop();
+	auto snd = pop();
+	auto fst = pop();
 
 	snd->push(fst);
 	snd->push(trd);

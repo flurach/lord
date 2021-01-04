@@ -9,7 +9,7 @@ Node *parse(Lexer *lexer)
 
 Node *parse_stmt(Lexer *lexer)
 {
-	auto parsers = {
+	return parse_either(lexer, {
 		parse_for,
 		parse_if,
 		parse_fdef,
@@ -18,9 +18,7 @@ Node *parse_stmt(Lexer *lexer)
 		parse_logic,
 		parse_PASS,
 		parse_EOL
-	};
-
-	return parse_either(lexer, parsers);
+	});
 }
 
 Node *parse_for(Lexer *lexer)
@@ -43,16 +41,8 @@ Node *parse_for(Lexer *lexer)
 
 Node *parse_forcond(Lexer *lexer)
 {
-	auto seq = {
-		parse_SYM,
-		parse_IN,
-		parse_range
-	};
-
-	Node *result;
-	if ((result = parse_seq(lexer, seq)) != NULL)
-		return result;
-
+	if (auto n = parse_seq(lexer, { parse_SYM, parse_IN, parse_range }))
+		return n;
 	return parse_sepby(lexer, parse_forlogic, parse_SEMI);
 }
 
@@ -226,9 +216,8 @@ Node *parse_fdef(Lexer *lexer)
 Node *parse_fbody(Lexer *lexer)
 {
 	Node *indent, *stmts, *dedent;
-	Node *expr;
 
-	if ((expr = parse_expr(lexer)) != NULL)
+	if (auto expr = parse_expr(lexer))
 		return expr;
 
 	if ((indent = parse_INDENT(lexer)) == NULL)
@@ -245,29 +234,17 @@ Node *parse_fbody(Lexer *lexer)
 
 Node *parse_bind(Lexer *lexer)
 {
-	Node *result;
-
-	auto seq1 = {
-		parse_typedsym,
-		parse_bindsym,
-		parse_logic
-	};
-	if ((result = parse_seq(lexer, seq1)) != NULL) {
-		if (result->binarify())
-			return result;
+	if (auto n = parse_seq(lexer, { parse_typedsym, parse_bindsym, parse_logic })) {
+		n->binarify();
+		return n;
 	}
 
-	if ((result = parse_typedsym(lexer)) != NULL)
-		return result;
+	if (auto n = parse_typedsym(lexer))
+		return n;
 
-	auto seq2 = {
-		parse_SYM,
-		parse_bindsym,
-		parse_logic
-	};
-	if ((result = parse_seq(lexer, seq2)) != NULL) {
-		if (result->binarify())
-			return result;
+	if (auto n = parse_seq(lexer, { parse_SYM, parse_bindsym, parse_logic })) {
+		n->binarify();
+		return n;
 	}
 
 	return NULL;
@@ -275,57 +252,41 @@ Node *parse_bind(Lexer *lexer)
 
 Node *parse_bindsym(Lexer *lexer)
 {
-	auto either = {
+	return parse_either(lexer, {
 		parse_EQ,
 		parse_AEQ,
 		parse_SEQ,
 		parse_MEQ,
 		parse_DEQ,
 		parse_MOQ,
-	};
-	return parse_either(lexer, either);
+	});
 }
 
 Node *parse_typedsym(Lexer *lexer)
 {
-	auto seq = {
+	Node *n = parse_seq(lexer, {
 		parse_dot,
 		parse_COLN,
 		parse_typeanno
-	};
+	});
 
-	Node *result = parse_seq(lexer, seq);
-	if (result == NULL)
+	if (n == NULL)
 		return NULL;
 
-	if (result->binarify())
-		return result;
-	return NULL;
+	n->binarify();
+	return n;
 }
 
 Node *parse_typeanno(Lexer *lexer)
 {
-	Node *result;
-
-	auto seq1 = {
-		parse_LBRC,
-		parse_dot,
-		parse_RBRC
-	};
-	if ((result = parse_seq(lexer, seq1)) != NULL) {
-		result->token = T_TYPEANNO;
-		return result;
+	if (auto n = parse_seq(lexer, { parse_LBRC, parse_dot, parse_RBRC })) {
+		n->token = T_TYPEANNO;
+		return n;
 	}
 
-	auto seq2 = {
-		parse_dot,
-		parse_LBRC,
-		parse_logic,
-		parse_RBRC
-	};
-	if ((result = parse_seq(lexer, seq2)) != NULL) {
-		result->token = T_TYPEANNO;
-		return result;
+	if (auto n = parse_seq(lexer, { parse_dot, parse_LBRC, parse_logic, parse_RBRC })) {
+		n->token = T_TYPEANNO;
+		return n;
 	}
 
 	return parse_dot(lexer);
@@ -376,81 +337,48 @@ Node *parse_term(Lexer *lexer)
 
 Node *parse_fact(Lexer *lexer)
 {
-	auto ops = {
-		parse_LPAR,
-		parse_logic,
-		parse_RPAR,
-	};
-
-	Node *result;
-	if ((result = parse_seq(lexer, ops)) != NULL)
-		return result;
-
+	if (auto n = parse_seq(lexer, { parse_LPAR, parse_logic, parse_RPAR, }))
+		return n;
 	return parse_cast(lexer);
 }
 
 Node *parse_cast(Lexer *lexer)
 {
-	auto seq = {
-		parse_not,
-		parse_AS,
-		parse_typeanno
-	};
-
-	Node *result;
-	if ((result = parse_seq(lexer, seq)) != NULL) {
-		result->token = T_CAST;
-		return result;
+	if (auto n = parse_seq(lexer, { parse_not, parse_AS, parse_typeanno })) {
+		n->token = T_CAST;
+		return n;
 	}
-
 	return parse_not(lexer);
 }
 
 Node *parse_not(Lexer *lexer)
 {
-	auto seq = {
-		parse_NOT,
-		parse_lit
-	};
-
-	Node *result;
-	if ((result = parse_seq(lexer, seq)) != NULL)
-		return result;
-
+	if (auto n = parse_seq(lexer, { parse_NOT, parse_lit }))
+		return n;
 	return parse_lit(lexer);
 }
 
 Node *parse_lit(Lexer *lexer)
 {
-	auto either = {
+	return parse_either(lexer, {
 		parse_call,
 		parse_arg
-	};
-	return parse_either(lexer, either);
+	});
 }
 
 Node *parse_range(Lexer *lexer)
 {
-	Node *lnum, *to, *rnum;
-
-	if ((lnum = parse_num(lexer)) == NULL)
-		return NULL;
-
-	if ((to = parse_TO(lexer)) == NULL)
-		return lnum;
-	to->push(lnum);
-
-	if ((rnum = parse_num(lexer)) == NULL)
-		return to;
-	to->push(rnum);
-
-	return to;
+	if (auto n = parse_seq(lexer, { parse_num, parse_TO, parse_num })) {
+		n->binarify();
+		return n;
+	}
+	return NULL;
 }
 
 Node *parse_num(Lexer *lexer)
 {
 	Node *sub, *int_or_flt;
-	auto parsers = {parse_INT, parse_FLT};
+	auto parsers = { parse_INT, parse_FLT };
 
 	Lexer backup = *lexer;
 	if ((sub = parse_SUB(lexer)) == NULL)
@@ -467,13 +395,11 @@ Node *parse_num(Lexer *lexer)
 
 Node *parse_ptr(Lexer *lexer)
 {
-	auto seq = {
+	Node *result = parse_seq(lexer, {
 		parse_LBRC,
 		parse_logic,
 		parse_RBRC,
-	};
-
-	Node *result = parse_seq(lexer, seq);
+	});
 	if (result == NULL)
 		return NULL;
 
@@ -517,19 +443,17 @@ Node *parse_call(Lexer *lexer)
 
 Node *parse_arg(Lexer *lexer)
 {
-	Node *res;
-
-	auto seq = {
+	auto res = parse_seq(lexer, {
 		parse_LPAR,
 		parse_logic,
 		parse_RPAR
-	};
-	if ((res = parse_seq(lexer, seq)) != NULL) {
+	});
+	if (res != NULL) {
 		res->token = T_EXPR;
 		return res;
 	}
 
-	auto either = {
+	return parse_either(lexer, {
 		parse_range,
 		parse_num,
 		parse_STR,
@@ -537,8 +461,7 @@ Node *parse_arg(Lexer *lexer)
 		parse_ptr,
 		parse_arr,
 		parse_dot,
-	};
-	return parse_either(lexer, either);
+	});
 }
 
 Node *parse_dot(Lexer *lexer)
