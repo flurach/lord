@@ -86,24 +86,32 @@ int main(int argc, char **argv)
 {
 	int opt = 0;
 
-	while ((opt = getopt(argc, argv, "l::p::c::")) != -1) {
+	while ((opt = getopt(argc, argv, "l:p:c:")) != -1) {
 		switch (opt) {
 		case 'l':
-			if (optarg == NULL)
-				lex_repl();
-			else
-				lex_file(optarg);
+			lex_file(optarg);
 			break;
 
 		case 'p':
-			if (optarg == NULL)
-				parse_repl();
-			else
-				parse_file(optarg);
+			parse_file(optarg);
 			break;
 
 		case 'c':
 			compile_file(optarg);
+			break;
+
+		case ':':
+			switch (optopt) {
+			case 'l':
+				lex_repl();
+				break;
+			case 'p':
+				parse_repl();
+				break;
+			default:
+				printf("%c requires an arg\n", optopt);
+				break;
+			}
 			break;
 
 		default:
