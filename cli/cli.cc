@@ -3,7 +3,7 @@
 
 /* Lord's libs */
 #include <helpers.hh>
-#include <parser.hh>
+#include <lc.hh>
 
 /* Ext libs */
 #include <readline/readline.h>
@@ -79,7 +79,19 @@ void parse_repl()
 
 void compile_file(char *fpath)
 {
-	(void)fpath;
+	if (auto s = ftoa(fpath)) {
+		Lexer lexer = Lexer(*s);
+		Node *ast = parse(&lexer);
+
+		auto state = CompState();
+		pipe_visitors(ast, {
+			new ReslNsVisitor(&state)
+		});
+
+		delete ast;
+	} else {
+		puts("failed to open file");
+	}
 }
 
 int main(int argc, char **argv)

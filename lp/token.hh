@@ -84,11 +84,11 @@
 	X(LAST)
 
 
-typedef enum {
+enum Token {
 	#define X(token) T_##token,
 		LORD_LP_TOKENS
 	#undef X
-} Token;
+};
 
 static const char *Token_str[] = {
 	#define X(token) #token,
