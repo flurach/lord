@@ -8,6 +8,8 @@
 struct CompState {
 	NsMgr ns;
 	std::vector<Type*> types;
+
+	void print();
 };
 
 #endif

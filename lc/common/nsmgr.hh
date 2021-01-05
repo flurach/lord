@@ -12,6 +12,8 @@ struct NsMgr {
 
 	void ascend(std::string s);
 	void decend();
+
+	void print();
 };
 
 #endif

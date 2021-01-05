@@ -33,15 +33,15 @@ bool Node::binarify()
 	return true;
 }
 
-void Node::print()
+void Node::print(size_t indent)
 {
-	static size_t indent = 0;
-
 	size_t i = 0;
 	while (i++ < indent)
 		putchar('\t');
 
 	std::cout
+		<< id
+		<< " "
 		<< Token_str[token]
 		<< " '"
 		<< val
@@ -51,8 +51,6 @@ void Node::print()
 		<< range.end
 		<< std::endl;
 
-	indent++;
 	for (i = 0; i < ns.size(); i++)
-		ns[i]->print();
-	indent--;
+		ns[i]->print(indent + 1);
 }

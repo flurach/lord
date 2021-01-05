@@ -23,7 +23,7 @@ struct Node {
 	bool binarify();
 
 	/* debugging */
-	void print();
+	void print(size_t indent = 0);
 };
 
 #endif

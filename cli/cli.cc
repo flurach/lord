@@ -88,6 +88,9 @@ void compile_file(char *fpath)
 			new ReslNsVisitor(&state)
 		});
 
+		state.print();
+		ast->print();
+
 		delete ast;
 	} else {
 		puts("failed to open file");

@@ -29,8 +29,17 @@ void NsMgr::ascend(std::string s)
 
 void NsMgr::decend()
 {
-	while (ns.size() && ns.back() != '#')
+	if (ns.back() == '#') {
 		ns.pop_back();
-	if (ns.size())
-		ns.pop_back();
+		while (ns.size() && ns.back() != '#')
+			ns.pop_back();
+		if (ns.size())
+			ns.pop_back();
+	}
+}
+
+void NsMgr::print()
+{
+	for (size_t i = 0; i < syms.size(); i++)
+		std::cout << i << " '" << syms[i] << "'" << std::endl;
 }
