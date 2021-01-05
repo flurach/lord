@@ -89,6 +89,8 @@ Token Lexer::next()
 			this->token = T_ORR;
 		else if (this->val == "not")
 			this->token = T_NOT;
+		else if (this->val == "return")
+			this->token = T_RET;
 		else
 			this->token = T_SYM;
 	}

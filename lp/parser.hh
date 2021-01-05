@@ -18,6 +18,8 @@ Node *parse_type(Lexer *lexer);
 Node *parse_if(Lexer *lexer);
 Node *parse_else(Lexer *lexer);
 
+Node *parse_ret(Lexer *lexer);
+
 Node *parse_logic(Lexer *lexer);
 Node *parse_eqcmp(Lexer *lexer);
 Node *parse_difcmp(Lexer *lexer);

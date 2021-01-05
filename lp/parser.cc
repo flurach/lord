@@ -15,6 +15,7 @@ Node *parse_stmt(Lexer *lexer)
 		parse_fdef,
 		parse_type,
 		parse_bind,
+		parse_ret,
 		parse_logic,
 		parse_PASS,
 		parse_EOL
@@ -117,6 +118,19 @@ Node *parse_else(Lexer *lexer)
 	_else->push(_if_or_fbody);
 
 	return _else;
+}
+
+Node *parse_ret(Lexer *lexer)
+{
+	Node *ret, *logic;
+
+	if ((ret = parse_RET(lexer)) == NULL)
+		return NULL;
+
+	if ((logic = parse_logic(lexer)) != NULL)
+		ret->push(logic);
+
+	return ret;
 }
 
 Node *parse_logic(Lexer *lexer)

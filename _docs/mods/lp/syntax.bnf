@@ -2,6 +2,7 @@
          | <if>
          | <fdef>
          | <type>
+	 | <ret>
          | <bind>
          | <logic>
          | <PASS>
@@ -32,6 +33,8 @@
 
 <fbody> ::= <INDENT> {<stmt>} <DEDENT>
           | <logic>
+
+<ret> :: = <RET> <logic>
 
 # name: Type = something
 <bind> ::= <typedsym> <bindsym> <logic>

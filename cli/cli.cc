@@ -86,7 +86,7 @@ int main(int argc, char **argv)
 {
 	int opt = 0;
 
-	while ((opt = getopt(argc, argv, "l:p:c:")) != -1) {
+	while ((opt = getopt(argc, argv, ":l:p:c:")) != -1) {
 		switch (opt) {
 		case 'l':
 			lex_file(optarg);
@@ -115,7 +115,7 @@ int main(int argc, char **argv)
 			break;
 
 		default:
-			printf("unknown option %c\n", opt);
+			printf("unknown option %c\n", optopt);
 			break;
 		}
 	}

@@ -27,6 +27,7 @@
 	X(TO)\
 	X(TYPE)\
 	X(AS)\
+	X(RET)\
 	\
 	/* operators */\
 	X(EQ)\
