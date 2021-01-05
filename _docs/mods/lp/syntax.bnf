@@ -41,7 +41,7 @@
          | <typedsym>
          | <SYM> <bindsym> <logic>
 
-<bindsym> ::= <EQ> | <AEQ> | <SEQ> | <MEQ> | <DEQ> | <MOQ>
+<bindsym> ::= <EQ> | <AEQ> | <SEQ> | <MEQ> | <DEQ> | <DDEQ> | <MOQ>
 
 # "name: Type" or "name"
 <typedsym> ::= <dot> <COLN> <typeanno>
@@ -54,7 +54,7 @@
 # maths
 <expr> ::= <term> (<ADD>|<SUB>) <expr>
          | <term>
-<term> ::= <fact> (<MUL>|<DIV>|<MOD>) <term>
+<term> ::= <fact> (<MUL>|<DIV>|<DDIV>|<MOD>) <term>
          | <fact>
 <fact> ::= <LPAR> <logic> <RPAR>
          | <cast>

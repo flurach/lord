@@ -49,11 +49,13 @@
 	X(SUB)\
 	X(MUL)\
 	X(DIV)\
+	X(DDIV)\
 	X(MOD)\
 	X(AEQ)\
 	X(SEQ)\
 	X(MEQ)\
 	X(DEQ)\
+	X(DDEQ)\
 	X(MOQ)\
 	\
 	/* logic */\

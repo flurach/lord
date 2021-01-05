@@ -199,7 +199,15 @@ Token Lexer::next()
 	}
 	else if (curr() == '/') {
 		this->val.push_back(ch());
-		if (curr() == '=') {
+		if (curr() == '/') {
+			this->val.push_back(ch());
+			if (curr() == '=') {
+				this->token = T_DDEQ;
+				this->val.push_back(ch());
+			} else {
+				this->token = T_DDIV;
+			}
+		} else if (curr() == '=') {
 			this->token = T_DEQ;
 			this->val.push_back(ch());
 		} else {

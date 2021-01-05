@@ -272,6 +272,7 @@ Node *parse_bindsym(Lexer *lexer)
 		parse_SEQ,
 		parse_MEQ,
 		parse_DEQ,
+		parse_DDEQ,
 		parse_MOQ,
 	});
 }
@@ -337,6 +338,7 @@ Node *parse_term(Lexer *lexer)
 	auto ops = {
 		parse_MUL,
 		parse_DIV,
+		parse_DDIV,
 		parse_MOD
 	};
 	if ((op = parse_either(lexer, ops)) == NULL)
