@@ -10,7 +10,7 @@ void ReslNsVisitor::visit_FN(Node *n)
 	state->ns.ascend(n->ns[0]->val);
 	visit_args(n->ns[1]);
 	visit(n->ns[3]);
-	state->ns.decend();
+	state->ns.descend();
 }
 
 void ReslNsVisitor::visit_args(Node *n)

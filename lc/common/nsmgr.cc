@@ -27,7 +27,7 @@ void NsMgr::ascend(std::string s)
 	ns += s + '#';
 }
 
-void NsMgr::decend()
+void NsMgr::descend()
 {
 	if (ns.back() == '#') {
 		ns.pop_back();

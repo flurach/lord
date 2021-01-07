@@ -11,7 +11,7 @@ struct NsMgr {
 	int getsym(std::string s);
 
 	void ascend(std::string s);
-	void decend();
+	void descend();
 
 	void print();
 };
