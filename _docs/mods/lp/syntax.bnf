@@ -52,10 +52,8 @@
              | <dot>
 
 # maths
-<expr> ::= <term> (<ADD>|<SUB>) <expr>
-         | <term>
-<term> ::= <fact> (<MUL>|<DIV>|<DDIV>|<MOD>) <term>
-         | <fact>
+<expr> ::= <term> {(<ADD>|<SUB>) <term>}
+<term> ::= <fact> {(<MUL>|<DIV>|<DDIV>|<MOD>) <fact>}
 <fact> ::= <LPAR> <logic> <RPAR>
          | <cast>
 

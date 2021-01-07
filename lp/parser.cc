@@ -309,46 +309,44 @@ Node *parse_typeanno(Lexer *lexer)
 
 Node *parse_expr(Lexer *lexer)
 {
-	Node *term, *op, *expr;
+	Node *term, *op;
 
 	if ((term = parse_term(lexer)) == NULL)
 		return NULL;
 
-	auto ops = {
-		parse_ADD,
-		parse_SUB
-	};
-	if ((op = parse_either(lexer, ops)) == NULL)
-		return term;
-	op->push(term);
+	while (true) {
+		if ((op = parse_either(lexer, { parse_ADD, parse_SUB })) == NULL)
+			break;
+		op->push(term);
+		term = op;
 
-	if ((expr = parse_expr(lexer)) != NULL)
-		op->push(expr);
+		if ((op = parse_term(lexer)) == NULL)
+			break;
+		term->push(op);
+	}
 
-	return op;
+	return term;
 }
 
 Node *parse_term(Lexer *lexer)
 {
-	Node *fact, *op, *term;
+	Node *fact, *op;
 
 	if ((fact = parse_fact(lexer)) == NULL)
 		return NULL;
 
-	auto ops = {
-		parse_MUL,
-		parse_DIV,
-		parse_DDIV,
-		parse_MOD
-	};
-	if ((op = parse_either(lexer, ops)) == NULL)
-		return fact;
-	op->push(fact);
+	while (true) {
+		if ((op = parse_either(lexer, { parse_MUL, parse_DIV, parse_DDIV, parse_MOD })) == NULL)
+			break;
+		op->push(fact);
+		fact = op;
 
-	if ((term = parse_expr(lexer)) != NULL)
-		op->push(term);
+		if ((op = parse_fact(lexer)) == NULL)
+			break;
+		fact->push(op);
+	}
 
-	return op;
+	return fact;
 }
 
 Node *parse_fact(Lexer *lexer)
