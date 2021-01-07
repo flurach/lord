@@ -6,8 +6,8 @@
 #include "nsmgr.hh"
 
 struct CompState {
-	NsMgr ns;
-	std::vector<Type*> types;
+	NsMgr ns = NsMgr();
+	std::vector<Type> types = {};
 
 	void print();
 };

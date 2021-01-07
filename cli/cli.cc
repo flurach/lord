@@ -85,6 +85,7 @@ void compile_file(char *fpath)
 
 		auto state = CompState();
 		pipe_visitors(ast, {
+			new ReslTypeVisitor(&state),
 			new ReslNsVisitor(&state)
 		});
 
