@@ -2,7 +2,6 @@
 #define LORD_LC_COMMON_NSMGR_HH
 
 #include "node.hh"
-
 struct NsMgr {
 	std::string ns = "";
 	std::vector<std::string> syms = {};

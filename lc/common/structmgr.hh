@@ -14,8 +14,12 @@ struct Field {
 };
 
 struct Struct {
-	// struct data
+	/* known data */
+	std::string module;
+	Range range;
 	Range defined_at;
+
+	/* collected data */
 	std::string name = "";
 	std::vector<Field> fields;
 

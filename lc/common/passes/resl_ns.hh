@@ -5,7 +5,7 @@
 
 class ReslNsVisitor : public Visitor {
 public:
-	ReslNsVisitor(Module *mod);
+	ReslNsVisitor(Compiler *c);
 
 	void visit_FN(Node *n) override;
 	void visit_args(Node *n);

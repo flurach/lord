@@ -79,23 +79,14 @@ void parse_repl()
 
 void compile_file(char *fpath)
 {
-	if (auto s = ftoa(fpath)) {
-		Lexer lexer = Lexer(*s);
-		Node *ast = parse(&lexer);
+	auto c = Compiler();
 
-		auto mod = Module("__main__");
-		pipe_visitors(ast, {
-			new ReslStructVisitor(&mod),
-			new ReslNsVisitor(&mod)
-		});
-
-		mod.print();
-		ast->print();
-
-		delete ast;
-	} else {
+	if (!c.load_file(fpath)) {
 		puts("failed to open file");
+		return;
 	}
+
+	c.print();
 }
 
 int main(int argc, char **argv)

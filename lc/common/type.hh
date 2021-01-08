@@ -5,7 +5,8 @@
 #include <vector>
 
 #define LORC_LC_COMMON_PRIMTYPES\
-	X(TYPE)\
+	X(BUILTIN)\
+	X(STRUCT)\
 	X(PTR)\
 	X(ARR)\
 	X(LAST)
@@ -28,7 +29,7 @@ struct Type {
 	Type *sub;
 
 	/* constructor */
-	Type(PrimType pt = PT_TYPE, std::string name = "i64", Type *sub = NULL);
+	Type(PrimType pt = PT_BUILTIN, std::string name = "i64", Type *sub = NULL);
 	~Type();
 };
 
