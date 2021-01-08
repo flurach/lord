@@ -1,0 +1,31 @@
+-1 MODULE '' 0..0
+	-1 IF 'if' 21..23
+		-1 EEQ '==' 41..43
+			-1 CALL '' 24..35
+				-1 SYM 'doSomething' 24..35
+				-1 ARGS '' 0..0
+					-1 INT '5' 36..37
+					-1 INT '10' 38..40
+			-1 INT '5' 44..45
+		-1 STMTS '' 0..0
+			-1 CALL '' 47..51
+				-1 SYM 'puts' 47..51
+				-1 ARGS '' 0..0
+					-1 STR 'First if' 52..62
+		-1 ELSE 'else' 63..67
+			-1 IF 'if' 68..70
+				-1 EEQ '==' 89..91
+					-1 CALL '' 71..82
+						-1 SYM 'doSomething' 71..82
+						-1 ARGS '' 0..0
+							-1 INT '10' 83..85
+							-1 INT '10' 86..88
+					-1 INT '5' 92..93
+				-1 STMTS '' 0..0
+					-1 CALL '' 95..99
+						-1 SYM 'puts' 95..99
+						-1 ARGS '' 0..0
+							-1 STR 'Second if' 100..111
+				-1 ELSE 'else' 112..116
+					-1 STMTS '' 0..0
+						-1 PASS 'pass' 118..122

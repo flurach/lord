@@ -1,0 +1,10 @@
+-1 MODULE '' 0..0
+	-1 FN 'fn' 22..24
+		-1 SYM 'main' 25..29
+		-1 ARGS '' 0..0
+		-1 EQ '=' 30..31
+		-1 CALL '' 32..36
+			-1 SYM 'puts' 32..36
+			-1 ARGS '' 0..0
+				-1 STR 'Hail the Lord' 37..52
+	-1 EOL '' 52..53

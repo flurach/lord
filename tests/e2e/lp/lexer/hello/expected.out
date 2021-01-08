@@ -1,0 +1,6 @@
+FN 'fn' 22..24
+SYM 'main' 25..29
+EQ '=' 30..31
+SYM 'puts' 32..36
+STR 'Hail the Lord' 37..52
+EOL '' 52..53

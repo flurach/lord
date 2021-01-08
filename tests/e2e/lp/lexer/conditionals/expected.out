@@ -1,0 +1,25 @@
+IF 'if' 21..23
+SYM 'doSomething' 24..35
+INT '5' 36..37
+INT '10' 38..40
+EEQ '==' 41..43
+INT '5' 44..45
+INDENT '' 45..47
+SYM 'puts' 47..51
+STR 'First if' 52..62
+DEDENT '' 62..63
+ELSE 'else' 63..67
+IF 'if' 68..70
+SYM 'doSomething' 71..82
+INT '10' 83..85
+INT '10' 86..88
+EEQ '==' 89..91
+INT '5' 92..93
+INDENT '' 93..95
+SYM 'puts' 95..99
+STR 'Second if' 100..111
+DEDENT '' 111..112
+ELSE 'else' 112..116
+INDENT '' 116..118
+PASS 'pass' 118..122
+DEDENT '' 122..123

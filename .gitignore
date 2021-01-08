@@ -6,3 +6,6 @@ Makefile
 # env
 .vscode/
 tags
+
+# tests
+tests/**/result.out

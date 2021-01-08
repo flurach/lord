@@ -1,0 +1,10 @@
+SYM 'printf' 13..19
+STR '%f\n' 20..26
+LPAR '(' 27..28
+SYM 'my_int' 28..34
+AS 'as' 35..37
+SYM 'f64' 38..41
+ADD '+' 42..43
+SYM 'my_float' 44..52
+RPAR ')' 52..53
+EOL '' 53..54
