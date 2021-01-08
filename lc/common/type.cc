@@ -1,6 +1,6 @@
 #include "type.hh"
 
-Type::Type(PrimType pt = PT_TYPE, std::string name = "i64", Type *sub = NULL)
+Type::Type(PrimType pt, std::string name, Type *sub)
 	: pt(pt), name(name), sub(sub)
 {
 }

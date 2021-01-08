@@ -11,7 +11,7 @@ struct Module {
 	std::string name;
 
 	/* internal info */
-	NsMgr ns = NsMgr();
+	NsMgr nsmgr = NsMgr();
 	StructMgr structmgr = StructMgr();
 
 	Module(std::string name = "");

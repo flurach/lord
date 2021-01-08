@@ -8,7 +8,7 @@ Module::Module(std::string name)
 void Module::print()
 {
 	std::cout << "NAMES:" << std::endl;
-	ns.print();
+	nsmgr.print();
 
 	std::cout << "STRUCTS:" << std::endl;
 	structmgr.print();
