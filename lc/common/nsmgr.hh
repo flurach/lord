@@ -1,5 +1,5 @@
-#ifndef LORD_LC_COMMON_NS_HH
-#define LORD_LC_COMMON_NS_HH
+#ifndef LORD_LC_COMMON_NSMGR_HH
+#define LORD_LC_COMMON_NSMGR_HH
 
 #include "node.hh"
 

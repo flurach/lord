@@ -1,7 +1,7 @@
 #include "visitor.hh"
 
-Visitor::Visitor(CompState *state)
-	: state(state)
+Visitor::Visitor(Module *mod)
+	: mod(mod)
 {
 }
 

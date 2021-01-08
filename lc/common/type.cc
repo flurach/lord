@@ -1,18 +1,12 @@
 #include "type.hh"
 
-Type::Type(PrimType pt)
-	: pt(pt)
+Type::Type(PrimType pt = PT_TYPE, std::string name = "i64", Type *sub = NULL)
+	: pt(pt), name(name), sub(sub)
 {
 }
 
-size_t Type::size()
+Type::~Type()
 {
-	if (pt != PT_TYPE)
-		return PrimType_size[pt];
-
-	size_t s = 0;
-	for (auto f : field_types)
-		s += f.size();
-
-	return s;
+	if (sub)
+		delete sub;
 }

@@ -1,13 +1,13 @@
 #ifndef LORD_LC_COMMON_VISITOR_HH
 #define LORD_LC_COMMON_VISITOR_HH
 
-#include "../comp_state.hh"
+#include "../module.hh"
 
 class Visitor {
 public:
-	CompState *state = NULL;
+	Module *mod = NULL;
 
-	Visitor(CompState *state);
+	Visitor(Module *mod);
 	virtual ~Visitor() {};
 
 	void visit(Node *n);

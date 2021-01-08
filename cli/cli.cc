@@ -83,13 +83,13 @@ void compile_file(char *fpath)
 		Lexer lexer = Lexer(*s);
 		Node *ast = parse(&lexer);
 
-		auto state = CompState();
+		auto mod = Module("__main__");
 		pipe_visitors(ast, {
-			new ReslTypeVisitor(&state),
-			new ReslNsVisitor(&state)
+			new ReslStructVisitor(&mod),
+			new ReslNsVisitor(&mod)
 		});
 
-		state.print();
+		mod.print();
 		ast->print();
 
 		delete ast;
