@@ -2,6 +2,7 @@
 #define LORD_LC_COMMON_TYPE_HH
 
 #define LORC_LC_COMMON_PRIMTYPES\
+	X(UNKNOWN)\
 	X(BUILTIN)\
 	X(STRUCT)\
 	X(PTR)\
@@ -25,9 +26,10 @@ struct Type {
 	std::string name;
 	Type *sub;
 
-	/* constructor */
-	Type(PrimType pt = PT_BUILTIN, std::string name = "i64", Type *sub = NULL);
+	Type(PrimType pt = PT_UNKNOWN, std::string name = "", Type *sub = NULL);
 	~Type();
+
+	void print();
 };
 
 #endif

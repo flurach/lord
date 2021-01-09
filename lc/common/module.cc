@@ -21,11 +21,20 @@ bool Module::load_file(std::string fpath)
 	auto l = Lexer(src);
 	ast = parse(&l);
 
+	pipe_visitors(ast, {
+		new StructNameVisitor(this),
+		new StructFieldVisitor(this),
+		new ReslNsVisitor(this),
+	});
+
 	return true;
 
 }
 
 void Module::print()
 {
-	std::cout << "=== MODULE " << name << " ===" << std::endl;
+	std::cout << "=== MODULE '" << name << "' ===" << std::endl;
+
+	std::cout << " => STRUCTS " << std::endl;
+	structmgr.print();
 }

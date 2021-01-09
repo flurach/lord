@@ -28,10 +28,12 @@ struct Struct {
 };
 
 struct StructMgr {
-	std::vector<Struct> structs;
+	std::vector<Struct*> structs;
 
-	void addStruct(Struct s);
-	void addField(Field f);
+	~StructMgr();
+
+	void add(Struct *s);
+	Struct *get(std::string s);
 
 	void print();
 };

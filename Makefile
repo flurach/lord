@@ -17,17 +17,14 @@ DBG = -g
 
 # commands
 CMD := $(CC) $(CSTD) $(CFLAGS) $(INCS)
-BIN = $(CMD) $(LINKS) -o
-LIB = $(CMD) -shared -o
-OBJ = $(CMD) -fPIC -c
-
-
-# release
 ifeq (release,$(firstword $(MAKECMDGOALS)))
 	CMD := $(CMD) $(OPT)
 else
 	CMD := $(CMD) $(DBG)
 endif
+BIN = $(CMD) $(LINKS) -o
+LIB = $(CMD) -shared -o
+OBJ = $(CMD) -fPIC -c
 
 
 # interface
@@ -67,6 +64,11 @@ bin/lord: cli/cli.cc
 	$(BIN) bin/lord cli/cli.cc
 
 bin/liblc.so: lc/lc.hh\
+              bin/obj/lc/common/node2x.o\
+              bin/obj/lc/common/passes/struct_field.o\
+              bin/obj/lc/common/passes/struct_name.o\
+              bin/obj/lc/common/passes/resl_ns.o\
+              bin/obj/lc/common/passes/visitor.o\
               bin/obj/lc/common/compiler.o\
               bin/obj/lc/common/module.o\
               bin/obj/lc/common/nsmgr.o\
@@ -83,6 +85,21 @@ bin/liblp.so: lp/lp.hh lp/token.hh\
 
 
 # objects
+bin/obj/lc/common/passes/struct_field.o: lc/common/passes/struct_field.hh lc/common/passes/struct_field.cc
+	$(OBJ) lc/common/passes/struct_field.cc -o bin/obj/lc/common/passes/struct_field.o
+
+bin/obj/lc/common/passes/struct_name.o: lc/common/passes/struct_name.hh lc/common/passes/struct_name.cc
+	$(OBJ) lc/common/passes/struct_name.cc -o bin/obj/lc/common/passes/struct_name.o
+
+bin/obj/lc/common/passes/resl_ns.o: lc/common/passes/resl_ns.hh lc/common/passes/resl_ns.cc
+	$(OBJ) lc/common/passes/resl_ns.cc -o bin/obj/lc/common/passes/resl_ns.o
+
+bin/obj/lc/common/passes/visitor.o: lc/common/passes/visitor.hh lc/common/passes/visitor.cc
+	$(OBJ) lc/common/passes/visitor.cc -o bin/obj/lc/common/passes/visitor.o
+
+bin/obj/lc/common/node2x.o: lc/common/node2x.hh lc/common/node2x.cc
+	$(OBJ) lc/common/node2x.cc -o bin/obj/lc/common/node2x.o
+
 bin/obj/lc/common/compiler.o: lc/common/compiler.hh lc/common/compiler.cc
 	$(OBJ) lc/common/compiler.cc -o bin/obj/lc/common/compiler.o
 

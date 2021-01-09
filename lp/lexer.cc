@@ -61,7 +61,7 @@ Token Lexer::next()
 	}
 
 	/* keywords, logic & symbols */
-	else if (isalpha(curr())) {
+	else if (isalpha(curr()) || curr() == '_') {
 		while (isalnum(curr()) || curr() == '_')
 			this->val.push_back(ch());
 
