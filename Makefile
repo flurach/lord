@@ -1,3 +1,8 @@
+# colors
+GREEN = \033[1;32m
+NOCOLOR = \033[0m
+
+
 # config
 CC = clang++
 CSTD= -std=c++20
@@ -22,28 +27,44 @@ endif
 
 
 # interface
-all: dirs bin/lord
-	@echo "=== Build (debug) Successful ==="
-
-.PHONY: clean
+.PHONY: all clean
+all: ld_path dirs lp cli
+	@echo -e "$(GREEN)=== Build (debug) Successful ===$(NOCOLOR)"
 clean:
-	rm -rf bin
+	@rm -rf bin
+	@echo "Cleaned!"
 
 
 # modules
+.PHONY: cli lc lp
+cli: cli_title bin/lord;
+lc: lc_title bin/liblc.so;
+lp: lp_title bin/liblp.so;
+
+
+# titles
+.PHONY: ld_path dirs cli_title lc_title lp_title
+ld_path: export LD_LIBRARY_PATH=bin ;
 dirs:
 	@mkdir -p bin/obj/lc bin/obj/lp bin/obj/cli
+cli_title:
+	@echo -e "$(GREEN)=== Building CLI ===$(NOCOLOR)"
+lc_title:
+	@echo -e "$(GREEN)=== Building Compiler ===$(NOCOLOR)"
+lp_title:
+	@echo -e "$(GREEN)=== Building Parser ===$(NOCOLOR)"
 
-bin/lord: bin/liblp.so
-	@echo "=== Building CLI ==="
+
+# bins & libs
+bin/lord:
 	$(BIN) bin/lord cli/cli.cc
 
 bin/liblc.so:
-	@echo "=== Building Compiler ==="
 	$(LIB) bin/lc.so lc/*.o
 
-bin/liblp.so: lp/lp.hh bin/obj/lp/parser.o bin/obj/lp/node.o bin/obj/lp/lexer.o bin/obj/lp/helpers.o
-	@echo "=== Building Parser ==="
+bin/liblp.so: lp/lp.hh lp/token.hh\
+              bin/obj/lp/parser.o bin/obj/lp/node.o\
+              bin/obj/lp/lexer.o bin/obj/lp/helpers.o
 	$(LIB) bin/liblp.so bin/obj/lp/*.o
 
 
