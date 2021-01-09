@@ -1,5 +1,6 @@
 # colors
 GREEN = \033[1;32m
+YELLOW = \033[1;33m
 NOCOLOR = \033[0m
 
 
@@ -30,10 +31,9 @@ endif
 
 
 # interface
-.PHONY: all clean
-all: dirs lp lc cli
-	@echo -e "$(GREEN)=== Build (debug) Successful ===$(NOCOLOR)"
-release: clean all ;
+.PHONY: debug release clean
+debug: debug_title dirs lp lc cli;
+release: release_title dirs lp lc cli;
 clean:
 	@rm -rf bin
 	@echo "Cleaned!"
@@ -47,15 +47,19 @@ lp: lp_title bin/liblp.so;
 
 
 # titles
-.PHONY: ld_path dirs cli_title lc_title lp_title
+.PHONY: dirs debug_title release_title cli_title lc_title lp_title
 dirs:
 	@find cli lc lp -type d -exec bash -c "mkdir -p bin/obj/{}" \;
+debug_title:
+	@echo -e "$(GREEN)=== Build (debug) ===$(NOCOLOR)"
+release_title:
+	@echo -e "$(GREEN)=== Build (release) ===$(NOCOLOR)"
 cli_title:
-	@echo -e "$(GREEN)=== Building CLI ===$(NOCOLOR)"
+	@echo -e "$(YELLOW)=== Building CLI ===$(NOCOLOR)"
 lc_title:
-	@echo -e "$(GREEN)=== Building Compiler ===$(NOCOLOR)"
+	@echo -e "$(YELLOW)=== Building Compiler ===$(NOCOLOR)"
 lp_title:
-	@echo -e "$(GREEN)=== Building Parser ===$(NOCOLOR)"
+	@echo -e "$(YELLOW)=== Building Parser ===$(NOCOLOR)"
 
 
 # bins & libs
