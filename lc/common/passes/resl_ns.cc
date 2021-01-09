@@ -1,7 +1,7 @@
 #include "resl_ns.hh"
 
-ReslNsVisitor::ReslNsVisitor(Compiler *c)
-	: Visitor(c)
+ReslNsVisitor::ReslNsVisitor(Module *m)
+	: Visitor(m)
 {
 }
 

@@ -5,7 +5,7 @@
 
 class StructCollectVisitor : public Visitor {
 public:
-	StructCollectVisitor(Compiler *c);
+	StructCollectVisitor(Module *m);
 
 	void visit_TYPE(Node *n) override;
 };

@@ -8,32 +8,26 @@
 
 ## Building
 
-You need to install `premake5`, then do:
-
 ```sh
-$ premake5 gmake
-$ make
+make
 ```
 
-This builds the `_bin/lord` executable.
+
+## Testing
+
+```sh
+# e2e tests
+sh tests/e2e/run.sh
+```
 
 
 ## Development
 
-You can read [the docs here](_docs/read-this.md) and if you ever
-happen to stuck, we probably have a tutorial for it in [here](_docs/misc/resources.md)!
-
-For the moment, generate your build files:
-
-- windows: `premake5 vs2019`
-- linux:   `premake5 gmake`
-- mac:     `premake5 xcode4`
-
-You can then use your favoured platform (Visual studio, XCode, Linux etc.)
-to build the binaries/libraries. All built files go into ___bin/__.
+You can read [the docs here](docs/read-this.md) and if you ever
+happen to stuck, I probably have a tutorial for it in [here](docs/misc/resources.md).
 
 
 ## Tech stack
 
-- [premake5](https://premake.github.io/): as the build system
+- [make](https://www.gnu.org/software/make/): as the build system
 - [clang](https://clang.llvm.org/): as the compiler

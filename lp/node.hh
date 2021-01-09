@@ -1,11 +1,6 @@
 #ifndef LORD_LP_NODE_HH
 #define LORD_LP_NODE_HH
 
-#include <iostream>
-#include <vector>
-#include "token.hh"
-#include "common.hh"
-
 /* node class */
 struct Node {
 	int id = -1;

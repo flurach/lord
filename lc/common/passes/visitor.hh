@@ -1,13 +1,14 @@
 #ifndef LORD_LC_COMMON_VISITOR_HH
 #define LORD_LC_COMMON_VISITOR_HH
 
-#include "../compiler.hh"
+#include "../module.hh"
+struct Module;
 
 class Visitor {
 public:
-	Compiler *c = NULL;
+	Module *m = NULL;
 
-	Visitor(Compiler *c);
+	Visitor(Module *m);
 	virtual ~Visitor() {};
 
 	void visit(Node *n);

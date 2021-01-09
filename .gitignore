@@ -1,7 +1,5 @@
 # build
-_bin/
-Makefile
-*.make
+bin/
 
 # env
 .vscode/

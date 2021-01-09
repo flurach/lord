@@ -1,4 +1,4 @@
-#include "node.hh"
+#include "lp.hh"
 
 Node::Node(Range range, Token token, std::string val)
 	: range(range), token(token), val(val)

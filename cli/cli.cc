@@ -2,8 +2,7 @@
 #include <unistd.h>
 
 /* Lord's libs */
-#include <helpers.hh>
-#include <lc.hh>
+#include <lp.hh>
 
 /* Ext libs */
 #include <readline/readline.h>
@@ -77,23 +76,26 @@ void parse_repl()
 	}
 }
 
-void compile_file(char *fpath)
-{
-	auto c = Compiler();
+/* void compile_file(char *fpath) */
+/* { */
+/* 	if (auto s = ftoa(fpath)) { */
+/* 		Lexer lexer = Lexer(*s); */
+/* 		Node *ast = parse(&lexer); */
 
-	if (!c.load_file(fpath)) {
-		puts("failed to open file");
-		return;
-	}
+/* 		ast->print(); */
 
-	c.print();
-}
+/* 		delete ast; */
+/* 	} else { */
+/* 		puts("failed to open file"); */
+/* 	} */
+/* } */
 
 int main(int argc, char **argv)
 {
 	int opt = 0;
 
-	while ((opt = getopt(argc, argv, ":l:p:c:")) != -1) {
+	while ((opt = getopt(argc, argv, ":l:p:")) != -1) {
+	/* while ((opt = getopt(argc, argv, ":l:p:c:")) != -1) { */
 		switch (opt) {
 		case 'l':
 			lex_file(optarg);
@@ -103,9 +105,9 @@ int main(int argc, char **argv)
 			parse_file(optarg);
 			break;
 
-		case 'c':
-			compile_file(optarg);
-			break;
+		/* case 'c': */
+		/* 	compile_file(optarg); */
+		/* 	break; */
 
 		case ':':
 			switch (optopt) {

@@ -1,30 +1,11 @@
 #ifndef LORD_LC_COMMON_COMPILER_HH
 #define LORD_LC_COMMON_COMPILER_HH
 
-#include "parser.hh"
-#include "type.hh"
-#include "nsmgr.hh"
-#include "structmgr.hh"
+#include "module.hh"
 
 struct Compiler {
-	/* parser info */
-	std::string src = "";
-	Node *ast = NULL;
-
-	/* compiler info */
-	NsMgr structns = NsMgr();
-	StructMgr structmgr = StructMgr();
-	NsMgr symns = NsMgr();
-
-	/* constructor & destructor */
-	Compiler();
-	~Compiler();
-
-	/* methods */
-	bool load_file(std::string fpath);
-
-	/* debugging */
-	void print();
+	std::vector<Module> mods = {};
+	bool load_mod(std::string fpath);
 };
 
 #endif

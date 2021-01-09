@@ -1,4 +1,4 @@
-#include "lexer.hh"
+#include "lp.hh"
 
 Lexer::Lexer(std::string src)
 {

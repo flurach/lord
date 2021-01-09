@@ -5,7 +5,7 @@ echo " => suite lp/lexer"
 for d in tests/e2e/lp/lexer/*; do
 	dir="${d}"
 
-	_bin/lord -l $dir/code.ld > $dir/result.out
+	bin/lord -l $dir/code.ld > $dir/result.out
 	cmp $dir/result.out $dir/expected.out > /dev/null
 
 	if [ $? -eq "0" ]; then
@@ -20,7 +20,7 @@ echo " => suite lp/parser"
 for d in tests/e2e/lp/parser/*; do
 	dir="${d}"
 
-	_bin/lord -p $dir/code.ld > $dir/result.out
+	bin/lord -p $dir/code.ld > $dir/result.out
 	cmp $dir/result.out $dir/expected.out > /dev/null
 
 	if [ $? -eq "0" ]; then

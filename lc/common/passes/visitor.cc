@@ -1,7 +1,7 @@
 #include "visitor.hh"
 
-Visitor::Visitor(Compiler *c)
-	: c(c)
+Visitor::Visitor(Module *m)
+	: m(m)
 {
 }
 

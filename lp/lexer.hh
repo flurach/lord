@@ -1,9 +1,6 @@
 #ifndef LORD_LP_LEX_HH
 #define LORD_LP_LEX_HH
 
-#include "node.hh"
-#include "helpers.hh"
-
 /* lexer class */
 struct Lexer {
 	std::string src = "";

@@ -1,7 +1,7 @@
 #include "struct_collect.hh"
 
-StructCollectVisitor::StructCollectVisitor(Compiler *c)
-	: Visitor(c)
+StructCollectVisitor::StructCollectVisitor(Module *m)
+	: Visitor(m)
 {
 }
 

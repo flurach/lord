@@ -1,8 +1,6 @@
 #ifndef LORD_LP_PARSER_HH
 #define LORD_LP_PARSER_HH
 
-#include "lexer.hh"
-
 /* interface */
 Node *parse(Lexer *lexer);
 

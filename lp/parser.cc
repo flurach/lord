@@ -1,4 +1,4 @@
-#include "parser.hh"
+#include "lp.hh"
 
 Node *parse(Lexer *lexer)
 {
