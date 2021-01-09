@@ -1,12 +1,12 @@
 echo "=== E2E Testing ==="
 all="1"
 
-echo " => suite lp/lexer"
-for d in tests/e2e/lp/lexer/*; do
+echo " => suite lp (lexer)"
+for d in tests/e2e/*/; do
 	dir="${d}"
 
-	bin/lord -l $dir/code.ld > $dir/result.out
-	cmp $dir/result.out $dir/expected.out > /dev/null
+	bin/lord -l $dir/code.ld > $dir/lexer-result.out
+	cmp $dir/lexer-result.out $dir/lexer-expected.out > /dev/null
 
 	if [ $? -eq "0" ]; then
 		echo " - passed $(basename $d)"
@@ -16,12 +16,12 @@ for d in tests/e2e/lp/lexer/*; do
 	fi
 done
 
-echo " => suite lp/parser"
-for d in tests/e2e/lp/parser/*; do
+echo " => suite lp (parser)"
+for d in tests/e2e/*/; do
 	dir="${d}"
 
-	bin/lord -p $dir/code.ld > $dir/result.out
-	cmp $dir/result.out $dir/expected.out > /dev/null
+	bin/lord -p $dir/code.ld > $dir/parser-result.out
+	cmp $dir/parser-result.out $dir/parser-expected.out > /dev/null
 
 	if [ $? -eq "0" ]; then
 		echo " - passed $(basename $d)"

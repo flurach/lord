@@ -6,4 +6,4 @@ bin/
 tags
 
 # tests
-tests/**/result.out
+tests/**/*result.out
