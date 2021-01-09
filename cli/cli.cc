@@ -2,7 +2,7 @@
 #include <unistd.h>
 
 /* Lord's libs */
-#include <lp.hh>
+#include <lc.hh>
 
 /* Ext libs */
 #include <readline/readline.h>
@@ -76,26 +76,23 @@ void parse_repl()
 	}
 }
 
-/* void compile_file(char *fpath) */
-/* { */
-/* 	if (auto s = ftoa(fpath)) { */
-/* 		Lexer lexer = Lexer(*s); */
-/* 		Node *ast = parse(&lexer); */
+void compile_file(char *fpath)
+{
+	Compiler c = Compiler();
 
-/* 		ast->print(); */
+	if (!c.load_mod(std::string(fpath))) {
+		puts("failed to open file");
+		return;
+	}
 
-/* 		delete ast; */
-/* 	} else { */
-/* 		puts("failed to open file"); */
-/* 	} */
-/* } */
+	c.print();
+}
 
 int main(int argc, char **argv)
 {
 	int opt = 0;
 
-	while ((opt = getopt(argc, argv, ":l:p:")) != -1) {
-	/* while ((opt = getopt(argc, argv, ":l:p:c:")) != -1) { */
+	while ((opt = getopt(argc, argv, ":l:p:c:")) != -1) {
 		switch (opt) {
 		case 'l':
 			lex_file(optarg);
@@ -105,18 +102,20 @@ int main(int argc, char **argv)
 			parse_file(optarg);
 			break;
 
-		/* case 'c': */
-		/* 	compile_file(optarg); */
-		/* 	break; */
+		case 'c':
+			compile_file(optarg);
+			break;
 
 		case ':':
 			switch (optopt) {
 			case 'l':
 				lex_repl();
 				break;
+
 			case 'p':
 				parse_repl();
 				break;
+
 			default:
 				printf("%c requires an arg\n", optopt);
 				break;

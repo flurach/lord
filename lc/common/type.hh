@@ -1,9 +1,6 @@
 #ifndef LORD_LC_COMMON_TYPE_HH
 #define LORD_LC_COMMON_TYPE_HH
 
-#include <string>
-#include <vector>
-
 #define LORC_LC_COMMON_PRIMTYPES\
 	X(BUILTIN)\
 	X(STRUCT)\

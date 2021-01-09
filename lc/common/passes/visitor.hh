@@ -1,9 +1,6 @@
 #ifndef LORD_LC_COMMON_VISITOR_HH
 #define LORD_LC_COMMON_VISITOR_HH
 
-#include "../module.hh"
-struct Module;
-
 class Visitor {
 public:
 	Module *m = NULL;

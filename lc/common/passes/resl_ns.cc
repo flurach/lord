@@ -1,4 +1,4 @@
-#include "resl_ns.hh"
+#include "lc.hh"
 
 ReslNsVisitor::ReslNsVisitor(Module *m)
 	: Visitor(m)

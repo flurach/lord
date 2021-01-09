@@ -1,4 +1,4 @@
-#include "struct_collect.hh"
+#include "lc.hh"
 
 StructCollectVisitor::StructCollectVisitor(Module *m)
 	: Visitor(m)

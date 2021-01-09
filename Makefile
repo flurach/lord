@@ -9,7 +9,7 @@ CSTD= -std=c++20
 CFLAGS = -Wall -Wextra -Werror
 INCS = -I lp -I lc -I cli
 LIBS = `pkg-config --libs readline`
-LINKS = -Lbin -llp $(LIBS)
+LINKS = -Lbin -llp -llc $(LIBS)
 DBG = -g
 
 
@@ -55,14 +55,15 @@ lp_title:
 
 
 # bins & libs
-bin/lord:
+bin/lord: cli/cli.cc
 	$(BIN) bin/lord cli/cli.cc
 
-bin/liblc.so: lc/lc.hh lc/common/passes/all.hh\
+bin/liblc.so: lc/lc.hh\
               bin/obj/lc/common/compiler.o\
               bin/obj/lc/common/module.o\
               bin/obj/lc/common/nsmgr.o\
-              bin/obj/lc/common/structmgr.o
+              bin/obj/lc/common/structmgr.o\
+              bin/obj/lc/common/type.o
 	$(LIB) bin/liblc.so `find bin/obj/lc -type f -name '**.o'`
 
 bin/liblp.so: lp/lp.hh lp/token.hh\
@@ -85,6 +86,9 @@ bin/obj/lc/common/nsmgr.o: lc/common/nsmgr.hh lc/common/nsmgr.cc
 
 bin/obj/lc/common/structmgr.o: lc/common/structmgr.hh lc/common/structmgr.cc
 	$(OBJ) lc/common/structmgr.cc -o bin/obj/lc/common/structmgr.o
+
+bin/obj/lc/common/type.o: lc/common/type.hh lc/common/type.cc
+	$(OBJ) lc/common/type.cc -o bin/obj/lc/common/type.o
 
 bin/obj/lp/parser.o: lp/parser.hh lp/parser.cc
 	$(OBJ) lp/parser.cc -o bin/obj/lp/parser.o

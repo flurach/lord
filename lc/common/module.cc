@@ -24,3 +24,8 @@ bool Module::load_file(std::string fpath)
 	return true;
 
 }
+
+void Module::print()
+{
+	std::cout << "=== MODULE " << name << " ===" << std::endl;
+}

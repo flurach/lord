@@ -1,8 +1,6 @@
 #ifndef LORD_LC_COMMON_PASSES_RESL_NS_HH
 #define LORD_LC_COMMON_PASSES_RESL_NS_HH
 
-#include "visitor.hh"
-
 class ReslNsVisitor : public Visitor {
 public:
 	ReslNsVisitor(Module *m);

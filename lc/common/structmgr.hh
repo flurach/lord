@@ -1,9 +1,6 @@
 #ifndef LORD_LC_COMMON_STRUCTMGR_HH
 #define LORD_LC_COMMON_STRUCTMGR_HH
 
-#include "node.hh"
-#include "type.hh"
-
 struct Field {
 	Range range;
 	std::string name;

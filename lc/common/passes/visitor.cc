@@ -1,4 +1,4 @@
-#include "visitor.hh"
+#include "lc.hh"
 
 Visitor::Visitor(Module *m)
 	: m(m)

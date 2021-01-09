@@ -10,3 +10,9 @@ bool Compiler::load_mod(std::string fpath)
 
 	return r;
 }
+
+void Compiler::print()
+{
+	for (auto m : mods)
+		m.print();
+}
