@@ -1,4 +1,4 @@
-#include "nsmgr.hh"
+#include "lc.hh"
 
 int NsMgr::newsym(std::string s)
 {

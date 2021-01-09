@@ -28,7 +28,7 @@ endif
 
 # interface
 .PHONY: all clean
-all: ld_path dirs lp cli
+all: dirs lp lc cli
 	@echo -e "$(GREEN)=== Build (debug) Successful ===$(NOCOLOR)"
 clean:
 	@rm -rf bin
@@ -44,9 +44,8 @@ lp: lp_title bin/liblp.so;
 
 # titles
 .PHONY: ld_path dirs cli_title lc_title lp_title
-ld_path: export LD_LIBRARY_PATH=bin ;
 dirs:
-	@mkdir -p bin/obj/lc bin/obj/lp bin/obj/cli
+	@find cli lc lp -type d -exec bash -c "mkdir -p bin/obj/{}" \;
 cli_title:
 	@echo -e "$(GREEN)=== Building CLI ===$(NOCOLOR)"
 lc_title:
@@ -59,16 +58,34 @@ lp_title:
 bin/lord:
 	$(BIN) bin/lord cli/cli.cc
 
-bin/liblc.so:
-	$(LIB) bin/lc.so lc/*.o
+bin/liblc.so: lc/lc.hh lc/common/passes/all.hh\
+              bin/obj/lc/common/compiler.o\
+              bin/obj/lc/common/module.o\
+              bin/obj/lc/common/nsmgr.o\
+              bin/obj/lc/common/structmgr.o
+	$(LIB) bin/liblc.so `find bin/obj/lc -type f -name '**.o'`
 
 bin/liblp.so: lp/lp.hh lp/token.hh\
-              bin/obj/lp/parser.o bin/obj/lp/node.o\
-              bin/obj/lp/lexer.o bin/obj/lp/helpers.o
+              bin/obj/lp/parser.o\
+	      bin/obj/lp/node.o\
+              bin/obj/lp/lexer.o\
+	      bin/obj/lp/helpers.o
 	$(LIB) bin/liblp.so bin/obj/lp/*.o
 
 
 # objects
+bin/obj/lc/common/compiler.o: lc/common/compiler.hh lc/common/compiler.cc
+	$(OBJ) lc/common/compiler.cc -o bin/obj/lc/common/compiler.o
+
+bin/obj/lc/common/module.o: lc/common/module.hh lc/common/module.cc
+	$(OBJ) lc/common/module.cc -o bin/obj/lc/common/module.o
+
+bin/obj/lc/common/nsmgr.o: lc/common/nsmgr.hh lc/common/nsmgr.cc
+	$(OBJ) lc/common/nsmgr.cc -o bin/obj/lc/common/nsmgr.o
+
+bin/obj/lc/common/structmgr.o: lc/common/structmgr.hh lc/common/structmgr.cc
+	$(OBJ) lc/common/structmgr.cc -o bin/obj/lc/common/structmgr.o
+
 bin/obj/lp/parser.o: lp/parser.hh lp/parser.cc
 	$(OBJ) lp/parser.cc -o bin/obj/lp/parser.o
 

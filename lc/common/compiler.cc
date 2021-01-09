@@ -1,5 +1,4 @@
-#include "compiler.hh"
-#include "passes/all.hh"
+#include "lc.hh"
 
 bool Compiler::load_mod(std::string fpath)
 {

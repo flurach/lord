@@ -1,4 +1,4 @@
-#include "type.hh"
+#include "lc.hh"
 
 Type::Type(PrimType pt, std::string name, Type *sub)
 	: pt(pt), name(name), sub(sub)

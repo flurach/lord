@@ -1,4 +1,4 @@
-#include "structmgr.hh"
+#include "lc.hh"
 
 Field::Field(Range r, std::string n, Type t)
 	: range(r), name(n), type(t)

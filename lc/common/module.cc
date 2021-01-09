@@ -1,5 +1,4 @@
-#include "module.hh"
-#include "compiler.hh"
+#include "lc.hh"
 
 Module::Module(Compiler *c)
 	: c(c)

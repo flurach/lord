@@ -1,7 +1,10 @@
 #ifndef LORD_LP_LEX_HH
 #define LORD_LP_LEX_HH
 
-/* lexer class */
+struct Range {
+	size_t begin, end;
+};
+
 struct Lexer {
 	std::string src = "";
 	size_t i = 0;
