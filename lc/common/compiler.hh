@@ -3,7 +3,7 @@
 
 struct Compiler {
 	std::vector<Module> mods = {};
-	bool load_mod(std::string fpath);
+	Module *load_mod(std::string fpath);
 	void print();
 };
 

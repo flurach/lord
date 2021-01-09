@@ -1,14 +1,15 @@
 #include "lc.hh"
 
-bool Compiler::load_mod(std::string fpath)
+Module *Compiler::load_mod(std::string fpath)
 {
 	Module m = Module(this);
 
-	auto r = m.load_file(fpath);
-	if (r)
+	if (m.load_file(fpath)) {
 		mods.push_back(m);
+		return mods.back();
+	}
 
-	return r;
+	return NULL;
 }
 
 void Compiler::print()

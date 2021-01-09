@@ -80,7 +80,7 @@ void compile_file(char *fpath)
 {
 	Compiler c = Compiler();
 
-	if (!c.load_mod(std::string(fpath))) {
+	if (!c.load_mod(fpath)) {
 		puts("failed to open file");
 		return;
 	}
