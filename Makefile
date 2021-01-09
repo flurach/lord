@@ -10,6 +10,7 @@ CFLAGS = -Wall -Wextra -Werror
 INCS = -I lp -I lc -I cli
 LIBS = `pkg-config --libs readline`
 LINKS = -Lbin -llp -llc $(LIBS)
+OPT = -O3
 DBG = -g
 
 
@@ -21,7 +22,9 @@ OBJ = $(CMD) -fPIC -c
 
 
 # release
-ifneq (release,$(firstword $(MAKECMDGOALS)))
+ifeq (release,$(firstword $(MAKECMDGOALS)))
+	CMD := $(CMD) $(OPT)
+else
 	CMD := $(CMD) $(DBG)
 endif
 
@@ -30,6 +33,7 @@ endif
 .PHONY: all clean
 all: dirs lp lc cli
 	@echo -e "$(GREEN)=== Build (debug) Successful ===$(NOCOLOR)"
+release: clean all ;
 clean:
 	@rm -rf bin
 	@echo "Cleaned!"
