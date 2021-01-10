@@ -47,9 +47,7 @@
 <typedsym> ::= <dot> <COLN> <typeanno>
 
 # "i64" or "Module.Type[5]" or "[pointer]"
-<typeanno> ::= <LBRC> <dot> <RBRC>
-             | <dot> <LBRC> <logic> <RBRC>
-             | <dot>
+<typeanno> ::= (<ptr>|<dot>) {<ptr>}
 
 # maths
 <expr> ::= <term> {(<ADD>|<SUB>) <term>}

@@ -294,17 +294,22 @@ Node *parse_typedsym(Lexer *lexer)
 
 Node *parse_typeanno(Lexer *lexer)
 {
-	if (auto n = parse_seq(lexer, { parse_LBRC, parse_dot, parse_RBRC })) {
-		n->token = T_TYPEANNO;
-		return n;
+	Node *ptr_or_dot, *ptrs;
+
+	if ((ptr_or_dot = parse_either(lexer, { parse_ptr, parse_dot })) == NULL)
+		return NULL;
+
+	ptrs = parse_many(lexer, parse_ptr);
+	if (ptrs->ns.size()) {
+		auto arr = new Node(ptr_or_dot->range, T_TYPEANNO, "");
+		arr->ns.push_back(ptr_or_dot);
+		arr->ns.push_back(ptrs);
+		return arr;
 	}
 
-	if (auto n = parse_seq(lexer, { parse_dot, parse_LBRC, parse_logic, parse_RBRC })) {
-		n->token = T_TYPEANNO;
-		return n;
-	}
-
-	return parse_dot(lexer);
+	delete ptrs;
+	ptr_or_dot->token = T_TYPEANNO;
+	return ptr_or_dot;
 }
 
 Node *parse_expr(Lexer *lexer)

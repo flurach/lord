@@ -25,6 +25,7 @@ struct Type {
 	PrimType pt;
 	std::string name;
 	Type *sub;
+	size_t size = 0;
 
 	Type(PrimType pt = PT_UNKNOWN, std::string name = "", Type *sub = NULL);
 	~Type();

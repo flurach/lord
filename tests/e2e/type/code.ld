@@ -16,6 +16,7 @@ type SampleStruct =
 	builtin_ptr: [i8]
 	custom_ptr:  [SmallStruct]
 	arr: i64[10]
+	pArr: [i64][10]
 	twoDarr: i64[10][10]
 
 

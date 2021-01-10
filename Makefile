@@ -65,7 +65,6 @@ bin/lord: cli/cli.cc
 
 bin/liblc.so: lc/lc.hh\
               bin/obj/lc/common/node2x.o\
-              bin/obj/lc/common/passes/struct_field.o\
               bin/obj/lc/common/passes/struct_name.o\
               bin/obj/lc/common/passes/resl_ns.o\
               bin/obj/lc/common/passes/visitor.o\
@@ -73,7 +72,8 @@ bin/liblc.so: lc/lc.hh\
               bin/obj/lc/common/module.o\
               bin/obj/lc/common/nsmgr.o\
               bin/obj/lc/common/structmgr.o\
-              bin/obj/lc/common/type.o
+              bin/obj/lc/common/type.o\
+              # bin/obj/lc/common/passes/struct_field.o
 	$(LIB) bin/liblc.so `find bin/obj/lc -type f -name '**.o'`
 
 bin/liblp.so: lp/lp.hh lp/token.hh\
@@ -85,8 +85,8 @@ bin/liblp.so: lp/lp.hh lp/token.hh\
 
 
 # objects
-bin/obj/lc/common/passes/struct_field.o: lc/common/passes/struct_field.hh lc/common/passes/struct_field.cc
-	$(OBJ) lc/common/passes/struct_field.cc -o bin/obj/lc/common/passes/struct_field.o
+# bin/obj/lc/common/passes/struct_field.o: lc/common/passes/struct_field.hh lc/common/passes/struct_field.cc
+# 	$(OBJ) lc/common/passes/struct_field.cc -o bin/obj/lc/common/passes/struct_field.o
 
 bin/obj/lc/common/passes/struct_name.o: lc/common/passes/struct_name.hh lc/common/passes/struct_name.cc
 	$(OBJ) lc/common/passes/struct_name.cc -o bin/obj/lc/common/passes/struct_name.o

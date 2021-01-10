@@ -1,4 +1,4 @@
 # TODO
 
-- FIFO module importing
-- NsMgr module name memoization
+- [ ] Fix parsing for array type annotations
+- [ ] Fix node2type function for array annotations

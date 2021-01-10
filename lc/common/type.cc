@@ -19,10 +19,10 @@ void Type::print()
 		std::cout << name << " {}";
 	} else if (pt == PT_PTR) {
 		std::cout << "[";
-		sub->print();
+		if (sub) sub->print();
 		std::cout << "]";
 	} else if (pt == PT_ARR) {
-		sub->print();
+		if (sub) sub->print();
 		std::cout << "[" << name << "]";
 	}
 }
