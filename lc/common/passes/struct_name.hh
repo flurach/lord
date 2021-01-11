@@ -5,7 +5,7 @@ class StructNameVisitor : public Visitor {
 public:
 	StructNameVisitor(Module *m);
 
-	void visit_TYPE(Node *n) override;
+	void visit_STRUCT(Node *n) override;
 };
 
 #endif

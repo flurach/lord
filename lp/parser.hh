@@ -11,7 +11,7 @@ Node *parse_for(Lexer *lexer);
 Node *parse_forcond(Lexer *lexer);
 Node *parse_forlogic(Lexer *lexer);
 
-Node *parse_type(Lexer *lexer);
+Node *parse_struct(Lexer *lexer);
 
 Node *parse_if(Lexer *lexer);
 Node *parse_else(Lexer *lexer);

@@ -13,11 +13,12 @@ Node *parse_stmt(Lexer *lexer)
 		parse_for,
 		parse_if,
 		parse_fdef,
-		parse_type,
+		parse_struct,
 		parse_bind,
 		parse_ret,
 		parse_logic,
 		parse_PASS,
+		parse_ERR,
 		parse_EOL
 	});
 }
@@ -57,11 +58,11 @@ Node *parse_forlogic(Lexer *lexer)
 	return parse_either(lexer, either);
 }
 
-Node *parse_type(Lexer *lexer)
+Node *parse_struct(Lexer *lexer)
 {
 	Node *type, *sym, *eq, *fbody;
 
-	if ((type = parse_TYPE(lexer)) == NULL)
+	if ((type = parse_STRUCT(lexer)) == NULL)
 		return NULL;
 
 	if ((sym = parse_SYM(lexer)) == NULL)
@@ -294,21 +295,18 @@ Node *parse_typedsym(Lexer *lexer)
 
 Node *parse_typeanno(Lexer *lexer)
 {
-	Node *ptr_or_dot, *ptrs;
+	Node *ptr_or_dot;
 
 	if ((ptr_or_dot = parse_either(lexer, { parse_ptr, parse_dot })) == NULL)
 		return NULL;
 
-	ptrs = parse_many(lexer, parse_ptr);
-	if (ptrs->ns.size()) {
+	while (auto ptr = parse_ptr(lexer)) {
 		auto arr = new Node(ptr_or_dot->range, T_TYPEANNO, "");
 		arr->ns.push_back(ptr_or_dot);
-		arr->ns.push_back(ptrs);
-		return arr;
+		arr->ns.push_back(ptr);
+		ptr_or_dot = arr;
 	}
 
-	delete ptrs;
-	ptr_or_dot->token = T_TYPEANNO;
 	return ptr_or_dot;
 }
 

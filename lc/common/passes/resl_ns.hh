@@ -7,7 +7,7 @@ public:
 
 	void visit_FN(Node *n) override;
 	void visit_args(Node *n);
-	void visit_TYPE(Node *n) override;
+	void visit_STRUCT(Node *n) override;
 
 	void visit_EQ(Node *n) override;
 	void visit_SYM(Node *n) override;

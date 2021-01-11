@@ -79,8 +79,8 @@ Token Lexer::next()
 			this->token = T_IN;
 		else if (this->val == "to")
 			this->token = T_TO;
-		else if (this->val == "type")
-			this->token = T_TYPE;
+		else if (this->val == "struct")
+			this->token = T_STRUCT;
 		else if (this->val == "as")
 			this->token = T_AS;
 		else if (this->val == "and")
@@ -137,6 +137,15 @@ Token Lexer::next()
 	else if (curr() == '.') {
 		this->val.push_back(ch());
 		this->token = T_DOT;
+	}
+	else if (curr() == '|') {
+		this->val.push_back(ch());
+		if (curr() == '>') {
+			this->val.push_back(ch());
+			this->token = T_DOT;
+		} else {
+			this->token = T_ERR;
+		}
 	}
 
 	/* punctuation */

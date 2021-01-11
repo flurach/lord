@@ -19,7 +19,7 @@ void ReslNsVisitor::visit_args(Node *n)
 		nn->id = m->nsmgr.newsym(nn->val);
 }
 
-void ReslNsVisitor::visit_TYPE(Node *n)
+void ReslNsVisitor::visit_STRUCT(Node *n)
 {
 	(void)n;
 }

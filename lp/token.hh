@@ -34,6 +34,7 @@
 	X(LBRC)\
 	X(RBRC)\
 	X(DOT)\
+	X(PIPE)\
 	\
 	/* punctuation */\
 	X(LPAR)\

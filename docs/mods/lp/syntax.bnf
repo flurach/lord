@@ -1,11 +1,13 @@
 <stmt> ::= <for>
          | <if>
          | <fdef>
-         | <type>
+         | <struct>
 	 | <ret>
          | <bind>
          | <logic>
          | <PASS>
+         | <EOL>
+         | <ERR>
 
 <for> ::= <FOR> <forcond> <fbody>
 
@@ -14,7 +16,7 @@
 
 <forlogic> ::= <logic> sepby <SEMI>
 
-<type> ::= <TYPE> <SYM> <EQ> <fbody>
+<struct> ::= <STRUCT> <SYM> <EQ> <fbody>
 
 <if> ::= <IF> <logic> <fbody> [<else>]
 
@@ -46,8 +48,10 @@
 # "name: Type" or "name"
 <typedsym> ::= <dot> <COLN> <typeanno>
 
-# "i64" or "Module.Type[5]" or "[pointer]"
-<typeanno> ::= (<ptr>|<dot>) {<ptr>}
+# "i64" or "Module.Type[5]" or "[pointer]" or "[ptr][10][10]"
+<typeanno> ::= <typeanno> <ptr>
+             | <ptr>
+             | <dot>
 
 # maths
 <expr> ::= <term> {(<ADD>|<SUB>) <term>}

@@ -8,18 +8,18 @@ Type::~Type()
 
 void Type::print()
 {
-	if (tk == PT_UNKNOWN) {
+	if (tk == TK_UNKNOWN) {
 		std::cout << "{}";
-	} else if (tk == PT_STRUCT) {
-		std::cout << "struct " << name << " {}";
-	} else if (tk == PT_PTR) {
+	} else if (tk == TK_STRUCT) {
+		std::cout << "struct " << TypeKind_str[tk] << " {}";
+	} else if (tk == TK_PTR) {
 		std::cout << "[";
 		if (sub) sub->print();
 		std::cout << "]";
-	} else if (tk == PT_ARR) {
+	} else if (tk == TK_ARR) {
 		if (sub) sub->print();
-		std::cout << "[" << name << "]";
+		std::cout << "[" << TypeKind_str[tk] << "]";
+	} else {
+		std::cout << TypeKind_str[tk];
 	}
-
-	else if (tk)
 }

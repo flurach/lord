@@ -34,6 +34,9 @@ static const char *TypeKind_str[] = {
 struct Type {
 	TypeKind tk;
 	Type *sub;
+
+	~Type();
+
 	void print();
 };
 
