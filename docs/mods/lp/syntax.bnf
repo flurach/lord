@@ -69,7 +69,21 @@
 
 # constant literals
 <lit> ::= <call>
+        | <structinit>
         | <arg>
+
+<structinit> ::= <DOT> <LCRL> {<typedsym> sepby <COMA>} <RCRL>
+
+# func_name arg1 arg2 ...
+<call> ::= <dot> [{<arg>}]
+<arg> ::= <LPAR> <logic> <RPAR>
+        | <range>
+        | <num>
+        | <STR>
+        | <CHR>
+        | <ptr>
+        | <arr>
+        | <dot>
 
 # X to Y
 <range> ::= <num> <TO> <num>
@@ -84,17 +98,6 @@
 
 # { logic1, logic2, ... }
 <arr> ::= <LCRL> {<logic> sepby <COMA>} <RCLR>
-
-# func_name arg1 arg2 ...
-<call> ::= <dot> [{<arg>}]
-<arg> ::= <LPAR> <logic> <RPAR>
-        | <range>
-        | <num>
-        | <STR>
-        | <CHR>
-        | <ptr>
-        | <arr>
-	| <dot>
 
 # "type.field" or "type"
 <dot> ::= <SYM> <DOT> <dot>
