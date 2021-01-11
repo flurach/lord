@@ -25,7 +25,7 @@
 	X(FOR)\
 	X(IN)\
 	X(TO)\
-	X(TYPE)\
+	X(STRUCT)\
 	X(AS)\
 	X(RET)\
 	\

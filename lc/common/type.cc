@@ -1,28 +1,25 @@
 #include "lc.hh"
 
-Type::Type(PrimType pt, std::string name, Type *sub)
-	: pt(pt), name(name), sub(sub)
-{
-}
-
 Type::~Type()
 {
+	if (sub)
+		delete sub;
 }
 
 void Type::print()
 {
-	if (pt == PT_UNKNOWN) {
+	if (tk == PT_UNKNOWN) {
 		std::cout << "{}";
-	} else if (pt == PT_BUILTIN) {
-		std::cout << name;
-	} else if (pt == PT_STRUCT) {
-		std::cout << name << " {}";
-	} else if (pt == PT_PTR) {
+	} else if (tk == PT_STRUCT) {
+		std::cout << "struct " << name << " {}";
+	} else if (tk == PT_PTR) {
 		std::cout << "[";
 		if (sub) sub->print();
 		std::cout << "]";
-	} else if (pt == PT_ARR) {
+	} else if (tk == PT_ARR) {
 		if (sub) sub->print();
 		std::cout << "[" << name << "]";
 	}
+
+	else if (tk)
 }

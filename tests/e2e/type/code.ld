@@ -1,7 +1,6 @@
 # data types
 
-
-type SampleStruct =
+struct SampleStruct =
 	_i8:  i8
 	_i16: i16
 	_i32: i32
@@ -13,20 +12,25 @@ type SampleStruct =
 	_f32: f32
 	_f64: f64
 	_struct: SmallStruct
+
 	builtin_ptr: [i8]
 	custom_ptr:  [SmallStruct]
-	arr: i64[10]
-	pArr: [i64][10]
+
+	arr:     i64[10]
 	twoDarr: i64[10][10]
+	pArr:    [i64][10][10]
 
+	fnptr: [i64 -> i64]
 
-type SmallStruct =
+fn SampleStruct.print self =
+	self.fnptr self._i64 |> printf "%d\n"
+
+struct SmallStruct =
 	hey: [u8]
 
-
-fn SampleStruct.area self =
-	self._i8 * self._i8
-
-
-sample = SampleStruct 5 5
-printf "%d\n" (sample.area)
+fn main =
+	sample = SampleStruct {
+		_i64: 10,
+		fnptr: x => x * x
+	}
+	sample.print

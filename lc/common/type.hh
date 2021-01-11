@@ -1,35 +1,39 @@
 #ifndef LORD_LC_COMMON_TYPE_HH
 #define LORD_LC_COMMON_TYPE_HH
 
-#define LORC_LC_COMMON_PRIMTYPES\
+#define LORC_LC_COMMON_TYPEKINDS\
 	X(UNKNOWN)\
-	X(BUILTIN)\
+	X(i8)\
+	X(i16)\
+	X(i32)\
+	X(i64)\
+	X(u8)\
+	X(u16)\
+	X(u32)\
+	X(u64)\
+	X(f32)\
+	X(f64)\
 	X(STRUCT)\
-	X(PTR)\
 	X(ARR)\
+	X(PTR)\
+	X(FNPTR)\
 	X(LAST)
 
-enum PrimType {
-	#define X(pt) PT_##pt,
-		LORC_LC_COMMON_PRIMTYPES
+enum TypeKind {
+	#define X(tk) TK_##tk,
+		LORC_LC_COMMON_TYPEKINDS
 	#undef X
 };
 
-static const char *PrimType_str[] = {
-	#define X(pt) #pt,
-		LORC_LC_COMMON_PRIMTYPES
+static const char *TypeKind_str[] = {
+	#define X(tk) #tk,
+		LORC_LC_COMMON_TYPEKINDS
 	#undef X
 };
 
 struct Type {
-	PrimType pt;
-	std::string name;
+	TypeKind tk;
 	Type *sub;
-	size_t size = 0;
-
-	Type(PrimType pt = PT_UNKNOWN, std::string name = "", Type *sub = NULL);
-	~Type();
-
 	void print();
 };
 
