@@ -10,17 +10,31 @@ Node *parse(Lexer *lexer)
 Node *parse_stmt(Lexer *lexer)
 {
 	return parse_either(lexer, {
+		parse_import,
 		parse_for,
 		parse_if,
 		parse_fdef,
 		parse_struct,
-		parse_bind,
 		parse_ret,
-		parse_logic,
+		parse_bind,
+		parse_pipe,
 		parse_PASS,
 		parse_ERR,
 		parse_EOL
 	});
+}
+
+Node *parse_import(Lexer *lexer)
+{
+	Node *imp, *sym;
+
+	if ((imp = parse_IMPORT(lexer)) == NULL)
+		return NULL;
+
+	if ((sym = parse_SYM(lexer)) != NULL)
+		imp->push(sym);
+
+	return imp;
 }
 
 Node *parse_for(Lexer *lexer)
@@ -52,7 +66,7 @@ Node *parse_forlogic(Lexer *lexer)
 {
 	auto either = {
 		parse_bind,
-		parse_logic
+		parse_pipe
 	};
 
 	return parse_either(lexer, either);
@@ -82,14 +96,14 @@ Node *parse_struct(Lexer *lexer)
 
 Node *parse_if(Lexer *lexer)
 {
-	Node *_if, *logic, *fbody, *_else;
+	Node *_if, *pipe, *fbody, *_else;
 
 	if ((_if = parse_IF(lexer)) == NULL)
 		return NULL;
 
-	if ((logic = parse_logic(lexer)) == NULL)
+	if ((pipe = parse_pipe(lexer)) == NULL)
 		return _if;
-	_if->push(logic);
+	_if->push(pipe);
 
 	if ((fbody = parse_fbody(lexer)) == NULL)
 		return _if;
@@ -123,15 +137,25 @@ Node *parse_else(Lexer *lexer)
 
 Node *parse_ret(Lexer *lexer)
 {
-	Node *ret, *logic;
+	Node *ret, *pipe;
 
 	if ((ret = parse_RET(lexer)) == NULL)
 		return NULL;
 
-	if ((logic = parse_logic(lexer)) != NULL)
-		ret->push(logic);
+	if ((pipe = parse_pipe(lexer)) != NULL)
+		ret->push(pipe);
 
 	return ret;
+}
+
+Node *parse_pipe(Lexer *lexer)
+{
+	if (auto n = parse_seq(lexer, { parse_logic, parse_PIPE, parse_pipe })) {
+		n->binarify();
+		return n;
+	}
+
+	return parse_logic(lexer);
 }
 
 Node *parse_logic(Lexer *lexer)
@@ -232,8 +256,8 @@ Node *parse_fbody(Lexer *lexer)
 {
 	Node *indent, *stmts, *dedent;
 
-	if (auto expr = parse_expr(lexer))
-		return expr;
+	if (auto pipe = parse_pipe(lexer))
+		return pipe;
 
 	if ((indent = parse_INDENT(lexer)) == NULL)
 		return NULL;
@@ -249,7 +273,7 @@ Node *parse_fbody(Lexer *lexer)
 
 Node *parse_bind(Lexer *lexer)
 {
-	if (auto n = parse_seq(lexer, { parse_typedsym, parse_bindsym, parse_logic })) {
+	if (auto n = parse_seq(lexer, { parse_typedsym, parse_bindsym, parse_pipe })) {
 		n->binarify();
 		return n;
 	}
@@ -257,7 +281,7 @@ Node *parse_bind(Lexer *lexer)
 	if (auto n = parse_typedsym(lexer))
 		return n;
 
-	if (auto n = parse_seq(lexer, { parse_SYM, parse_bindsym, parse_logic })) {
+	if (auto n = parse_seq(lexer, { parse_SYM, parse_bindsym, parse_pipe })) {
 		n->binarify();
 		return n;
 	}
@@ -354,7 +378,7 @@ Node *parse_term(Lexer *lexer)
 
 Node *parse_fact(Lexer *lexer)
 {
-	if (auto n = parse_seq(lexer, { parse_LPAR, parse_logic, parse_RPAR, }))
+	if (auto n = parse_seq(lexer, { parse_LPAR, parse_pipe, parse_RPAR, }))
 		return n;
 	return parse_cast(lexer);
 }
@@ -378,9 +402,40 @@ Node *parse_not(Lexer *lexer)
 Node *parse_lit(Lexer *lexer)
 {
 	return parse_either(lexer, {
+		parse_structinit,
 		parse_call,
 		parse_arg
 	});
+}
+
+Node *parse_structinit(Lexer *lexer)
+{
+	auto n = parse_seq(lexer, {
+		parse_dot,
+		parse_LCRL,
+		parse_structbody,
+		parse_RCRL
+	});
+
+	if (n == NULL)
+		return NULL;
+
+	n->token = n->ns[0]->token;
+	return n;
+}
+
+Node *parse_structbody(Lexer *lexer)
+{
+	return parse_sepby(lexer, parse_structfield, parse_COMA);
+}
+
+Node *parse_structfield(Lexer *lexer)
+{
+	if (auto n = parse_seq(lexer, { parse_SYM, parse_COLN, parse_pipe })) {
+		n->binarify();
+		return n;
+	}
+	return NULL;
 }
 
 Node *parse_range(Lexer *lexer)
@@ -462,7 +517,7 @@ Node *parse_arg(Lexer *lexer)
 {
 	auto res = parse_seq(lexer, {
 		parse_LPAR,
-		parse_logic,
+		parse_pipe,
 		parse_RPAR
 	});
 	if (res != NULL) {

@@ -7,6 +7,8 @@ Node *parse(Lexer *lexer);
 /* grammar */
 Node *parse_stmt(Lexer *lexer);
 
+Node *parse_import(Lexer *lexer);
+
 Node *parse_for(Lexer *lexer);
 Node *parse_forcond(Lexer *lexer);
 Node *parse_forlogic(Lexer *lexer);
@@ -18,6 +20,7 @@ Node *parse_else(Lexer *lexer);
 
 Node *parse_ret(Lexer *lexer);
 
+Node *parse_pipe(Lexer *lexer);
 Node *parse_logic(Lexer *lexer);
 Node *parse_eqcmp(Lexer *lexer);
 Node *parse_difcmp(Lexer *lexer);
@@ -37,6 +40,10 @@ Node *parse_fact(Lexer *lexer);
 Node *parse_cast(Lexer *lexer);
 Node *parse_not(Lexer *lexer);
 Node *parse_lit(Lexer *lexer);
+
+Node *parse_structinit(Lexer *lexer);
+Node *parse_structbody(Lexer *lexer);
+Node *parse_structfield(Lexer *lexer);
 
 Node *parse_range(Lexer *lexer);
 Node *parse_num(Lexer *lexer);

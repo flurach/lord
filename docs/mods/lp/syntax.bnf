@@ -1,4 +1,5 @@
-<stmt> ::= <for>
+<stmt> ::= <import>
+         | <for>
          | <if>
          | <fdef>
          | <struct>
@@ -9,18 +10,23 @@
          | <EOL>
          | <ERR>
 
+<import> ::= <IMPORT> <SYM>
+
 <for> ::= <FOR> <forcond> <fbody>
 
 <forcond> ::= <SYM> <IN> <range>
             | {<forlogic>}
 
-<forlogic> ::= <logic> sepby <SEMI>
+<forlogic> ::= <pipe> sepby <SEMI>
 
 <struct> ::= <STRUCT> <SYM> <EQ> <fbody>
 
-<if> ::= <IF> <logic> <fbody> [<else>]
+<if> ::= <IF> <pipe> <fbody> [<else>]
 
 <else> ::= <ELSE> (<if>|<fbody>)
+
+<pipe> ::= <logic> <PIPE> <pipe>
+         | <logic>
 
 <logic> ::= <eqcmp> (<AND>|<OR>) <logic>
           | <eqcmp>
@@ -34,14 +40,14 @@
 <fdef> ::= <FN> <dot> {<SYM>} <EQ> <fbody>
 
 <fbody> ::= <INDENT> {<stmt>} <DEDENT>
-          | <logic>
+          | <pipe>
 
-<ret> :: = <RET> <logic>
+<ret> :: = <RET> <pipe>
 
 # name: Type = something
-<bind> ::= <typedsym> <bindsym> <logic>
+<bind> ::= <typedsym> <bindsym> <pipe>
          | <typedsym>
-         | <SYM> <bindsym> <logic>
+         | <SYM> <bindsym> <pipe>
 
 <bindsym> ::= <EQ> | <AEQ> | <SEQ> | <MEQ> | <DEQ> | <DDEQ> | <MOQ>
 
@@ -56,7 +62,7 @@
 # maths
 <expr> ::= <term> {(<ADD>|<SUB>) <term>}
 <term> ::= <fact> {(<MUL>|<DIV>|<DDIV>|<MOD>) <fact>}
-<fact> ::= <LPAR> <logic> <RPAR>
+<fact> ::= <LPAR> <pipe> <RPAR>
          | <cast>
 
 # something as OtherType
@@ -72,11 +78,13 @@
         | <structinit>
         | <arg>
 
-<structinit> ::= <DOT> <LCRL> {<typedsym> sepby <COMA>} <RCRL>
+<structinit> ::= <DOT> <LCRL> <structfield> <RCRL>
+<structbody> ::= {<structfield> sepby <COMMA>}
+<structfield> ::= <SYM> <COLN> <pipe>
 
 # func_name arg1 arg2 ...
 <call> ::= <dot> [{<arg>}]
-<arg> ::= <LPAR> <logic> <RPAR>
+<arg> ::= <LPAR> <pipe> <RPAR>
         | <range>
         | <num>
         | <STR>
@@ -94,10 +102,10 @@
         | <FLT>
 
 # [expr]
-<ptr> ::= <LBRC> <logic> <RBRC>
+<ptr> ::= <LBRC> <pipe> <RBRC>
 
-# { logic1, logic2, ... }
-<arr> ::= <LCRL> {<logic> sepby <COMA>} <RCLR>
+# { pipe1, pipe2, ... }
+<arr> ::= <LCRL> {<pipe> sepby <COMA>} <RCLR>
 
 # "type.field" or "type"
 <dot> ::= <SYM> <DOT> <dot>

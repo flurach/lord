@@ -65,7 +65,9 @@ Token Lexer::next()
 		while (isalnum(curr()) || curr() == '_')
 			this->val.push_back(ch());
 
-		if (this->val == "pass")
+		if (this->val == "import")
+			this->token = T_IMPORT;
+		else if (this->val == "pass")
 			this->token = T_PASS;
 		else if (this->val == "fn")
 			this->token = T_FN;
@@ -142,7 +144,7 @@ Token Lexer::next()
 		this->val.push_back(ch());
 		if (curr() == '>') {
 			this->val.push_back(ch());
-			this->token = T_DOT;
+			this->token = T_PIPE;
 		} else {
 			this->token = T_ERR;
 		}

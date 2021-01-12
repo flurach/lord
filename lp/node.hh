@@ -16,6 +16,7 @@ struct Node {
 	void push(Node *child);
 	Node *pop();
 	bool binarify();
+	bool leadify();
 
 	/* debugging */
 	void print(size_t indent = 0);

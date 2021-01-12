@@ -18,6 +18,7 @@
 	X(CHR)\
 	\
 	/* keywords */\
+	X(IMPORT)\
 	X(PASS)\
 	X(FN)\
 	X(IF)\
