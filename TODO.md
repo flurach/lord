@@ -5,5 +5,14 @@
 - [X] Add pipes to grammar
 - [X] Add struct initialization to grammar
 - [X] Implement the three above in parser
+
+- [ ] Simplify architecture
+- [ ] Make a list of compilation passes
+- [ ] Actually implement them
+
+- [ ] Write a philosophy document
+- [ ] Beautify README
+- [ ] Refactor the code
+
 - [ ] Rewrite node2type function
 - [ ] Turn node2type function into a Visitor

@@ -20,10 +20,10 @@ Type node2type(Module *m, Node *n)
 	/* if (n->ns.size() == 0) { */
 	/* 	auto i = std::find(builtin.begin(), builtin.end(), n->val); */
 	/* 	if (i != builtin.end()) */
-	/* 		return Type(i - buitin.begin() + 1, n->val); */
+	/* 		return {(TypeKind)(i - builtin.begin() + 1), NULL}; */
 
 	/* 	if (auto s = m->structmgr.get(n->val)) */
-	/* 		return Type(TK_STRUCT,  s->name); */
+	/* 		return {TK_STRUCT,  NULL}; */
 	/* } */
 
 	/* else if (n->ns.size() == 2) { */
