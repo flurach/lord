@@ -21,5 +21,5 @@ void FnNameVisitor::visit_method(Node *n)
 
 void FnNameVisitor::visit_fdef(Node *n)
 {
-	std::cout << "fn: " << n->ns[0]->val << std::endl;
+	m->fnmgr.add(Fn(n->range, n->ns[0]->val));
 }

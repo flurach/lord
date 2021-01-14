@@ -4,13 +4,10 @@
 #include <algorithm>
 #include "lp.hh"
 
-#include "common/type.hh"
-#include "common/nsmgr.hh"
 #include "common/structmgr.hh"
+#include "common/fnmgr.hh"
 #include "common/module.hh"
 #include "common/compiler.hh"
-
-#include "common/node2x.hh"
 
 #include "common/passes/visitor.hh"
 #include "common/passes/struct_name.hh"

@@ -1,14 +1,13 @@
 #include "lc.hh"
 
-Field::Field(Range r, std::string n, Type t)
-	: range(r), name(n), type(t)
+Field::Field(Range r, std::string n)
+	: range(r), name(n)
 {
 }
 
 void Field::print()
 {
-	std::cout << name << " of type ";
-	type.print();
+	std::cout << name << " of type ()";
 	std::cout << std::endl;
 }
 

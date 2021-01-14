@@ -64,16 +64,13 @@ bin/lord: cli/cli.cc
 	$(BIN) bin/lord cli/cli.cc
 
 bin/liblc.so: lc/lc.hh\
-              bin/obj/lc/common/node2x.o\
               bin/obj/lc/common/passes/fn_name.o\
               bin/obj/lc/common/passes/struct_name.o\
-              bin/obj/lc/common/passes/resl_ns.o\
               bin/obj/lc/common/passes/visitor.o\
               bin/obj/lc/common/compiler.o\
               bin/obj/lc/common/module.o\
-              bin/obj/lc/common/nsmgr.o\
-              bin/obj/lc/common/structmgr.o\
-              bin/obj/lc/common/type.o
+              bin/obj/lc/common/fnmgr.o\
+              bin/obj/lc/common/structmgr.o
 	$(LIB) bin/liblc.so `find bin/obj/lc -type f -name '**.o'`
 
 bin/liblp.so: lp/lp.hh lp/token.hh\
@@ -94,23 +91,17 @@ bin/obj/lc/common/passes/struct_name.o: lc/common/passes/struct_name.hh lc/commo
 bin/obj/lc/common/passes/visitor.o: lc/common/passes/visitor.hh lc/common/passes/visitor.cc
 	$(OBJ) lc/common/passes/visitor.cc -o bin/obj/lc/common/passes/visitor.o
 
-bin/obj/lc/common/node2x.o: lc/common/node2x.hh lc/common/node2x.cc
-	$(OBJ) lc/common/node2x.cc -o bin/obj/lc/common/node2x.o
-
 bin/obj/lc/common/compiler.o: lc/common/compiler.hh lc/common/compiler.cc
 	$(OBJ) lc/common/compiler.cc -o bin/obj/lc/common/compiler.o
 
 bin/obj/lc/common/module.o: lc/common/module.hh lc/common/module.cc
 	$(OBJ) lc/common/module.cc -o bin/obj/lc/common/module.o
 
-bin/obj/lc/common/nsmgr.o: lc/common/nsmgr.hh lc/common/nsmgr.cc
-	$(OBJ) lc/common/nsmgr.cc -o bin/obj/lc/common/nsmgr.o
+bin/obj/lc/common/fnmgr.o: lc/common/fnmgr.hh lc/common/fnmgr.cc
+	$(OBJ) lc/common/fnmgr.cc -o bin/obj/lc/common/fnmgr.o
 
 bin/obj/lc/common/structmgr.o: lc/common/structmgr.hh lc/common/structmgr.cc
 	$(OBJ) lc/common/structmgr.cc -o bin/obj/lc/common/structmgr.o
-
-bin/obj/lc/common/type.o: lc/common/type.hh lc/common/type.cc
-	$(OBJ) lc/common/type.cc -o bin/obj/lc/common/type.o
 
 bin/obj/lp/parser.o: lp/parser.hh lp/parser.cc
 	$(OBJ) lp/parser.cc -o bin/obj/lp/parser.o

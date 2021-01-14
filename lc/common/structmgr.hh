@@ -4,9 +4,8 @@
 struct Field {
 	Range range;
 	std::string name;
-	Type type;
 
-	Field(Range r, std::string n, Type t);
+	Field(Range r, std::string n);
 	void print();
 };
 
