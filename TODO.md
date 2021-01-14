@@ -12,6 +12,7 @@
 
 - [ ] Write a philosophy document
 - [ ] Beautify README
+- [ ] Switch from readline to editline
 - [ ] Refactor the code
 
 - [ ] Rewrite node2type function
