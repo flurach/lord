@@ -13,7 +13,7 @@
 #include "common/node2x.hh"
 
 #include "common/passes/visitor.hh"
-#include "common/passes/resl_ns.hh"
 #include "common/passes/struct_name.hh"
+#include "common/passes/fn_name.hh"
 
 #endif
