@@ -8,7 +8,7 @@ struct Range {
 struct Lexer {
 	std::string src = "";
 	size_t i = 0;
-	size_t i_len = 0, i_dep = 0;
+	size_t i_len = 0, i_dep = 0, i_bypass = 0;
 
 	Range range = {0, 0};
 	Token token = T_EOF;

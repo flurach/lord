@@ -33,9 +33,9 @@ void Module::print()
 {
 	std::cout << "=== MODULE '" << name << "' ===" << std::endl;
 
-	std::cout << " => FUNCTIONS " << std::endl;
-	fnmgr.print();
-
 	std::cout << " => STRUCTS " << std::endl;
 	structmgr.print();
+
+	std::cout << " => FUNCTIONS " << std::endl;
+	fnmgr.print();
 }

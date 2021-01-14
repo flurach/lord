@@ -14,6 +14,3 @@
 - [ ] Beautify README
 - [ ] Switch from readline to editline
 - [ ] Refactor the code
-
-- [ ] Rewrite node2type function
-- [ ] Turn node2type function into a Visitor

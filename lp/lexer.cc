@@ -23,7 +23,7 @@ Token Lexer::next()
 	this->val = "";
 
 	/* skip whitespace */
-	while (curr() == '\t' || curr() == ' ')
+	while (curr() == '\t' || curr() == ' ' || (curr() == '\n' && i_bypass))
 		ch();
 
 	this->range.begin = this->i;
@@ -152,18 +152,22 @@ Token Lexer::next()
 
 	/* punctuation */
 	else if (curr() == '(') {
+		i_bypass++;
 		this->token = T_LPAR;
 		this->val.push_back(ch());
 	}
 	else if (curr() == ')') {
+		i_bypass--;
 		this->token = T_RPAR;
 		this->val.push_back(ch());
 	}
 	else if (curr() == '{') {
+		i_bypass++;
 		this->token = T_LCRL;
 		this->val.push_back(ch());
 	}
 	else if (curr() == '}') {
+		i_bypass--;
 		this->token = T_RCRL;
 		this->val.push_back(ch());
 	}
