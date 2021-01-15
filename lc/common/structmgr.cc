@@ -1,29 +1,31 @@
 #include "lc.hh"
 
-Field::Field(Range r, std::string n)
-	: range(r), name(n)
+Field::Field(Range r, std::string n, Type t)
+	: defined_at(r), name(n), type(t)
 {
 }
 
 void Field::print()
 {
-	std::cout << name << " of type ()";
-	std::cout << std::endl;
+	std::cout << name << ": ";
+	type.print();
 }
 
-Struct::Struct(Range r, std::string n)
-	: defined_at(r), name(n)
+Struct::Struct(Node *ref)
+	: ref(ref)
 {
+	defined_at = ref->range;
+	name = ref->ns[0]->val;
+}
+
+void Struct::addMethod(Fn *fn)
+{
+	fnmgr.add(fn);
 }
 
 void Struct::addField(Field f)
 {
 	fields.push_back(f);
-}
-
-void Struct::addMethod(Fn fn)
-{
-	fnmgr.add(fn);
 }
 
 void Struct::print()
@@ -35,7 +37,8 @@ void Struct::print()
 	}
 	for (auto m : fnmgr.fns) {
 		putchar('\t');
-		m.print();
+		putchar('\t');
+		m->print();
 	}
 }
 
@@ -52,7 +55,7 @@ void StructMgr::add(Struct *s)
 
 Struct *StructMgr::get(std::string s)
 {
-	for (auto st : structs) {
+	for (auto& st : structs) {
 		if (st->name == s)
 			return st;
 	}

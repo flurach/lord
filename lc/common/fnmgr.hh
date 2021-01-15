@@ -3,20 +3,22 @@
 
 struct Fn {
 	/* known data */
-	Range defined_at;
+	Node *ref;
 
 	/* collected data */
-	std::string name = "";
-	// std::vector<Field> fields; // ARGUMENTS
+	Range defined_at;
+	std::string name;
 
-	Fn(Range r, std::string n);
-
+	Fn(Node *ref);
 	void print();
 };
 
 struct FnMgr {
-	std::vector<Fn> fns;
-	void add(Fn f);
+	std::vector<Fn*> fns;
+
+	~FnMgr();
+
+	void add(Fn *f);
 	void print();
 };
 

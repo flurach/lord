@@ -16,15 +16,13 @@ void FnNameVisitor::visit_FN(Node *n)
 void FnNameVisitor::visit_method(Node *n)
 {
 	auto struct_name = n->ns[0]->ns[0]->val;
-	auto method_name = n->ns[0]->ns[1]->val;
-
 	auto s = m->structmgr.get(struct_name);
 	if (s != NULL)
-		s->addMethod(Fn(n->range, method_name));
+		s->addMethod(new Fn(n));
 }
 
 
 void FnNameVisitor::visit_fdef(Node *n)
 {
-	m->fnmgr.add(Fn(n->range, n->ns[0]->val));
+	m->fnmgr.add(new Fn(n));
 }

@@ -24,6 +24,7 @@ bool Module::load_file(std::string fpath)
 	pipe_visitors(ast, {
 		new StructNameVisitor(this),
 		new FnNameVisitor(this),
+		new StructFieldVisitor(this),
 	});
 
 	return true;

@@ -1,8 +1,14 @@
 #include "lc.hh"
 
-Fn::Fn(Range r, std::string n)
-	: defined_at(r), name(n)
+Fn::Fn(Node *ref)
+	: ref(ref)
 {
+	defined_at = ref->range;
+
+	if (ref->ns[0]->token == T_DOT)
+		name = ref->ns[0]->ns[1]->val;
+	else
+		name = ref->ns[0]->val;
 }
 
 void Fn::print()
@@ -10,13 +16,19 @@ void Fn::print()
 	std::cout << name << ": void" << std::endl;
 }
 
-void FnMgr::add(Fn f)
+void FnMgr::add(Fn *f)
 {
 	fns.push_back(f);
+}
+
+FnMgr::~FnMgr()
+{
+	for (auto f : fns)
+		delete f;
 }
 
 void FnMgr::print()
 {
 	for (auto fn : fns)
-		fn.print();
+		fn->print();
 }

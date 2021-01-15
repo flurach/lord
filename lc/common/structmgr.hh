@@ -2,29 +2,32 @@
 #define LORD_LC_COMMON_STRUCTMGR_HH
 
 struct Field {
-	Range range;
+	Range defined_at;
 	std::string name;
+	Type type;
 
-	Field(Range r, std::string n);
+	Field(Range r, std::string n, Type t);
 	void print();
 };
 
 struct Struct {
 	/* known data */
-	std::string module;
-	Range range;
-	Range defined_at;
+	Node *ref;
 
 	/* collected data */
+	Range defined_at;
 	std::string name = "";
-	std::vector<Field> fields;
 	FnMgr fnmgr = FnMgr();
+	std::vector<Field> fields;
 
-	Struct(Range r, std::string n);
+	/* constructor */
+	Struct(Node *ref);
 
+	/* debug */
+	void addMethod(Fn *fn);
 	void addField(Field f);
-	void addMethod(Fn fn);
 
+	/* debug */
 	void print();
 };
 
