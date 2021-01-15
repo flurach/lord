@@ -18,10 +18,12 @@ struct Struct {
 	/* collected data */
 	std::string name = "";
 	std::vector<Field> fields;
+	FnMgr fnmgr = FnMgr();
 
 	Struct(Range r, std::string n);
 
 	void addField(Field f);
+	void addMethod(Fn fn);
 
 	void print();
 };

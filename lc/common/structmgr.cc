@@ -21,12 +21,21 @@ void Struct::addField(Field f)
 	fields.push_back(f);
 }
 
+void Struct::addMethod(Fn fn)
+{
+	fnmgr.add(fn);
+}
+
 void Struct::print()
 {
 	std::cout << name << std::endl;
 	for (auto f : fields) {
 		putchar('\t');
 		f.print();
+	}
+	for (auto m : fnmgr.fns) {
+		putchar('\t');
+		m.print();
 	}
 }
 

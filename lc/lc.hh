@@ -4,8 +4,8 @@
 #include <algorithm>
 #include "lp.hh"
 
-#include "common/structmgr.hh"
 #include "common/fnmgr.hh"
+#include "common/structmgr.hh"
 #include "common/module.hh"
 #include "common/compiler.hh"
 

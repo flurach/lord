@@ -29,7 +29,5 @@ struct SmallStruct =
 	hey: [u8]
 
 fn main =
-	sample = SampleStruct {
-		_i64: 10
-	}
+	sample = SampleStruct { _i64: 10 }
 	sample.print

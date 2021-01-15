@@ -15,7 +15,12 @@ void FnNameVisitor::visit_FN(Node *n)
 
 void FnNameVisitor::visit_method(Node *n)
 {
-	std::cout << "method: " << n->ns[0]->ns[0]->val << "." << n->ns[0]->ns[1]->val << std::endl;
+	auto struct_name = n->ns[0]->ns[0]->val;
+	auto method_name = n->ns[0]->ns[1]->val;
+
+	auto s = m->structmgr.get(struct_name);
+	if (s != NULL)
+		s->addMethod(Fn(n->range, method_name));
 }
 
 
