@@ -82,6 +82,7 @@
 	X(PTR_ACCESS)\
 	X(EXPR)\
 	X(CAST)\
+	X(STRUCTINIT)\
 	\
 	X(LAST)
 

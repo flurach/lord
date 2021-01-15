@@ -30,7 +30,6 @@ struct SmallStruct =
 
 fn main =
 	sample = SampleStruct {
-		_i64: 10,
-		fnptr: x => x * x
+		_i64: 10
 	}
 	sample.print

@@ -417,10 +417,9 @@ Node *parse_structinit(Lexer *lexer)
 		parse_RCRL
 	});
 
-	if (n == NULL)
-		return NULL;
+	if (n != NULL)
+		n->token = T_STRUCTINIT;
 
-	n->token = n->ns[0]->token;
 	return n;
 }
 
