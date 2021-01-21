@@ -8,6 +8,7 @@ struct Fn {
 	/* collected data */
 	Range defined_at;
 	std::string name;
+	Scope scope;
 
 	Fn(Node *ref);
 	void print();

@@ -25,6 +25,7 @@ bool Module::load_file(std::string fpath)
 		new StructNameVisitor(this),
 		new FnNameVisitor(this),
 		new StructFieldVisitor(this),
+		new SymNameVisitor(this),
 	});
 
 	return true;

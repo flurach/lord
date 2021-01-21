@@ -1,19 +1,23 @@
 #ifndef LORD_LC_COMMON_TYPE_HH
 #define LORD_LC_COMMON_TYPE_HH
 
+#define LORD_LC_COMMON_TYPE_TYPEKINDS\
+	X(UNKNOWN)\
+	X(i64)\
+	X(STRUCT)\
+	\
+	X(LAST)
+
 enum TypeKind {
-	TK_UNKNOWN,
-	TK_i8,
-	TK_i16,
-	TK_i32,
-	TK_i64,
-	TK_u8,
-	TK_u16,
-	TK_u32,
-	TK_u64,
-	TK_f32,
-	TK_f64,
-	TK_STRUCT
+	#define X(tk) TK_##tk,
+		LORD_LC_COMMON_TYPE_TYPEKINDS
+	#undef X
+};
+
+static const char *TypeKind_str[] = {
+	#define X(tk) #tk,
+		LORD_LC_COMMON_TYPE_TYPEKINDS
+	#undef X
 };
 
 struct Type {

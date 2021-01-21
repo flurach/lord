@@ -1,15 +1,22 @@
-/* C libs */
+#include <fstream>
+#include <optional>
 #include <unistd.h>
-
-/* Lord's libs */
 #include <lc.hh>
-
-/* Ext libs */
 #include <readline/readline.h>
 #include <readline/history.h>
 
-/* cli state */
-int repl = 0;
+/* helpers */
+std::optional<std::string> ftoa(char *fpath)
+{
+	std::ifstream ifs(fpath);
+	if (ifs.is_open() == false)
+		return {};
+	std::string content(
+		(std::istreambuf_iterator<char>(ifs)),
+		(std::istreambuf_iterator<char>())
+	);
+	return content;
+}
 
 void lex_file(char *fpath)
 {

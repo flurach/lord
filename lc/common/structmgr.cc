@@ -37,7 +37,6 @@ void Struct::print()
 	}
 	for (auto m : fnmgr.fns) {
 		putchar('\t');
-		putchar('\t');
 		m->print();
 	}
 }

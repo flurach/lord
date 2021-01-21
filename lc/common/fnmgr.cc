@@ -13,7 +13,8 @@ Fn::Fn(Node *ref)
 
 void Fn::print()
 {
-	std::cout << name << ": void" << std::endl;
+	std::cout << name << ": ()" << std::endl;
+	scope.print();
 }
 
 void FnMgr::add(Fn *f)
