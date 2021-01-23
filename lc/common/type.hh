@@ -20,12 +20,16 @@ static const char *TypeKind_str[] = {
 	#undef X
 };
 
+struct Module;
+struct Struct;
+
 struct Type {
 	TypeKind kind = TK_UNKNOWN;
-	std::string name = "";
+	Struct *structptr = NULL;
 
 	Type();
-	Type(Node *ref);
+	Type(Struct *structptr);
+	Type(Module *m, Node *ref);
 
 	void print();
 };

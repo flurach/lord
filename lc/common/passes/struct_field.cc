@@ -20,6 +20,6 @@ void StructFieldVisitor::visit_COLN(Node *n)
 	s->addField(Field(
 		n->ns[0]->range,
 		n->ns[0]->val,
-		Type(n->ns[1])
+		Type(m, n->ns[1])
 	));
 }

@@ -21,7 +21,6 @@ void FnAndMethodVisitor::visit_method(Node *n)
 		s->addMethod(new Fn(n));
 }
 
-
 void FnAndMethodVisitor::visit_fdef(Node *n)
 {
 	m->fnmgr.add(new Fn(n));

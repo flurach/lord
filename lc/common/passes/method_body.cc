@@ -28,6 +28,9 @@ void MethodBodyVisitor::visit_fnargs(Node *n)
 {
 	for (auto nn : n->ns)
 		nn->id = f->symgr.add(nn->val);
+
+	if (n->ns.size() > 0)
+		f->symgr.types[n->ns[0]->id] = Type(s);
 }
 
 void MethodBodyVisitor::visit_EQ(Node *n)

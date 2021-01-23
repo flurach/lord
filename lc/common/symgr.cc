@@ -20,12 +20,20 @@ int Symgr::get(std::string s)
 	return -1;
 }
 
-void Symgr::print(size_t i)
+void Symgr::print(size_t j)
 {
-	for (auto s : syms) {
+	for (size_t i = 0; i < syms.size(); i++) {
 		size_t x = 0;
-		while (x++ < i)
+		while (x++ < j)
 			putchar('\t');
-		std::cout << '\t' << s << std::endl;
+
+		std::cout << syms[i];
+		auto t = types.find(i);
+		if (t != types.end()) {
+			std::cout << ": ";
+			t->second.print();
+		} else {
+			std::cout << std::endl;
+		}
 	}
 }

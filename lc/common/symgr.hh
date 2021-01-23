@@ -3,11 +3,12 @@
 
 struct Symgr {
 	std::vector<std::string> syms;
+	std::map<int, Type> types;
 
 	int add(std::string s);
 	int get(std::string s);
 
-	void print(size_t i = 0);
+	void print(size_t j = 0);
 };
 
 #endif
