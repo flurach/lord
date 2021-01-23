@@ -1,16 +1,9 @@
 # TODO
 
-- [X] Fix parsing for array type annotations
-- [X] Add imports to grammar
-- [X] Add pipes to grammar
-- [X] Add struct initialization to grammar
-- [X] Implement the three above in parser
+- [X] collect struct names
+- [X] collect struct field names, types
 
-- [ ] Simplify architecture
-- [ ] Make a list of compilation passes
-- [ ] Actually implement them
+- [X] collect struct method names, bodies
+- [ ] collect/identify struct method sym names
 
-- [ ] Write a philosophy document
-- [ ] Beautify README
-- [ ] Switch from readline to editline
-- [ ] Refactor the code
+- [ ] type-infer struct method bodies

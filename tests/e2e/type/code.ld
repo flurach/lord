@@ -1,11 +1,14 @@
 # data types
 
 struct SampleStruct =
-	_i64: i64
+	data: i64
 
 fn SampleStruct.print self =
-	self._i64 * self._i64 |> printf "%d\n"
+	printf "%d\n" (self.sqr)
 
-fn main =
-	sample = SampleStruct { _i64: 10 }
+fn SampleStruct.sqr self =
+	self.data * self.data
+
+fn main args =
+	sample = SampleStruct { data: 10 }
 	sample.print

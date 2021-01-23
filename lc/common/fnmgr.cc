@@ -11,10 +11,13 @@ Fn::Fn(Node *ref)
 		name = ref->ns[0]->val;
 }
 
-void Fn::print()
+void Fn::print(size_t i)
 {
+	size_t x = 0;
+	while (x++ < i)
+		putchar('\t');
 	std::cout << name << ": ()" << std::endl;
-	scope.print();
+	symgr.print(i + 1);
 }
 
 void FnMgr::add(Fn *f)
@@ -28,8 +31,11 @@ FnMgr::~FnMgr()
 		delete f;
 }
 
-void FnMgr::print()
+void FnMgr::print(size_t i)
 {
+	size_t x = 0;
+	while (x++ < i)
+		putchar('\t');
 	for (auto fn : fns)
-		fn->print();
+		fn->print(i + 1);
 }

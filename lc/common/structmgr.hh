@@ -7,7 +7,7 @@ struct Field {
 	Type type;
 
 	Field(Range r, std::string n, Type t);
-	void print();
+	void print(size_t i = 0);
 };
 
 struct Struct {
@@ -28,7 +28,7 @@ struct Struct {
 	void addField(Field f);
 
 	/* debug */
-	void print();
+	void print(size_t i = 0);
 };
 
 struct StructMgr {
@@ -39,7 +39,7 @@ struct StructMgr {
 	void add(Struct *s);
 	Struct *get(std::string s);
 
-	void print();
+	void print(size_t i = 0);
 };
 
 #endif

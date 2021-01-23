@@ -22,10 +22,10 @@ bool Module::load_file(std::string fpath)
 	ast = parse(&l);
 
 	pipe_visitors(ast, {
-		new StructNameVisitor(this),
-		new FnNameVisitor(this),
+		new StructVisitor(this),
 		new StructFieldVisitor(this),
-		new SymNameVisitor(this),
+		new FnAndMethodVisitor(this),
+		new MethodBodyVisitor(this)
 	});
 
 	return true;
@@ -34,6 +34,9 @@ bool Module::load_file(std::string fpath)
 void Module::print()
 {
 	std::cout << "=== MODULE '" << name << "' ===" << std::endl;
+
+	std::cout << " => AST " << std::endl;
+	ast->print(1);
 
 	std::cout << " => STRUCTS " << std::endl;
 	structmgr.print();

@@ -5,19 +5,21 @@ StructFieldVisitor::StructFieldVisitor(Module *m)
 {
 }
 
-void StructFieldVisitor::visit_STRUCT(Node *n)
+void StructFieldVisitor::visit_MODULE(Node *n)
 {
-	auto struct_name = n->ns[0]->val;
-	auto fields = n->ns[2]->ns;
+	(void)n;
 
-	auto s = m->structmgr.get(struct_name);
-
-	for (auto f : fields) {
-		if (f->token == T_COLN)
-			s->addField(Field(
-				f->ns[0]->range,
-				f->ns[0]->val,
-				Type(f->ns[1])
-			));
+	for (auto ss : m->structmgr.structs) {
+		s = ss;
+		visit(s->ref);
 	}
+}
+
+void StructFieldVisitor::visit_COLN(Node *n)
+{
+	s->addField(Field(
+		n->ns[0]->range,
+		n->ns[0]->val,
+		Type(n->ns[1])
+	));
 }

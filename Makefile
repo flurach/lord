@@ -64,16 +64,16 @@ bin/lord: cli/cli.cc
 	$(BIN) bin/lord cli/cli.cc
 
 bin/liblc.so: lc/lc.hh\
-              bin/obj/lc/common/passes/sym_name.o\
+              bin/obj/lc/common/passes/method_body.o\
+              bin/obj/lc/common/passes/fn_and_method.o\
               bin/obj/lc/common/passes/struct_field.o\
-              bin/obj/lc/common/passes/fn_name.o\
-              bin/obj/lc/common/passes/struct_name.o\
+              bin/obj/lc/common/passes/struct.o\
               bin/obj/lc/common/passes/visitor.o\
               bin/obj/lc/common/compiler.o\
               bin/obj/lc/common/module.o\
               bin/obj/lc/common/structmgr.o\
               bin/obj/lc/common/fnmgr.o\
-              bin/obj/lc/common/scopemgr.o\
+              bin/obj/lc/common/symgr.o\
               bin/obj/lc/common/type.o
 	$(LIB) bin/liblc.so `find bin/obj/lc -type f -name '**.o'`
 
@@ -85,17 +85,17 @@ bin/liblp.so: lp/lp.hh lp/token.hh\
 
 
 # objects
-bin/obj/lc/common/passes/sym_name.o: lc/common/passes/sym_name.hh lc/common/passes/sym_name.cc
-	$(OBJ) lc/common/passes/sym_name.cc -o bin/obj/lc/common/passes/sym_name.o
+bin/obj/lc/common/passes/method_body.o: lc/common/passes/method_body.hh lc/common/passes/method_body.cc
+	$(OBJ) lc/common/passes/method_body.cc -o bin/obj/lc/common/passes/method_body.o
+
+bin/obj/lc/common/passes/fn_and_method.o: lc/common/passes/fn_and_method.hh lc/common/passes/fn_and_method.cc
+	$(OBJ) lc/common/passes/fn_and_method.cc -o bin/obj/lc/common/passes/fn_and_method.o
 
 bin/obj/lc/common/passes/struct_field.o: lc/common/passes/struct_field.hh lc/common/passes/struct_field.cc
 	$(OBJ) lc/common/passes/struct_field.cc -o bin/obj/lc/common/passes/struct_field.o
 
-bin/obj/lc/common/passes/fn_name.o: lc/common/passes/fn_name.hh lc/common/passes/fn_name.cc
-	$(OBJ) lc/common/passes/fn_name.cc -o bin/obj/lc/common/passes/fn_name.o
-
-bin/obj/lc/common/passes/struct_name.o: lc/common/passes/struct_name.hh lc/common/passes/struct_name.cc
-	$(OBJ) lc/common/passes/struct_name.cc -o bin/obj/lc/common/passes/struct_name.o
+bin/obj/lc/common/passes/struct.o: lc/common/passes/struct.hh lc/common/passes/struct.cc
+	$(OBJ) lc/common/passes/struct.cc -o bin/obj/lc/common/passes/struct.o
 
 bin/obj/lc/common/passes/visitor.o: lc/common/passes/visitor.hh lc/common/passes/visitor.cc
 	$(OBJ) lc/common/passes/visitor.cc -o bin/obj/lc/common/passes/visitor.o
@@ -112,8 +112,8 @@ bin/obj/lc/common/structmgr.o: lc/common/structmgr.hh lc/common/structmgr.cc
 bin/obj/lc/common/fnmgr.o: lc/common/fnmgr.hh lc/common/fnmgr.cc
 	$(OBJ) lc/common/fnmgr.cc -o bin/obj/lc/common/fnmgr.o
 
-bin/obj/lc/common/scopemgr.o: lc/common/scopemgr.hh lc/common/scopemgr.cc
-	$(OBJ) lc/common/scopemgr.cc -o bin/obj/lc/common/scopemgr.o
+bin/obj/lc/common/symgr.o: lc/common/symgr.hh lc/common/symgr.cc
+	$(OBJ) lc/common/symgr.cc -o bin/obj/lc/common/symgr.o
 
 bin/obj/lc/common/type.o: lc/common/type.hh lc/common/type.cc
 	$(OBJ) lc/common/type.cc -o bin/obj/lc/common/type.o

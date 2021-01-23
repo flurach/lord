@@ -5,9 +5,13 @@ Field::Field(Range r, std::string n, Type t)
 {
 }
 
-void Field::print()
+void Field::print(size_t i)
 {
+	size_t x = 0;
+	while (x++ < i)
+		putchar('\t');
 	std::cout << name << ": ";
+
 	type.print();
 }
 
@@ -28,17 +32,18 @@ void Struct::addField(Field f)
 	fields.push_back(f);
 }
 
-void Struct::print()
+void Struct::print(size_t i)
 {
+	size_t x = 0;
+	while (x++ < i)
+		putchar('\t');
 	std::cout << name << std::endl;
-	for (auto f : fields) {
-		putchar('\t');
-		f.print();
-	}
-	for (auto m : fnmgr.fns) {
-		putchar('\t');
-		m->print();
-	}
+
+	for (auto f : fields)
+		f.print(i + 1);
+
+	for (auto m : fnmgr.fns)
+		m->print(i + 1);
 }
 
 StructMgr::~StructMgr()
@@ -61,9 +66,9 @@ Struct *StructMgr::get(std::string s)
 	return NULL;
 }
 
-void StructMgr::print()
+void StructMgr::print(size_t i)
 {
 	for (auto s : structs)
-		s->print();
+		s->print(i + 1);
 }
 

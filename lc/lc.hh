@@ -7,16 +7,16 @@
 #include "lp.hh"
 
 #include "common/type.hh"
-#include "common/scopemgr.hh"
+#include "common/symgr.hh"
 #include "common/fnmgr.hh"
 #include "common/structmgr.hh"
 #include "common/module.hh"
 #include "common/compiler.hh"
 
 #include "common/passes/visitor.hh"
-#include "common/passes/struct_name.hh"
-#include "common/passes/fn_name.hh"
+#include "common/passes/struct.hh"
 #include "common/passes/struct_field.hh"
-#include "common/passes/sym_name.hh"
+#include "common/passes/fn_and_method.hh"
+#include "common/passes/method_body.hh"
 
 #endif

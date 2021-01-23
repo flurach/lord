@@ -8,10 +8,10 @@ struct Fn {
 	/* collected data */
 	Range defined_at;
 	std::string name;
-	Scope scope;
+	Symgr symgr;
 
 	Fn(Node *ref);
-	void print();
+	void print(size_t i = 0);
 };
 
 struct FnMgr {
@@ -20,7 +20,7 @@ struct FnMgr {
 	~FnMgr();
 
 	void add(Fn *f);
-	void print();
+	void print(size_t i = 0);
 };
 
 #endif

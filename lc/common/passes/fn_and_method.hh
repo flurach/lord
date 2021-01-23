@@ -1,9 +1,9 @@
 #ifndef LORD_LC_COMMON_PASSES_FN_NAME_HH
 #define LORD_LC_COMMON_PASSES_FN_NAME_HH
 
-class FnNameVisitor : public Visitor {
+class FnAndMethodVisitor : public Visitor {
 public:
-	FnNameVisitor(Module *m);
+	FnAndMethodVisitor(Module *m);
 
 	void visit_FN(Node *n) override;
 
