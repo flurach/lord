@@ -95,11 +95,23 @@ void compile_file(char *fpath)
 	c.print();
 }
 
+void genpy_file(char *fpath)
+{
+	Compiler c = Compiler();
+
+	if (!c.load_mod(fpath)) {
+		puts("failed to open file");
+		return;
+	}
+
+	std::cout << c.mods[0]->genpy() << std::endl;
+}
+
 int main(int argc, char **argv)
 {
 	int opt = 0;
 
-	while ((opt = getopt(argc, argv, ":l:p:c:")) != -1) {
+	while ((opt = getopt(argc, argv, ":l:p:c:g:")) != -1) {
 		switch (opt) {
 		case 'l':
 			lex_file(optarg);
@@ -113,7 +125,11 @@ int main(int argc, char **argv)
 			compile_file(optarg);
 			break;
 
-		case ':':
+		case 'g':
+			genpy_file(optarg);
+			break;
+
+		case ':': {
 			switch (optopt) {
 			case 'l':
 				lex_repl();
@@ -128,6 +144,7 @@ int main(int argc, char **argv)
 				break;
 			}
 			break;
+		}
 
 		default:
 			printf("unknown option %c\n", optopt);

@@ -14,9 +14,12 @@
 #include "common/compiler.hh"
 
 #include "common/passes/visitor.hh"
+#include "common/passes/desugar.hh"
 #include "common/passes/struct.hh"
 #include "common/passes/struct_field.hh"
 #include "common/passes/fn_and_method.hh"
 #include "common/passes/method_body.hh"
+
+#include "py/pygen.hh"
 
 #endif

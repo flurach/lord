@@ -264,6 +264,7 @@ Node *parse_fbody(Lexer *lexer)
 	delete indent;
 
 	stmts = parse_many(lexer, parse_stmt);
+	stmts->token = T_INDENT;
 
 	if ((dedent = parse_DEDENT(lexer)) != NULL)
 		delete dedent;

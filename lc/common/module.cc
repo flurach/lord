@@ -22,10 +22,11 @@ bool Module::load_file(std::string fpath)
 	ast = parse(&l);
 
 	pipe_visitors(ast, {
+		new DesugarVisitor(this),
 		new StructVisitor(this),
 		new StructFieldVisitor(this),
 		new FnAndMethodVisitor(this),
-		new MethodBodyVisitor(this)
+		new MethodBodyVisitor(this),
 	});
 
 	return true;
@@ -43,4 +44,11 @@ void Module::print()
 
 	std::cout << " => FUNCTIONS " << std::endl;
 	fnmgr.print();
+}
+
+std::string Module::genpy()
+{
+	PygenVisitor pygenv(this);
+	pygenv.visit(ast);
+	return pygenv.buf;
 }

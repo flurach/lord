@@ -20,6 +20,7 @@ struct Module {
 
 	/* methods */
 	bool load_file(std::string fpath);
+	std::string genpy();
 
 	/* debugging */
 	void print();

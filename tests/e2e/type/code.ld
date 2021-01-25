@@ -4,7 +4,7 @@ struct SampleStruct =
 	data: i64
 
 fn SampleStruct.print self =
-	printf "%d\n" (self.sqr)
+	print (self.sqr)
 
 fn SampleStruct.sqr self =
 	self.data * self.data

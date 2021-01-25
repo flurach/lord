@@ -64,10 +64,12 @@ bin/lord: cli/cli.cc
 	$(BIN) bin/lord cli/cli.cc
 
 bin/liblc.so: lc/lc.hh\
+              bin/obj/lc/py/pygen.o\
               bin/obj/lc/common/passes/method_body.o\
               bin/obj/lc/common/passes/fn_and_method.o\
               bin/obj/lc/common/passes/struct_field.o\
               bin/obj/lc/common/passes/struct.o\
+              bin/obj/lc/common/passes/desugar.o\
               bin/obj/lc/common/passes/visitor.o\
               bin/obj/lc/common/compiler.o\
               bin/obj/lc/common/module.o\
@@ -85,6 +87,9 @@ bin/liblp.so: lp/lp.hh lp/token.hh\
 
 
 # objects
+bin/obj/lc/py/pygen.o: lc/py/pygen.hh lc/py/pygen.cc
+	$(OBJ) lc/py/pygen.cc -o bin/obj/lc/py/pygen.o
+
 bin/obj/lc/common/passes/method_body.o: lc/common/passes/method_body.hh lc/common/passes/method_body.cc
 	$(OBJ) lc/common/passes/method_body.cc -o bin/obj/lc/common/passes/method_body.o
 
@@ -96,6 +101,9 @@ bin/obj/lc/common/passes/struct_field.o: lc/common/passes/struct_field.hh lc/com
 
 bin/obj/lc/common/passes/struct.o: lc/common/passes/struct.hh lc/common/passes/struct.cc
 	$(OBJ) lc/common/passes/struct.cc -o bin/obj/lc/common/passes/struct.o
+
+bin/obj/lc/common/passes/desugar.o: lc/common/passes/desugar.hh lc/common/passes/desugar.cc
+	$(OBJ) lc/common/passes/desugar.cc -o bin/obj/lc/common/passes/desugar.o
 
 bin/obj/lc/common/passes/visitor.o: lc/common/passes/visitor.hh lc/common/passes/visitor.cc
 	$(OBJ) lc/common/passes/visitor.cc -o bin/obj/lc/common/passes/visitor.o
