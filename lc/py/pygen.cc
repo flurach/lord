@@ -71,10 +71,13 @@ void PygenVisitor::gen_structmethod(Fn *m)
 	/* method body */
 	ilvl++;
 	for (auto s : m->ref->ns[3]->ns) {
+		if (s->token == T_EOL)
+			continue;
 		addtabs();
 		visit(s);
-		buf += "\n\n";
+		buf += "\n";
 	}
+	buf += "\n";
 	ilvl--;
 }
 
@@ -94,9 +97,11 @@ void PygenVisitor::gen_fn(Fn *f)
 	/* method body */
 	ilvl++;
 	for (auto s : f->ref->ns[3]->ns) {
+		if (s->token == T_EOL)
+			continue;
 		addtabs();
 		visit(s);
-		buf += "\n\n";
+		buf += "\n";
 	}
 	ilvl--;
 }
