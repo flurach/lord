@@ -159,6 +159,8 @@ void PygenVisitor::visit_STRUCTINIT(Node *n)
 	visit(n->ns[0]);
 	buf += "(";
 	for (auto ff : n->ns[2]->ns) {
+		if (ff->token == T_COMA)
+			continue;
 		buf += ff->ns[0]->val;
 		buf += "=";
 		visit(ff->ns[1]);
