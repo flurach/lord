@@ -8,8 +8,17 @@
 
 ## Building
 
+Generate build files for:
+
 ```sh
-make
+## windows
+premake5 vs2019
+
+## macos
+premake5 xcode4
+
+## linux
+premake5 gmake
 ```
 
 
@@ -23,11 +32,11 @@ sh tests/e2e/run.sh
 
 ## Development
 
-You can read [the docs here](docs/read-this.md) and if you ever
+You can read [the docs here](docs/README.md) and if you ever
 happen to stuck, I probably have a tutorial for it in [here](docs/misc/resources.md).
 
 
 ## Tech stack
 
-- [make](https://www.gnu.org/software/make/): as the build system
+- [premake5](https://premake.github.io/): as the build system
 - [clang](https://clang.llvm.org/): as the compiler

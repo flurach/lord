@@ -62,7 +62,7 @@ void PygenVisitor::gen_structmethod(Fn *m)
 	buf += "def " + m->name + "(";
 
 	/* method args */
-	for (auto a : m->ref->ns[1]->ns)
+	for (auto a : *m->ref->at(1))
 		buf += a->val + ", ";
 	buf.pop_back();
 	buf.pop_back();
@@ -70,7 +70,7 @@ void PygenVisitor::gen_structmethod(Fn *m)
 
 	/* method body */
 	ilvl++;
-	for (auto s : m->ref->ns[3]->ns) {
+	for (auto s : *m->ref->at(3)) {
 		if (s->token == T_EOL)
 			continue;
 		addtabs();
@@ -88,7 +88,7 @@ void PygenVisitor::gen_fn(Fn *f)
 	buf += "def " + f->name + "(";
 
 	/* method args */
-	for (auto a : f->ref->ns[1]->ns)
+	for (auto a : *f->ref->at(1))
 		buf += a->val + ", ";
 	buf.pop_back();
 	buf.pop_back();
@@ -96,7 +96,7 @@ void PygenVisitor::gen_fn(Fn *f)
 
 	/* method body */
 	ilvl++;
-	for (auto s : f->ref->ns[3]->ns) {
+	for (auto s : *f->ref->at(3)) {
 		if (s->token == T_EOL)
 			continue;
 		addtabs();
@@ -108,12 +108,12 @@ void PygenVisitor::gen_fn(Fn *f)
 
 void PygenVisitor::visit_CALL(Node *n)
 {
-	visit(n->ns[0]);
+	visit(n->at(0));
 
 	bool is_field = false;
-	if (n->ns[0]->token == T_DOT && n->ns[0]->ns[0]->val == f->ref->ns[1]->ns[0]->val) {
+	if (n->at(0)->token == T_DOT && n->at(0)->at(0)->val == f->ref->at(1)->at(0)->val) {
 		for (auto ff : s->fields) {
-			if (ff.name == n->ns[0]->ns[1]->val) {
+			if (ff.name == n->at(0)->at(1)->val) {
 				is_field = true;
 				break;
 			}
@@ -122,11 +122,11 @@ void PygenVisitor::visit_CALL(Node *n)
 
 	if (!is_field) {
 		buf += "(";
-		for (auto a : n->ns[1]->ns) {
+		for (auto a : *n->at(1)) {
 			visit(a);
 			buf += ", ";
 		}
-		if (n->ns[1]->ns.size()) {
+		if (n->at(1)->size()) {
 			buf.pop_back();
 			buf.pop_back();
 		}
@@ -144,7 +144,7 @@ void PygenVisitor::visit_STR(Node *n)
 void PygenVisitor::visit_RET(Node *n)
 {
 	buf += "return ";
-	visit(n->ns[0]);
+	visit(n->at(0));
 }
 
 void PygenVisitor::visit_INT(Node *n)
@@ -154,24 +154,40 @@ void PygenVisitor::visit_INT(Node *n)
 
 void PygenVisitor::visit_EQ(Node *n)
 {
-	visit(n->ns[0]);
+	visit(n->at(0));
 	buf += " = ";
-	visit(n->ns[1]);
+	visit(n->at(1));
+}
+
+void PygenVisitor::visit_ARR(Node *n)
+{
+	buf += '[';
+	for (auto e : *n->at(1)) {
+		if (e->token == T_COMA)
+			continue;
+		visit(e);
+		buf += ", ";
+	}
+	if (n->at(1)->size()) {
+		buf.pop_back();
+		buf.pop_back();
+	}
+	buf += ']';
 }
 
 void PygenVisitor::visit_STRUCTINIT(Node *n)
 {
-	visit(n->ns[0]);
+	visit(n->at(0));
 	buf += "(";
-	for (auto ff : n->ns[2]->ns) {
+	for (auto ff : *n->at(2)) {
 		if (ff->token == T_COMA)
 			continue;
-		buf += ff->ns[0]->val;
+		buf += ff->at(0)->val;
 		buf += "=";
-		visit(ff->ns[1]);
+		visit(ff->at(1));
 		buf += ", ";
 	}
-	if (n->ns[2]->ns.size()) {
+	if (n->at(2)->size()) {
 		buf.pop_back();
 		buf.pop_back();
 	}
@@ -180,21 +196,32 @@ void PygenVisitor::visit_STRUCTINIT(Node *n)
 
 void PygenVisitor::visit_MUL(Node *n)
 {
-	visit(n->ns[0]);
+	visit(n->at(0));
 	buf += " * ";
-	visit(n->ns[1]);
+	visit(n->at(1));
 }
 
 void PygenVisitor::visit_DOT(Node *n)
 {
-	visit(n->ns[0]);
+	visit(n->at(0));
 	buf.push_back('.');
-	visit(n->ns[1]);
+	visit(n->at(1));
 }
 
 void PygenVisitor::visit_SYM(Node *n)
 {
 	buf += n->val;
+}
+
+void PygenVisitor::visit_COLN(Node *n)
+{
+	visit(n->at(0));
+}
+
+void PygenVisitor::visit_DEREF(Node *n)
+{
+	auto inside = n->at(1);
+	visit(inside);
 }
 
 void PygenVisitor::addtabs()

@@ -2,12 +2,11 @@
 #define LORD_LP_NODE_HH
 
 /* node class */
-struct Node {
+struct Node : std::vector<Node*> {
 	int id = -1;
 	Range range = {0, 0};
 	Token token = T_EOF;
 	std::string val = "";
-	std::vector<Node*> ns = {};
 
 	/* constructor & destructor */
 	Node(Range range = {0, 0}, Token token = T_EOF, std::string val = "");

@@ -5,10 +5,10 @@ Fn::Fn(Node *ref)
 {
 	defined_at = ref->range;
 
-	if (ref->ns[0]->token == T_DOT)
-		name = ref->ns[0]->ns[1]->val;
+	if (ref->at(0)->token == T_DOT)
+		name = ref->at(0)->at(1)->val;
 	else
-		name = ref->ns[0]->val;
+		name = ref->at(0)->val;
 }
 
 void Fn::print(size_t i)

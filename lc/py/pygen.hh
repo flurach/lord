@@ -29,6 +29,9 @@ public:
 	void visit_MUL(Node *n) override;
 	void visit_DOT(Node *n) override;
 	void visit_SYM(Node *n) override;
+	void visit_COLN(Node *n) override;
+	void visit_ARR(Node *n) override;
+	void visit_DEREF(Node *n) override;
 
 	void addtabs();
 };

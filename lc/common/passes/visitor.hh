@@ -12,7 +12,7 @@ public:
 
 	#define X(token)\
 		virtual void visit_##token(Node *n) {\
-			for (auto c : n->ns)\
+			for (auto c : *n)\
 				visit(c);\
 		};
 		LORD_LP_TOKENS

@@ -19,7 +19,7 @@ Struct::Struct(Node *ref)
 	: ref(ref)
 {
 	defined_at = ref->range;
-	name = ref->ns[0]->val;
+	name = ref->at(0)->val;
 }
 
 void Struct::addMethod(Fn *fn)

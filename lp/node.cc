@@ -7,19 +7,19 @@ Node::Node(Range range, Token token, std::string val)
 
 void Node::push(Node *child)
 {
-	ns.push_back(child);
+	push_back(child);
 }
 
 Node *Node::pop()
 {
-	auto last = ns.back();
-	ns.pop_back();
+	auto last = back();
+	pop_back();
 	return last;
 }
 
 bool Node::binarify()
 {
-	if (ns.size() != 3)
+	if (size() != 3)
 		return false;
 
 	auto trd = pop();
@@ -51,6 +51,6 @@ void Node::print(size_t indent)
 		<< range.end
 		<< std::endl;
 
-	for (i = 0; i < ns.size(); i++)
-		ns[i]->print(indent + 1);
+	for (auto c : *this)
+		c->print(indent + 1);
 }

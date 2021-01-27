@@ -18,8 +18,8 @@ void StructFieldVisitor::visit_MODULE(Node *n)
 void StructFieldVisitor::visit_COLN(Node *n)
 {
 	s->addField(Field(
-		n->ns[0]->range,
-		n->ns[0]->val,
-		Type(m, n->ns[1])
+		n->at(0)->range,
+		n->at(0)->val,
+		Type(m, n->at(1))
 	));
 }

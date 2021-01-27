@@ -7,8 +7,8 @@ DesugarVisitor::DesugarVisitor(Module *m)
 
 void DesugarVisitor::visit_FN(Node *n)
 {
-	auto last = n->ns[3]->pop();
+	auto last = n->at(3)->pop();
 	auto ret = new Node(last->range, T_RET, "ret");
 	ret->push(last);
-	n->ns[3]->push(ret);
+	n->at(3)->push(ret);
 }

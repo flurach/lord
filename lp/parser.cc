@@ -327,8 +327,8 @@ Node *parse_typeanno(Lexer *lexer)
 
 	while (auto ptr = parse_ptr(lexer)) {
 		auto arr = new Node(ptr_or_dot->range, T_TYPEANNO, "");
-		arr->ns.push_back(ptr_or_dot);
-		arr->ns.push_back(ptr);
+		arr->push(ptr_or_dot);
+		arr->push(ptr);
 		ptr_or_dot = arr;
 	}
 
@@ -475,7 +475,7 @@ Node *parse_ptr(Lexer *lexer)
 	if (result == NULL)
 		return NULL;
 
-	result->token = T_PTR_ACCESS;
+	result->token = T_DEREF;
 	return result;
 }
 

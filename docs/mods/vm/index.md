@@ -1,3 +1,0 @@
-# `vm` Documentation
-
-Currently empty.
