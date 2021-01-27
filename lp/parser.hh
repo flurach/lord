@@ -46,8 +46,8 @@ Node *parse_structbody(Lexer *lexer);
 Node *parse_structfield(Lexer *lexer);
 
 Node *parse_range(Lexer *lexer);
-Node *parse_num(Lexer *lexer);
-Node *parse_ptr(Lexer *lexer);
+Node *parse_neg(Lexer *lexer);
+Node *parse_deref(Lexer *lexer);
 Node *parse_arr(Lexer *lexer);
 
 Node *parse_call(Lexer *lexer);

@@ -5,4 +5,4 @@ fn main args =
 
 	# TODO this part compiles wrong
 	# fix it immediately
-	printf "%d\n" [my_int_arr - 1]
+	print [my_int_arr + 1]

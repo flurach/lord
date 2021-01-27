@@ -5,7 +5,6 @@ PygenVisitor::PygenVisitor(Module *m)
 {
 }
 
-
 void PygenVisitor::visit_MODULE(Node *n)
 {
 	(void)n;
@@ -110,8 +109,18 @@ void PygenVisitor::visit_CALL(Node *n)
 {
 	visit(n->at(0));
 
+	if (n->at(0)->token == T_DOT)
+		visit_methodcall(n);
+	else
+		visit_fncall(n);
+
+}
+
+void PygenVisitor::visit_methodcall(Node *n)
+{
 	bool is_field = false;
-	if (n->at(0)->token == T_DOT && n->at(0)->at(0)->val == f->ref->at(1)->at(0)->val) {
+
+	if (n->at(0)->at(0)->val == f->ref->at(1)->at(0)->val) {
 		for (auto ff : s->fields) {
 			if (ff.name == n->at(0)->at(1)->val) {
 				is_field = true;
@@ -121,6 +130,31 @@ void PygenVisitor::visit_CALL(Node *n)
 	}
 
 	if (!is_field) {
+		buf += "(";
+		for (auto a : *n->at(1)) {
+			visit(a);
+			buf += ", ";
+		}
+		if (n->at(1)->size()) {
+			buf.pop_back();
+			buf.pop_back();
+		}
+		buf += ")";
+	}
+}
+
+void PygenVisitor::visit_fncall(Node *n)
+{
+	bool is_fn = false;
+
+	for (auto ff : m->fnmgr.fns) {
+		if (ff->name == n->at(0)->val) {
+			is_fn = true;
+			break;
+		}
+	}
+
+	if (!is_fn) {
 		buf += "(";
 		for (auto a : *n->at(1)) {
 			visit(a);

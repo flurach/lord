@@ -20,6 +20,9 @@ public:
 	void gen_structmethod(Fn *m);
 	void gen_fn(Fn *m);
 
+	void visit_methodcall(Node *n);
+	void visit_fncall(Node *n);
+
 	void visit_CALL(Node *n) override;
 	void visit_STR(Node *n) override;
 	void visit_RET(Node *n) override;

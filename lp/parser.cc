@@ -322,10 +322,10 @@ Node *parse_typeanno(Lexer *lexer)
 {
 	Node *ptr_or_dot;
 
-	if ((ptr_or_dot = parse_either(lexer, { parse_ptr, parse_dot })) == NULL)
+	if ((ptr_or_dot = parse_either(lexer, { parse_deref, parse_dot })) == NULL)
 		return NULL;
 
-	while (auto ptr = parse_ptr(lexer)) {
+	while (auto ptr = parse_deref(lexer)) {
 		auto arr = new Node(ptr_or_dot->range, T_TYPEANNO, "");
 		arr->push(ptr_or_dot);
 		arr->push(ptr);
@@ -386,11 +386,11 @@ Node *parse_fact(Lexer *lexer)
 
 Node *parse_cast(Lexer *lexer)
 {
-	if (auto n = parse_seq(lexer, { parse_not, parse_AS, parse_typeanno })) {
+	if (auto n = parse_seq(lexer, { parse_neg, parse_AS, parse_typeanno })) {
 		n->token = T_CAST;
 		return n;
 	}
-	return parse_not(lexer);
+	return parse_neg(lexer);
 }
 
 Node *parse_not(Lexer *lexer)
@@ -440,32 +440,31 @@ Node *parse_structfield(Lexer *lexer)
 
 Node *parse_range(Lexer *lexer)
 {
-	if (auto n = parse_seq(lexer, { parse_num, parse_TO, parse_num })) {
+	if (auto n = parse_seq(lexer, { parse_INT, parse_TO, parse_INT })) {
 		n->binarify();
 		return n;
 	}
 	return NULL;
 }
 
-Node *parse_num(Lexer *lexer)
+Node *parse_neg(Lexer *lexer)
 {
-	Node *sub, *int_or_flt;
-	auto parsers = { parse_INT, parse_FLT };
-
+	Node *sub, *_not;
 	Lexer backup = *lexer;
-	if ((sub = parse_SUB(lexer)) == NULL)
-		return parse_either(lexer, parsers);
 
-	if ((int_or_flt = parse_either(lexer, parsers)) == NULL) {
+	if ((sub = parse_SUB(lexer)) == NULL)
+		return parse_not(lexer);
+
+	if ((_not = parse_not(lexer)) == NULL ) {
 		*lexer = backup;
 		return NULL;
 	}
 
-	sub->push(int_or_flt);
-	return sub;
+	sub->push(_not);
+	return _not;
 }
 
-Node *parse_ptr(Lexer *lexer)
+Node *parse_deref(Lexer *lexer)
 {
 	Node *result = parse_seq(lexer, {
 		parse_LBRC,
@@ -527,10 +526,11 @@ Node *parse_arg(Lexer *lexer)
 
 	return parse_either(lexer, {
 		parse_range,
-		parse_num,
+		parse_INT,
+		parse_FLT,
 		parse_STR,
 		parse_CHR,
-		parse_ptr,
+		parse_deref,
 		parse_arr,
 		parse_dot,
 	});

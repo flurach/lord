@@ -3,7 +3,7 @@
          | <if>
          | <fdef>
          | <struct>
-	 | <ret>
+         | <ret>
          | <bind>
          | <logic>
          | <PASS>
@@ -55,8 +55,8 @@
 <typedsym> ::= <dot> <COLN> <typeanno>
 
 # "i64" or "Module.Type[5]" or "[pointer]" or "[ptr][10][10]"
-<typeanno> ::= <typeanno> <ptr>
-             | <ptr>
+<typeanno> ::= <typeanno> <deref>
+             | <deref>
              | <dot>
 
 # maths
@@ -66,8 +66,12 @@
          | <cast>
 
 # something as OtherType
-<cast> ::= <not> <AS> <typeanno>
-         | <not>
+<cast> ::= <neg> <AS> <typeanno>
+         | <neg>
+
+# negate
+<neg> ::= "-" <not>
+        | <not>
 
 # "!something" or "not something"
 <not> ::= <NOT> <lit>
@@ -86,27 +90,23 @@
 <call> ::= <dot> [{<arg>}]
 <arg> ::= <LPAR> <pipe> <RPAR>
         | <range>
-        | <num>
+        | <INT>
+        | <FLT>
         | <STR>
         | <CHR>
-        | <ptr>
+        | <deref>
         | <arr>
         | <dot>
 
 # X to Y
-<range> ::= <num> <TO> <num>
-
-# (-)value
-<num> ::= <SUB> <num>
-        | <INT>
-        | <FLT>
+<range> ::= <INT> <TO> <INT>
 
 # [expr]
-<ptr> ::= <LBRC> <pipe> <RBRC>
+<deref> ::= <LBRC> <pipe> <RBRC>
 
 # { pipe1, pipe2, ... }
-<arr> ::= <LCRL> {<pipe> sepby <COMA>} <RCLR>
+<arr> ::= <LCRL> {<pipe> sepby ","} <RCLR>
 
 # "type.field" or "type"
-<dot> ::= <SYM> <DOT> <dot>
+<dot> ::= <SYM> "." <dot>
         | <SYM>
