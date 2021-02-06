@@ -6,13 +6,11 @@ Here, let me show you how simple it is!
 
 ## Modules
 
-Every folder within the root directory, is a __module__.
-
 Currenly there are 3 modules:
 
-* [lp](mods/lp),   The Lord parser.
-* [lc](mods/lc),   The Lord compiler.
-* [cli](mods/cli), Lord's command line interface
+* [`lp`](mods/lp),   The Lord Parser.
+* [`lc`](mods/lc),   The Lord Compiler.
+* [`cli`](mods/cli), Lord's Command Line Interface
 
 You can click on the links to go to the respective modules' documentation.
 
@@ -23,6 +21,7 @@ Be fine on there, I've prepared you with plenty of resources to learn from!
 [Here, take a look](misc/resources.md).
 
 
-## I dunno how to help!
+## I am still confused :(
 
-Come contact me on [Twitter](https://twitter.com/mbugrayildiz).
+Come contact me on [Twitter](https://twitter.com/mbugrayildiz),
+I'd be happy to help :)
