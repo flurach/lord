@@ -107,13 +107,13 @@ void PygenVisitor::gen_fn(Fn *f)
 
 void PygenVisitor::visit_CALL(Node *n)
 {
-	visit(n->at(0));
+	auto fname = n->at(0);
+	visit(fname);
 
-	if (n->at(0)->token == T_DOT)
+	if (fname->token == T_DOT)
 		visit_methodcall(n);
 	else
 		visit_fncall(n);
-
 }
 
 void PygenVisitor::visit_methodcall(Node *n)
@@ -154,6 +154,16 @@ void PygenVisitor::visit_fncall(Node *n)
 		}
 	}
 
+	// TODO: fix here, which causes `cast` test to compile wrong
+	if (!is_fn) {
+		for (auto ss : f->symgr.syms) {
+			if (ss == n->at(0)->val) {
+				is_fn = false;
+				break;
+			}
+		}
+	}
+
 	if (!is_fn) {
 		buf += "(";
 		for (auto a : *n->at(1)) {
@@ -185,6 +195,11 @@ void PygenVisitor::visit_RET(Node *n)
 }
 
 void PygenVisitor::visit_INT(Node *n)
+{
+	buf += n->val;
+}
+
+void PygenVisitor::visit_FLT(Node *n)
 {
 	buf += n->val;
 }
@@ -259,6 +274,22 @@ void PygenVisitor::visit_DEREF(Node *n)
 {
 	auto inside = n->at(1);
 	visit(inside);
+}
+
+void PygenVisitor::visit_CAST(Node *n)
+{
+	buf += "Cast.";
+	visit(n->at(2));
+	buf += '(';
+	visit(n->at(0));
+	buf += ')';
+}
+
+void PygenVisitor::visit_ADD(Node *n)
+{
+	visit(n->at(0));
+	buf += " + ";
+	visit(n->at(1));
 }
 
 void PygenVisitor::addtabs()

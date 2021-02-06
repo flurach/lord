@@ -35,6 +35,7 @@ public:
 	void visit_STR(Node *n) override;
 	void visit_RET(Node *n) override;
 	void visit_INT(Node *n) override;
+	void visit_FLT(Node *n) override;
 	void visit_EQ(Node *n) override;
 	void visit_STRUCTINIT(Node *n) override;
 	void visit_MUL(Node *n) override;
@@ -43,6 +44,8 @@ public:
 	void visit_COLN(Node *n) override;
 	void visit_ARR(Node *n) override;
 	void visit_DEREF(Node *n) override;
+	void visit_CAST(Node *n) override;
+	void visit_ADD(Node *n) override;
 
 	void addtabs();
 };
