@@ -7,13 +7,20 @@ DesugarVisitor::DesugarVisitor(Module *m)
 
 void DesugarVisitor::visit_FN(Node *n)
 {
-	auto last = n->at(3)->pop();
-	visit(last);
+	auto fbody = n->at(3);
+	visit(fbody);
 
+	if (fbody->back()->token == T_COLN
+	 || fbody->back()->token == T_EQ) {
+		auto ret = new Node(fbody->back()->range, T_RET, "ret");
+		fbody->push(ret);
+		return;
+	}
+
+	auto last = fbody->pop();
 	auto ret = new Node(last->range, T_RET, "ret");
 	ret->push(last);
-
-	n->at(3)->push(ret);
+	fbody->push(ret);
 }
 
 void DesugarVisitor::visit_PIPE(Node *n)

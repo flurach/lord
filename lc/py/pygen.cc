@@ -177,8 +177,11 @@ void PygenVisitor::visit_STR(Node *n)
 
 void PygenVisitor::visit_RET(Node *n)
 {
-	buf += "return ";
-	visit(n->at(0));
+	buf += "return";
+	if (n->size()) {
+		buf += ' ';
+		visit(n->at(0));
+	}
 }
 
 void PygenVisitor::visit_INT(Node *n)
