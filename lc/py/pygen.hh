@@ -8,7 +8,15 @@ private:
 
 public:
 	size_t ilvl = 0;
-	std::string buf;
+	std::string buf =
+		"# stdlib\n"
+		"class Array:\n"
+		"    def __init__(self, value):\n"
+		"        self.value = value\n"
+		"    def at(self, i):\n"
+		"        return self.value[i]\n"
+		"\n\n"
+		"# code\n";
 
 public:
 	PygenVisitor(Module *m);

@@ -195,7 +195,7 @@ void PygenVisitor::visit_EQ(Node *n)
 
 void PygenVisitor::visit_ARR(Node *n)
 {
-	buf += '[';
+	buf += "Array([";
 	for (auto e : *n->at(1)) {
 		if (e->token == T_COMA)
 			continue;
@@ -206,7 +206,7 @@ void PygenVisitor::visit_ARR(Node *n)
 		buf.pop_back();
 		buf.pop_back();
 	}
-	buf += ']';
+	buf += "])";
 }
 
 void PygenVisitor::visit_STRUCTINIT(Node *n)

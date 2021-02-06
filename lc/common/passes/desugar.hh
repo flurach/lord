@@ -6,6 +6,7 @@ public:
 	DesugarVisitor(Module *m);
 
 	void visit_FN(Node *n) override;
+	void visit_PIPE(Node *n) override;
 };
 
 #endif
