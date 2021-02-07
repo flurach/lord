@@ -4,10 +4,12 @@ struct SampleStruct =
 	data: i64
 
 fn SampleStruct.print self =
-	print (self.sqr)
+	result = self.sqr
+	print result
 
 fn SampleStruct.sqr self =
-	self.data * self.data
+	result = self.data * self.data
+	result
 
 fn main args =
 	sample = SampleStruct { data: 10 }

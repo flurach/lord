@@ -11,7 +11,6 @@ void Field::print(size_t i)
 	while (x++ < i)
 		putchar('\t');
 	std::cout << name << ": ";
-
 	type.print();
 }
 

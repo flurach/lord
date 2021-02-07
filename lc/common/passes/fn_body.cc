@@ -32,6 +32,8 @@ void FnBodyVisitor::visit_fnargs(Node *n)
 void FnBodyVisitor::visit_EQ(Node *n)
 {
 	n->at(0)->id = f->symgr.add(n->at(0)->val);
+	visit(n->at(0));
+	visit(n->at(1));
 }
 
 void FnBodyVisitor::visit_SYM(Node *n)
