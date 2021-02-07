@@ -57,8 +57,10 @@ Node *parse_for(Lexer *lexer)
 
 Node *parse_forcond(Lexer *lexer)
 {
-	if (auto n = parse_seq(lexer, { parse_SYM, parse_IN, parse_range }))
+	if (auto n = parse_seq(lexer, { parse_SYM, parse_IN, parse_range })) {
+		n->binarify();
 		return n;
+	}
 	return parse_sepby(lexer, parse_forlogic, parse_SEMI);
 }
 

@@ -368,6 +368,112 @@ void PygenVisitor::visit_EEQ(Node *n)
 	visit(n->at(1));
 }
 
+void PygenVisitor::visit_AEQ(Node *n)
+{
+	visit(n->at(0));
+	buf += " += ";
+	visit(n->at(1));
+}
+
+void PygenVisitor::visit_LSS(Node *n)
+{
+	visit(n->at(0));
+	buf += " < ";
+	visit(n->at(1));
+}
+
+void PygenVisitor::visit_IN(Node *n)
+{
+	visit(n->at(0));
+	buf += " in ";
+	visit(n->at(1));
+}
+
+void PygenVisitor::visit_TO(Node *n)
+{
+	buf += "range(";
+	visit(n->at(0));
+	buf += ", ";
+	visit(n->at(1));
+	buf += ")";
+}
+
+void PygenVisitor::visit_FOR(Node *n)
+{
+	auto head = n->at(0);
+
+	if (head->token == T_STMTS && head->size() > 1)
+		visit_normalfor(n);
+	else if (head->token == T_IN)
+		visit_rangefor(n);
+	else
+		visit_whilefor(n);
+}
+
+void PygenVisitor::visit_normalfor(Node *n)
+{
+	auto head = n->at(0);
+	auto body = n->at(1);
+	auto acc = head->at(0);
+	auto cond = head->at(2);
+	auto action = head->at(4);
+
+	visit(acc);
+	buf += "\n";
+
+	addtabs();
+	buf += "while ";
+	visit(cond);
+	buf += ':';
+
+	ilvl++;
+	for (auto stmt : *body) {
+		buf += '\n';
+		addtabs();
+		visit(stmt);
+	}
+	buf += '\n';
+	addtabs();
+	visit(action);
+	ilvl--;
+}
+
+void PygenVisitor::visit_rangefor(Node *n)
+{
+	auto head = n->at(0);
+	auto body = n->at(1);
+
+	buf += "for ";
+	visit(head);
+	buf += ':';
+
+	ilvl++;
+	for (auto stmt : *body) {
+		buf += '\n';
+		addtabs();
+		visit(stmt);
+	}
+	ilvl--;
+}
+
+void PygenVisitor::visit_whilefor(Node *n)
+{
+	auto head = n->at(0);
+	auto body = n->at(1);
+
+	buf += "while ";
+	visit(head);
+	buf += ":";
+
+	ilvl++;
+	for (auto stmt : *body) {
+		buf += '\n';
+		addtabs();
+		visit(stmt);
+	}
+	ilvl--;
+}
+
 void PygenVisitor::addtabs()
 {
 	size_t x = 0;

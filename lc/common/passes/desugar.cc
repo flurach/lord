@@ -12,9 +12,8 @@ void DesugarVisitor::visit_FN(Node *n)
 
 	if (fbody->back()->token == T_COLN
 	 || fbody->back()->token == T_EQ
-	 || fbody->back()->token == T_IF) {
-		auto ret = new Node(fbody->back()->range, T_RET, "ret");
-		fbody->push(ret);
+	 || fbody->back()->token == T_IF
+	 || fbody->back()->token == T_FOR) {
 		return;
 	}
 
