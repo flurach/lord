@@ -67,6 +67,11 @@ public:
 	void visit_DEREF(Node *n) override;
 	void visit_CAST(Node *n) override;
 	void visit_ADD(Node *n) override;
+	void visit_DIV(Node *n) override;
+	void visit_IF(Node *n) override;
+	void visit_ELSE(Node *n) override;
+	void visit_PASS(Node *n) override;
+	void visit_EEQ(Node *n) override;
 
 	void addtabs();
 };

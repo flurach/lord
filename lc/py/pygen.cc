@@ -282,6 +282,84 @@ void PygenVisitor::visit_ADD(Node *n)
 	visit(n->at(1));
 }
 
+void PygenVisitor::visit_DIV(Node *n)
+{
+	visit(n->at(0));
+	buf += " / ";
+	visit(n->at(1));
+}
+
+void PygenVisitor::visit_IF(Node *n)
+{
+	auto condition = n->at(0);
+	auto body = n->at(1);
+
+	buf += "if ";
+	visit(condition);
+	buf += ":\n";
+
+	ilvl++;
+	for (auto stmt : *body) {
+		addtabs();
+		visit(stmt);
+		buf += '\n';
+	}
+	ilvl--;
+
+
+	if (n->size() >= 3) {
+		addtabs();
+		auto _else = n->at(2);
+		visit(_else);
+	}
+}
+
+void PygenVisitor::visit_PASS(Node *n)
+{
+	(void)n;
+	buf += "pass";
+}
+
+void PygenVisitor::visit_ELSE(Node *n)
+{
+	if (n->at(0)->token == T_IF) {
+		auto condition = n->at(0)->at(0);
+		auto body = n->at(0)->at(1);
+
+		buf += "elif ";
+		visit(condition);
+		buf += ":\n";
+
+		ilvl++;
+		for (auto stmt : *body) {
+			addtabs();
+			visit(stmt);
+			buf += '\n';
+		}
+		ilvl--;
+
+		if (n->at(0)->size() >= 3) {
+			addtabs();
+			auto _else = n->at(0)->at(2);
+			visit(_else);
+		}
+	} else {
+		buf += "else:\n";
+		ilvl++;
+		addtabs();
+		visit(n->at(0));
+		buf += '\n';
+		ilvl--;
+	}
+}
+
+void PygenVisitor::visit_EEQ(Node *n)
+{
+	visit(n->at(0));
+	buf += " == ";
+	visit(n->at(1));
+}
+
 void PygenVisitor::addtabs()
 {
 	size_t x = 0;

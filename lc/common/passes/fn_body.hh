@@ -2,7 +2,7 @@
 #define LORD_LC_COMMON_PASSES_FN_BODY_HH
 
 class FnBodyVisitor : public Visitor {
-private:
+public:
 	Fn *f = NULL;
 
 public:
