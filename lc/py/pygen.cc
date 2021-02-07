@@ -97,13 +97,13 @@ void PygenVisitor::gen_fn(Fn *f)
 
 	/* fn body */
 	ilvl++;
-	if (f->ref->at(3)->token == T_SYM) {
+	if (f->ref->at(3)->token == T_INDENT) {
 		for (auto s : *f->ref->at(3)) {
 			if (s->token == T_EOL)
 				continue;
 			addtabs();
 			visit(s);
-			buf += "\n";
+			buf += '\n';
 		}
 	} else {
 		addtabs();
