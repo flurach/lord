@@ -19,6 +19,7 @@
 #include "common/passes/struct_field.hh"
 #include "common/passes/fn_and_method.hh"
 #include "common/passes/method_body.hh"
+#include "common/passes/fn_body.hh"
 
 #include "py/pygen.hh"
 

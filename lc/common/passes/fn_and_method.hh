@@ -1,5 +1,5 @@
-#ifndef LORD_LC_COMMON_PASSES_FN_NAME_HH
-#define LORD_LC_COMMON_PASSES_FN_NAME_HH
+#ifndef LORD_LC_COMMON_PASSES_FN_AND_METHOD_HH
+#define LORD_LC_COMMON_PASSES_FN_AND_METHOD_HH
 
 class FnAndMethodVisitor : public Visitor {
 public:

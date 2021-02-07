@@ -145,26 +145,16 @@ void PygenVisitor::visit_methodcall(Node *n)
 
 void PygenVisitor::visit_fncall(Node *n)
 {
-	bool is_fn = false;
+	bool is_sym = false;
 
-	for (auto ff : m->fnmgr.fns) {
-		if (ff->name == n->at(0)->val) {
-			is_fn = true;
+	for (auto ss : f->symgr.syms) {
+		if (ss == n->at(0)->val) {
+			is_sym = true;
 			break;
 		}
 	}
 
-	// TODO: fix here, which causes `cast` test to compile wrong
-	if (!is_fn) {
-		for (auto ss : f->symgr.syms) {
-			if (ss == n->at(0)->val) {
-				is_fn = false;
-				break;
-			}
-		}
-	}
-
-	if (!is_fn) {
+	if (!is_sym) {
 		buf += "(";
 		for (auto a : *n->at(1)) {
 			visit(a);
