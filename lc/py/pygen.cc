@@ -82,25 +82,33 @@ void PygenVisitor::gen_structmethod(Fn *m)
 
 void PygenVisitor::gen_fn(Fn *f)
 {
-	/* method name */
+	/* fn name */
 	addtabs();
 	buf += "def " + f->name + "(";
 
-	/* method args */
+	/* fn args */
 	for (auto a : *f->ref->at(1))
 		buf += a->val + ", ";
-	buf.pop_back();
-	buf.pop_back();
+	if (f->ref->at(1)->size()) {
+		buf.pop_back();
+		buf.pop_back();
+	}
 	buf += "):\n";
 
-	/* method body */
+	/* fn body */
 	ilvl++;
-	for (auto s : *f->ref->at(3)) {
-		if (s->token == T_EOL)
-			continue;
+	if (f->ref->at(3)->token == T_SYM) {
+		for (auto s : *f->ref->at(3)) {
+			if (s->token == T_EOL)
+				continue;
+			addtabs();
+			visit(s);
+			buf += "\n";
+		}
+	} else {
 		addtabs();
-		visit(s);
-		buf += "\n";
+		visit(f->ref->at(3));
+		buf += '\n';
 	}
 	ilvl--;
 }

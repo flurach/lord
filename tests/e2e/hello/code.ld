@@ -1,2 +1,2 @@
 # hello world program
-fn main = puts "Hail the Lord"
+fn main = print "Hail the Lord"
