@@ -28,12 +28,11 @@ void Symgr::print(size_t j)
 			putchar('\t');
 
 		std::cout << syms[i];
-		auto t = types.find(i);
-		if (t != types.end()) {
-			std::cout << ": ";
-			t->second.print();
-		} else {
-			std::cout << std::endl;
+		if (auto t = types[i]) {
+			std::cout
+				<< ": "
+				<< t->as_str();
 		}
+		std::cout << std::endl;
 	}
 }

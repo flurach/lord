@@ -23,6 +23,9 @@ void MethodBodyVisitor::visit_fnargs(Node *n)
 	for (auto nn : *n)
 		nn->id = f->symgr.add(nn->val);
 
-	if (n->size() > 0)
-		f->symgr.types[n->at(0)->id] = Type(s);
+	if (n->size() > 0) {
+		auto t = m->typemgr.make(new TypeStruct(m, s));
+		std::cout << "BE GONE THOT: " << t << std::endl;
+		f->symgr.types[n->at(0)->id] = t;
+	}
 }

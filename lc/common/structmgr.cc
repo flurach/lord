@@ -1,7 +1,7 @@
 #include "lc.hh"
 
-Field::Field(Range r, std::string n, Type t)
-	: defined_at(r), name(n), type(t)
+Field::Field(Range r, std::string n, Type *type)
+	: defined_at(r), name(n), type(type)
 {
 }
 
@@ -10,8 +10,7 @@ void Field::print(size_t i)
 	size_t x = 0;
 	while (x++ < i)
 		putchar('\t');
-	std::cout << name << ": ";
-	type.print();
+	std::cout << name << ": " << type->as_str() << std::endl;
 }
 
 Struct::Struct(Node *ref)

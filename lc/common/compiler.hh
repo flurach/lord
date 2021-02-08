@@ -6,6 +6,7 @@ struct Compiler {
 
 	~Compiler();
 
+	Module *load_main(std::string fpath);
 	Module *load_mod(std::string fpath);
 	void print();
 };

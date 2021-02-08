@@ -9,7 +9,7 @@ public:
 	MethodBodyVisitor(Module *m);
 
 	void visit_MODULE(Node *n) override;
-	void visit_fnargs(Node *n);
+	void visit_fnargs(Node *n) override;
 };
 
 #endif

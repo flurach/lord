@@ -4,9 +4,9 @@
 struct Field {
 	Range defined_at;
 	std::string name;
-	Type type;
+	Type *type;
 
-	Field(Range r, std::string n, Type t);
+	Field(Range r, std::string n, Type *type);
 	void print(size_t i = 0);
 };
 

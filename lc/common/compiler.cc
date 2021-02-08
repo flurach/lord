@@ -6,6 +6,18 @@ Compiler::~Compiler()
 		delete m;
 }
 
+Module *Compiler::load_main(std::string fpath)
+{
+	Module *m = new Module(this, "__main__");
+
+	if (m->load_file(fpath)) {
+		mods.push_back(m);
+		return mods.back();
+	}
+
+	return NULL;
+}
+
 Module *Compiler::load_mod(std::string fpath)
 {
 	Module *m = new Module(this);

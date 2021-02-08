@@ -19,6 +19,16 @@ void FnBodyVisitor::visit_FN(Node *n)
 {
 	auto fnargs = n->at(1);
 	auto fnbody = n->at(3);
+
+	/* main function exception */
+	if (m->name == "__main__" && n->at(0)->val == "main") {
+		auto _args = fnargs->at(0);
+		_args->id = f->symgr.add(_args->val);
+
+		auto t = m->typemgr.make(new TypeArr(new TypeStr()));
+		f->symgr.types[_args->id] = t;
+	}
+
 	visit_fnargs(fnargs);
 	visit(fnbody);
 }

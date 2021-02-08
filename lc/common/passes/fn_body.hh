@@ -11,7 +11,7 @@ public:
 	void visit_MODULE(Node *n) override;
 
 	void visit_FN(Node *n) override;
-	void visit_fnargs(Node *n);
+	virtual void visit_fnargs(Node *n);
 
 	void visit_EQ(Node *n) override;
 

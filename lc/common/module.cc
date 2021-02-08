@@ -1,13 +1,14 @@
 #include "lc.hh"
 
-Module::Module(Compiler *c)
-	: c(c)
+Module::Module(Compiler *c, std::string name)
+	: c(c), name(name)
 {
 }
 
 bool Module::load_file(std::string fpath)
 {
-	name = fpath;
+	if (!name.length())
+		name = fpath;
 
 	std::ifstream ifs(fpath);
 	if (ifs.is_open() == false)

@@ -3,7 +3,7 @@
 
 struct Symgr {
 	std::vector<std::string> syms;
-	std::map<int, Type> types;
+	std::map<int, Type*> types;
 
 	int add(std::string s);
 	int get(std::string s);

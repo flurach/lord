@@ -87,7 +87,7 @@ void compile_file(char *fpath)
 {
 	Compiler c = Compiler();
 
-	if (!c.load_mod(fpath)) {
+	if (!c.load_main(fpath)) {
 		puts("failed to open file");
 		return;
 	}
@@ -99,7 +99,7 @@ void genpy_file(char *fpath)
 {
 	Compiler c = Compiler();
 
-	if (!c.load_mod(fpath)) {
+	if (!c.load_main(fpath)) {
 		puts("failed to open file");
 		return;
 	}
