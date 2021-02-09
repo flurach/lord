@@ -25,7 +25,7 @@ void FnBodyVisitor::visit_FN(Node *n)
 		auto _args = fnargs->at(0);
 		_args->id = f->symgr.add(_args->val);
 
-		auto t = m->typemgr.make(new TypeArr(new TypeStr()));
+		auto t = m->typemgr.make_arr(m->typemgr.make_atomic("str"));
 		f->symgr.types[_args->id] = t;
 	}
 

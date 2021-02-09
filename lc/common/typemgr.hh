@@ -11,7 +11,10 @@
 
 struct TypeMgr {
 	std::vector<Type*> types;
-	Type *make(Type *t);
+
+	Type *make_atomic(std::string name);
+	Type *make_arr(Type *t);
+	Type *make_struct(Struct *s);
 };
 
 #endif

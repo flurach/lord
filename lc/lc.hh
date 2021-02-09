@@ -6,7 +6,7 @@
 #include <map>
 #include "lp.hh"
 
-#include "common/types/all.hh"
+#include "common/type.hh"
 #include "common/node2type.hh"
 #include "common/typemgr.hh"
 #include "common/symgr.hh"

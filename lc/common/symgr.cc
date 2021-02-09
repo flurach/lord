@@ -29,9 +29,8 @@ void Symgr::print(size_t j)
 
 		std::cout << syms[i];
 		if (auto t = types[i]) {
-			std::cout
-				<< ": "
-				<< t->as_str();
+			std::cout << ": ";
+			t->print();
 		}
 		std::cout << std::endl;
 	}

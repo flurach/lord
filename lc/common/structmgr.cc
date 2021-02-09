@@ -10,7 +10,9 @@ void Field::print(size_t i)
 	size_t x = 0;
 	while (x++ < i)
 		putchar('\t');
-	std::cout << name << ": " << type->as_str() << std::endl;
+	std::cout << name << ": ";
+	type->print();
+	std::cout << std::endl;
 }
 
 Struct::Struct(Node *ref)

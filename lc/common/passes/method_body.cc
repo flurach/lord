@@ -24,7 +24,7 @@ void MethodBodyVisitor::visit_fnargs(Node *n)
 		nn->id = f->symgr.add(nn->val);
 
 	if (n->size() > 0) {
-		auto t = m->typemgr.make(new TypeStruct(m, s));
+		auto t = m->typemgr.make_struct(s);
 		std::cout << "BE GONE THOT: " << t << std::endl;
 		f->symgr.types[n->at(0)->id] = t;
 	}

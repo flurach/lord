@@ -2,8 +2,7 @@
 #define LORD_LC_COMMON_TYPES_TYPE_HH
 
 #define LORD_LC_COMMON_TYPES_TYPE_TYPEKINDS\
-	X(UNKNOWN)\
-	X(BUILTIN)\
+	X(ATOMIC)\
 	X(ARR)\
 	X(STRUCT)\
 	\
@@ -21,16 +20,17 @@ static const char *TypeKind_str[] = {
 	#undef X
 };
 
-class Type {
-public:
-	TypeKind kind = TK_UNKNOWN;
+struct Module;
+struct Struct;
+
+struct Type {
+	TypeKind kind;
+	std::string name = "";
 	std::vector<Type*> subtypes = {};
 
-public:
-	virtual ~Type() {}
-
-	virtual size_t byte_size() { return 0; }
-	virtual std::string as_str() { return "[unknown]"; }
+	Type(TypeKind kind, std::string name, std::vector<Type*> subtypes = {});
+	bool equals(Type *t);
+	void print();
 };
 
 #endif

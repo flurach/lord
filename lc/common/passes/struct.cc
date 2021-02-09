@@ -8,6 +8,6 @@ StructVisitor::StructVisitor(Module *m)
 void StructVisitor::visit_STRUCT(Node *n)
 {
 	auto s = new Struct(n);
-	m->typemgr.make(new TypeStruct(m, s));
 	m->structmgr.add(s);
+	m->typemgr.make_struct(s);
 }
