@@ -42,7 +42,10 @@ void Module::print()
 	ast->print(1);
 
 	std::cout << " => STRUCTS " << std::endl;
-	structmgr.print();
+	for (auto pair : structs) {
+		pair.second->print(1);
+		std::cout << std::endl;
+	}
 
 	std::cout << " => FUNCTIONS " << std::endl;
 	fnmgr.print();

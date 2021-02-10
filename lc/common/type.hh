@@ -21,16 +21,15 @@ static const char *TypeKind_str[] = {
 };
 
 struct Module;
-struct Struct;
 
-struct Type {
+class Type : public std::map<std::string, Type*> {
+public:
 	TypeKind kind;
-	std::string name = "";
-	std::vector<Type*> subtypes = {};
+	std::string name;
 
-	Type(TypeKind kind, std::string name, std::vector<Type*> subtypes = {});
+	Type(TypeKind kind, std::string name = "");
 	bool equals(Type *t);
-	void print();
+	void print(size_t i = 0);
 };
 
 #endif

@@ -16,9 +16,10 @@ void FnAndMethodVisitor::visit_FN(Node *n)
 void FnAndMethodVisitor::visit_method(Node *n)
 {
 	auto struct_name = n->at(0)->at(0)->val;
-	auto s = m->structmgr.get(struct_name);
-	if (s != NULL)
-		s->addMethod(new Fn(n));
+	// FIXME
+	// auto s = m->structmgr.get(struct_name);
+	// if (s != NULL)
+	// 	s->addMethod(new Fn(n));
 }
 
 void FnAndMethodVisitor::visit_fdef(Node *n)

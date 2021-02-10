@@ -9,12 +9,9 @@
 // since all types are declared using TypeMgr, it should be a responsibility of
 // this class to instantiate them, not the user.
 
-struct TypeMgr {
-	std::vector<Type*> types;
-
-	Type *make_atomic(std::string name);
-	Type *make_arr(Type *t);
-	Type *make_struct(Struct *s);
+class TypeMgr : std::vector<Type*> {
+public:
+	Type *make(Type *t);
 };
 
 #endif

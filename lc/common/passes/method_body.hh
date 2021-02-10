@@ -3,9 +3,6 @@
 
 class MethodBodyVisitor : public FnBodyVisitor {
 public:
-	Struct *s = NULL;
-
-public:
 	MethodBodyVisitor(Module *m);
 
 	void visit_MODULE(Node *n) override;

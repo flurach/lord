@@ -7,7 +7,7 @@ StructVisitor::StructVisitor(Module *m)
 
 void StructVisitor::visit_STRUCT(Node *n)
 {
-	auto s = new Struct(n);
-	m->structmgr.add(s);
-	m->typemgr.make_struct(s);
+	auto s = new Type(TK_STRUCT, n->at(0)->val);
+	s = m->typemgr.make(s);
+	m->structs[n->at(0)->val] = s;
 }

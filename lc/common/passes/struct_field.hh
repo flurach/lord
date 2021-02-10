@@ -3,14 +3,13 @@
 
 class StructFieldVisitor : public Visitor {
 private:
-	Struct *s = NULL;
+	Type *s = NULL;
 
 public:
 	StructFieldVisitor(Module *m);
 
-	void visit_MODULE(Node *n) override;
-
-	void visit_COLN(Node *n) override;
+	void visit_STRUCT(Node *n) override;
+	void visit_coln(Node *n);
 };
 
 

@@ -9,49 +9,10 @@ void PygenVisitor::visit_MODULE(Node *n)
 {
 	(void)n;
 
-	for (auto ss : m->structmgr.structs) {
-		s = ss;
-		gen_struct(ss);
-	}
-	s = NULL;
-
 	for (auto ff : m->fnmgr.fns) {
 		f = ff;
 		gen_fn(ff);
 	}
-}
-
-void PygenVisitor::gen_struct(Struct *s)
-{
-	/* class definition */
-	addtabs();
-	buf += "class " + s->name + ":\n";
-
-	ilvl++;
-		/* def __init__(args) */
-		addtabs();
-		buf += "def __init__(self, ";
-		for (auto f : s->fields)
-			buf += f.name + ", ";
-		buf.pop_back();
-		buf.pop_back();
-		buf += "):\n";
-
-		/* __init__ body */
-		ilvl++;
-			for (auto f : s->fields) {
-				addtabs();
-				buf += "self." + f.name + " = " + f.name + "\n";
-			}
-			buf.push_back('\n');
-		ilvl--;
-
-		/* method definitions */
-		for (auto ff : s->fnmgr.fns) {
-			f = ff;
-			gen_structmethod(f);
-		}
-	ilvl--;
 }
 
 void PygenVisitor::gen_structmethod(Fn *m)
@@ -127,15 +88,6 @@ void PygenVisitor::visit_CALL(Node *n)
 void PygenVisitor::visit_methodcall(Node *n)
 {
 	bool is_field = false;
-
-	if (n->at(0)->at(0)->val == f->ref->at(1)->at(0)->val) {
-		for (auto ff : s->fields) {
-			if (ff.name == n->at(0)->at(1)->val) {
-				is_field = true;
-				break;
-			}
-		}
-	}
 
 	if (!is_field) {
 		buf += "(";

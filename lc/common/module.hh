@@ -13,7 +13,7 @@ struct Module {
 
 	/* semantic analysis */
 	TypeMgr typemgr = TypeMgr();
-	StructMgr structmgr = StructMgr();
+	std::map<std::string, Type*> structs;
 	FnMgr fnmgr = FnMgr();
 
 	/* constructor */

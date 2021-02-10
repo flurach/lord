@@ -5,21 +5,19 @@ StructFieldVisitor::StructFieldVisitor(Module *m)
 {
 }
 
-void StructFieldVisitor::visit_MODULE(Node *n)
+void StructFieldVisitor::visit_STRUCT(Node *n)
 {
-	(void)n;
+	s = new Type(TK_STRUCT, n->at(0)->val);
+	s = m->typemgr.make(s);
 
-	for (auto ss : m->structmgr.structs) {
-		s = ss;
-		visit(s->ref);
+	for (auto f : *n->at(2)) {
+		if (f->token != T_COLN)
+			return;
+		visit_coln(f);
 	}
 }
 
-void StructFieldVisitor::visit_COLN(Node *n)
+void StructFieldVisitor::visit_coln(Node *n)
 {
-	s->addField(Field(
-		n->at(0)->range,
-		n->at(0)->val,
-		node2type(m, n->at(1))
-	));
+	(*s)[n->at(0)->val] = node2type(m, n->at(1));
 }
