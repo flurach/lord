@@ -4,13 +4,13 @@
 #include <algorithm>
 #include <fstream>
 #include <map>
+#include <unordered_map>
 #include "lp.hh"
 
 #include "common/type.hh"
 #include "common/node2type.hh"
 #include "common/typemgr.hh"
 #include "common/symgr.hh"
-#include "common/fnmgr.hh"
 #include "common/module.hh"
 #include "common/compiler.hh"
 

@@ -16,13 +16,14 @@ void FnAndMethodVisitor::visit_FN(Node *n)
 void FnAndMethodVisitor::visit_method(Node *n)
 {
 	auto struct_name = n->at(0)->at(0)->val;
-	// FIXME
-	// auto s = m->structmgr.get(struct_name);
-	// if (s != NULL)
-	// 	s->addMethod(new Fn(n));
+	auto method_name = n->at(0)->at(1)->val;
+
+	auto s = m->structs[struct_name];
+	s->fields[method_name] = m->typemgr.make_fn(n, struct_name + "::" + method_name);
 }
 
 void FnAndMethodVisitor::visit_fdef(Node *n)
 {
-	m->fnmgr.add(new Fn(n));
+	auto fn_name = n->at(0)->val;
+	m->fns[fn_name] = m->typemgr.make_fn(n, fn_name);
 }

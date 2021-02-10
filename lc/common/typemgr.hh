@@ -11,7 +11,15 @@
 
 class TypeMgr : std::vector<Type*> {
 public:
+	~TypeMgr();
+
 	Type *make(Type *t);
+
+	Type *make_atomic(std::string name);
+	Type *make_arr(Type *t);
+
+	Type *make_struct(Node *ref, std::string name);
+	Type *make_fn(Node *ref, std::string name);
 };
 
 #endif

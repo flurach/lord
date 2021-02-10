@@ -2,6 +2,9 @@
 #define LORD_LC_COMMON_PASSES_METHOD_BODY_HH
 
 class MethodBodyVisitor : public FnBodyVisitor {
+private:
+	Type *s = NULL;
+
 public:
 	MethodBodyVisitor(Module *m);
 

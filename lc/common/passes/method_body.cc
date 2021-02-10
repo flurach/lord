@@ -9,25 +9,24 @@ void MethodBodyVisitor::visit_MODULE(Node *n)
 {
 	(void)n;
 
-	// FIXME
-	// for (auto ss : m->structmgr.structs) {
-	// 	s = ss;
-	// 	for (auto ff : s->fnmgr.fns) {
-	// 		f = ff;
-	// 		visit(f->ref);
-	// 	}
-	// }
+	for (auto pair : m->structs) {
+		s = pair.second;
+		if (s == NULL)
+			continue;
+		for (auto pair : s->fields) {
+			if (pair.second->kind != TK_FN)
+				continue;
+			f = pair.second;
+			visit(f->ref);
+		}
+	}
 }
 
 void MethodBodyVisitor::visit_fnargs(Node *n)
 {
 	for (auto nn : *n)
-		nn->id = f->symgr.add(nn->val);
+		nn->id = m->symgr.add(nn->val);
 
-	// FIXME
-	// if (n->size() > 0) {
-	// 	auto t = m->typemgr.make_struct(s);
-	// 	std::cout << "BE GONE THOT: " << t << std::endl;
-	// 	f->symgr.types[n->at(0)->id] = t;
-	// }
+	if (n->size() > 0)
+		m->symgr.types[n->at(0)->id] = s;
 }

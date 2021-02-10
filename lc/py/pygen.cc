@@ -9,17 +9,17 @@ void PygenVisitor::visit_MODULE(Node *n)
 {
 	(void)n;
 
-	for (auto ff : m->fnmgr.fns) {
-		f = ff;
-		gen_fn(ff);
+	for (auto& pair : m->fns) {
+		f = pair.second;
+		gen_fn(f);
 	}
 }
 
-void PygenVisitor::gen_structmethod(Fn *m)
+void PygenVisitor::gen_structmethod(Type *m)
 {
 	/* method name */
 	addtabs();
-	buf += "def " + m->name + "(";
+	buf += "def " + m->ref->at(0)->at(0)->val + "(";
 
 	/* method args */
 	for (auto a : *m->ref->at(1))
@@ -41,11 +41,11 @@ void PygenVisitor::gen_structmethod(Fn *m)
 	ilvl--;
 }
 
-void PygenVisitor::gen_fn(Fn *f)
+void PygenVisitor::gen_fn(Type *f)
 {
 	/* fn name */
 	addtabs();
-	buf += "def " + f->name + "(";
+	buf += "def " + f->ref->at(0)->val + "(";
 
 	/* fn args */
 	for (auto a : *f->ref->at(1))
@@ -107,7 +107,7 @@ void PygenVisitor::visit_fncall(Node *n)
 {
 	bool is_sym = false;
 
-	for (auto ss : f->symgr.syms) {
+	for (auto ss : m->symgr.syms) {
 		if (ss == n->at(0)->val) {
 			is_sym = true;
 			break;

@@ -5,6 +5,7 @@
 	X(ATOMIC)\
 	X(ARR)\
 	X(STRUCT)\
+	X(FN)\
 	\
 	X(LAST)
 
@@ -22,14 +23,32 @@ static const char *TypeKind_str[] = {
 
 struct Module;
 
-class Type : public std::map<std::string, Type*> {
-public:
+struct Type {
+
+	// an optional reference
+	Node *ref = NULL;
+
+	// what kind of type this thing is
 	TypeKind kind;
+
+	// atomic types
 	std::string name;
 
-	Type(TypeKind kind, std::string name = "");
+	// ADTs & functions
+	std::vector<Type*> subtypes;
+
+	// structs
+	std::map<std::string, Type*> fields;
+
+	// constructor
+	Type(Node *ref, TypeKind kind, std::string name);
+
+	// check equality
 	bool equals(Type *t);
+
+	// debug
 	void print(size_t i = 0);
+
 };
 
 #endif

@@ -43,12 +43,19 @@ void Module::print()
 
 	std::cout << " => STRUCTS " << std::endl;
 	for (auto pair : structs) {
+		if (!pair.second)
+			continue;
 		pair.second->print(1);
 		std::cout << std::endl;
 	}
 
 	std::cout << " => FUNCTIONS " << std::endl;
-	fnmgr.print();
+	for (auto pair : fns) {
+		putchar('\t');
+		std::cout << pair.first << ": ";
+		pair.second->print();
+		std::cout << std::endl;
+	}
 }
 
 std::string Module::genpy()

@@ -3,7 +3,7 @@
 
 class FnBodyVisitor : public Visitor {
 public:
-	Fn *f = NULL;
+	Type *f = NULL;
 
 public:
 	FnBodyVisitor(Module *m);

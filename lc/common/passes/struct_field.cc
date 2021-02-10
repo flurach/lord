@@ -7,17 +7,18 @@ StructFieldVisitor::StructFieldVisitor(Module *m)
 
 void StructFieldVisitor::visit_STRUCT(Node *n)
 {
-	s = new Type(TK_STRUCT, n->at(0)->val);
-	s = m->typemgr.make(s);
+	if (!m->structs[n->at(0)->val])
+		return;
+	s = m->structs[n->at(0)->val];
 
 	for (auto f : *n->at(2)) {
 		if (f->token != T_COLN)
-			return;
+			continue;
 		visit_coln(f);
 	}
 }
 
 void StructFieldVisitor::visit_coln(Node *n)
 {
-	(*s)[n->at(0)->val] = node2type(m, n->at(1));
+	s->fields[n->at(0)->val] = node2type(m, n->at(1));
 }

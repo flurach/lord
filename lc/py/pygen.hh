@@ -3,7 +3,7 @@
 
 class PygenVisitor : public Visitor {
 private:
-	Fn *f = NULL;
+	Type *f = NULL;
 
 public:
 	size_t ilvl = 0;
@@ -43,8 +43,8 @@ public:
 
 	void visit_MODULE(Node *n) override;
 
-	void gen_structmethod(Fn *m);
-	void gen_fn(Fn *m);
+	void gen_structmethod(Type *m);
+	void gen_fn(Type *f);
 
 	void visit_methodcall(Node *n);
 	void visit_fncall(Node *n);

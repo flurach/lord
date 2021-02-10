@@ -13,8 +13,9 @@ struct Module {
 
 	/* semantic analysis */
 	TypeMgr typemgr = TypeMgr();
-	std::map<std::string, Type*> structs;
-	FnMgr fnmgr = FnMgr();
+	std::unordered_map<std::string, Type*> structs;
+	std::unordered_map<std::string, Type*> fns;
+	Symgr symgr = Symgr();
 
 	/* constructor */
 	Module(Compiler *c, std::string name = "");
