@@ -134,7 +134,7 @@ std::optional<Node> parse_fn(Lexer *lexer)
 	fn->push(*args);
 
 	if (auto eq = parse_EQ(lexer))
-		fn->push(*eq);
+		{}
 	else
 		return fn;
 

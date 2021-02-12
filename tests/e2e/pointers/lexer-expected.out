@@ -1,9 +1,0 @@
-SYM 'my_str' 11..17
-EQ '=' 18..19
-STR 'Hello World!' 20..34
-EOL '' 34..35
-SYM 'putchar' 35..42
-LBRC '[' 43..44
-SYM 'my_str' 44..50
-RBRC ']' 50..51
-EOL '' 51..52

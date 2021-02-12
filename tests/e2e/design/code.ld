@@ -28,36 +28,9 @@ else
 	pass			# can be used for empty indent blocks
 
 
-# pointers
-my_str = "Hello World!"		# pointers use [] for access
-putchar [my_str]		# unlike C, this makes more sense (prints 'H')
-
-
 # arrays
 ## there's only one type of array, and it is always fix sized
-my_int_arr = {0, 1, 2, 3, 4, 5}
-my_other_arr: i64[5]		# you can allocate arrays like this
-				# this is an array of 5 integers
-
-## arrays are actually pointers
-printf "%d\n" [my_int_arr]	# prints 0
-
-
-# data types
-type Rectangle =
-	width:  i64
-	height: i64
-
-
-# bounded functions
-## you can bind functions to specific data types
-
-fn Rectangle.area self =	# self here is a pointer to the instance
-	self.width * self.height
-
-## calling them is easy too
-my_rect = Rectangle 5 5
-printf "%d\n" my_rect.area
+my_int_arr = [0, 1, 2, 3, 4, 5]
 
 
 # loops

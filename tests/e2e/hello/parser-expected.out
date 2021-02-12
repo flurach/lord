@@ -2,9 +2,8 @@
 	-1 FN 'fn' 22..24
 		-1 SYM 'main' 25..29
 		-1 ARGS '' 0..0
-		-1 EQ '=' 30..31
-		-1 CALL '' 32..36
-			-1 SYM 'puts' 32..36
+		-1 CALL '' 32..37
+			-1 SYM 'print' 32..37
 			-1 ARGS '' 0..0
-				-1 STR 'Hail the Lord' 37..52
-	-1 EOL '' 52..53
+				-1 STR 'Hail the Lord' 38..53
+	-1 EOL '' 53..54
