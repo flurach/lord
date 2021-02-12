@@ -10,12 +10,13 @@
 	X(INDENT)\
 	X(DEDENT)\
 	\
-	/* literals */\
+	/* types */\
 	X(SYM)\
 	X(INT)\
 	X(FLT)\
 	X(STR)\
 	X(CHR)\
+	X(ARR)\
 	\
 	/* keywords */\
 	X(IMPORT)\
@@ -74,15 +75,10 @@
 	/* AST specific */\
 	X(MODULE)\
 	X(STMTS)\
-	X(ARR)\
-	X(CALL)\
-	X(ARGS)\
 	X(BIND)\
 	X(TYPEANNO)\
-	X(DEREF)\
-	X(EXPR)\
-	X(CAST)\
-	X(STRUCTINIT)\
+	X(CALL)\
+	X(ARGS)\
 	\
 	X(LAST)
 

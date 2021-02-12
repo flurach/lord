@@ -1,13 +1,13 @@
 #include "lc.hh"
 
-Visitor::Visitor(Module *m)
+Visitor::Visitor(Module& m)
 	: m(m)
 {
 }
 
-void Visitor::visit(Node *n)
+void Visitor::visit(Node& n)
 {
-	switch (n->token) {
+	switch (n.token) {
 		#define X(token)\
 			case T_##token:\
 				visit_##token(n);\
@@ -17,10 +17,8 @@ void Visitor::visit(Node *n)
 	}
 }
 
-void pipe_visitors(Node *n, std::vector<Visitor*> visitors)
+void pipe_visitors(Node& n, std::vector<Visitor> visitors)
 {
-	for (auto v : visitors) {
-		v->visit(n);
-		delete v;
-	}
+	for (auto v : visitors)
+		v.visit(n);
 }

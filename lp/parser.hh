@@ -2,67 +2,60 @@
 #define LORD_LP_PARSER_HH
 
 /* interface */
-Node *parse(Lexer *lexer);
+std::optional<Node> parse(Lexer *lexer);
 
 /* grammar */
-Node *parse_stmt(Lexer *lexer);
+std::optional<Node> parse_stmt(Lexer *lexer);
 
-Node *parse_import(Lexer *lexer);
+std::optional<Node> parse_import(Lexer *lexer);
 
-Node *parse_for(Lexer *lexer);
-Node *parse_forcond(Lexer *lexer);
-Node *parse_forlogic(Lexer *lexer);
+std::optional<Node> parse_for(Lexer *lexer);
+std::optional<Node> parse_forcond(Lexer *lexer);
+std::optional<Node> parse_forstmt(Lexer *lexer);
 
-Node *parse_struct(Lexer *lexer);
+std::optional<Node> parse_if(Lexer *lexer);
+std::optional<Node> parse_else(Lexer *lexer);
 
-Node *parse_if(Lexer *lexer);
-Node *parse_else(Lexer *lexer);
+std::optional<Node> parse_fn(Lexer *lexer);
+std::optional<Node> parse_fbody(Lexer *lexer);
+std::optional<Node> parse_ret(Lexer *lexer);
 
-Node *parse_ret(Lexer *lexer);
+std::optional<Node> parse_bind(Lexer *lexer);
+std::optional<Node> parse_typedsym(Lexer *lexer);
+std::optional<Node> parse_bindop(Lexer *lexer);
+std::optional<Node> parse_typeanno(Lexer *lexer);
 
-Node *parse_pipe(Lexer *lexer);
-Node *parse_logic(Lexer *lexer);
-Node *parse_eqcmp(Lexer *lexer);
-Node *parse_difcmp(Lexer *lexer);
+std::optional<Node> parse_pipe(Lexer *lexer);
+std::optional<Node> parse_logic(Lexer *lexer);
+std::optional<Node> parse_eqcmp(Lexer *lexer);
+std::optional<Node> parse_difcmp(Lexer *lexer);
 
-Node *parse_fdef(Lexer *lexer);
-Node *parse_fbody(Lexer *lexer);
+std::optional<Node> parse_expr(Lexer *lexer);
+std::optional<Node> parse_term(Lexer *lexer);
+std::optional<Node> parse_fact(Lexer *lexer);
+std::optional<Node> parse_cast(Lexer *lexer);
+std::optional<Node> parse_not(Lexer *lexer);
+std::optional<Node> parse_neg(Lexer *lexer);
+std::optional<Node> parse_atom(Lexer *lexer);
 
-Node *parse_bind(Lexer *lexer);
-Node *parse_bindsym(Lexer *lexer);
-Node *parse_typedsym(Lexer *lexer);
-Node *parse_typeanno(Lexer *lexer);
+std::optional<Node> parse_call(Lexer *lexer);
+std::optional<Node> parse_arg(Lexer *lexer);
 
-Node *parse_expr(Lexer *lexer);
-Node *parse_term(Lexer *lexer);
-Node *parse_fact(Lexer *lexer);
-
-Node *parse_cast(Lexer *lexer);
-Node *parse_not(Lexer *lexer);
-Node *parse_lit(Lexer *lexer);
-
-Node *parse_structinit(Lexer *lexer);
-Node *parse_structbody(Lexer *lexer);
-Node *parse_structfield(Lexer *lexer);
-
-Node *parse_range(Lexer *lexer);
-Node *parse_neg(Lexer *lexer);
-Node *parse_deref(Lexer *lexer);
-Node *parse_arr(Lexer *lexer);
-
-Node *parse_call(Lexer *lexer);
-Node *parse_arg(Lexer *lexer);
-
-Node *parse_dot(Lexer *lexer);
+std::optional<Node> parse_lit(Lexer *lexer);
+std::optional<Node> parse_arr(Lexer *lexer);
+std::optional<Node> parse_range(Lexer *lexer);
+std::optional<Node> parse_dot(Lexer *lexer);
 
 /* higher-order parsers */
-Node *parse_many(Lexer *lexer, Node *(*parser)(Lexer*));
-Node *parse_sepby(Lexer *lexer, Node *(*parser)(Lexer*), Node *(*delim)(Lexer*));
-Node *parse_either(Lexer *lexer, std::vector<Node *(*)(Lexer*)> parsers);
-Node *parse_seq(Lexer *lexer, std::vector<Node *(*)(Lexer*)> parsers);
+using Parser = std::optional<Node> (*)(Lexer*);
+
+std::optional<Node> parse_many(Lexer *lexer, Parser p);
+std::optional<Node> parse_sepby(Lexer *lexer, Parser p, Parser delim);
+std::optional<Node> parse_either(Lexer *lexer, std::vector<Parser> ps);
+std::optional<Node> parse_seq(Lexer *lexer, std::vector<Parser> ps);
 
 /* primitive parsers */
-#define X(token) Node *parse_##token(Lexer *lexer);
+#define X(token) std::optional<Node> parse_##token(Lexer *lexer);
 	LORD_LP_TOKENS
 #undef X
 

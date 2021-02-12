@@ -1,8 +1,8 @@
+# top level declarations
 <stmt> ::= <import>
          | <for>
          | <if>
-         | <fdef>
-         | <struct>
+         | <fn>
          | <ret>
          | <bind>
          | <logic>
@@ -10,103 +10,99 @@
          | <EOL>
          | <ERR>
 
+
+# modules
 <import> ::= <IMPORT> <SYM>
 
+
+# loops
 <for> ::= <FOR> <forcond> <fbody>
 
-<forcond> ::= <SYM> <IN> <range>
-            | {<forlogic>}
+<forcond> ::= <forstmt> sepby ";"
+            | <SYM> "in" <range>
 
-<forlogic> ::= <pipe> sepby <SEMI>
+<forstmt> ::= <bind> | <pipe>
 
-<struct> ::= <STRUCT> <SYM> <EQ> <fbody>
 
+# conditional branching
 <if> ::= <IF> <pipe> <fbody> [<else>]
 
 <else> ::= <ELSE> (<if>|<fbody>)
 
-<pipe> ::= <logic> <PIPE> <pipe>
-         | <logic>
 
-<logic> ::= <eqcmp> (<AND>|<OR>) <logic>
-          | <eqcmp>
-
-<eqcmp> ::= <difcmp> (<EEQ>|<NEQ>) <eqcmp>
-          | <difcmp>
-
-<difcmp> ::= <expr> (<LSS>|<GTR>|<LEQ>|<GEQ>) <difcmp>
-           | <expr>
-
-<fdef> ::= <FN> <dot> {<SYM>} <EQ> <fbody>
+# functions
+<fn> ::= "fn" <dot> {<typedsym>} "=" <fbody>
 
 <fbody> ::= <INDENT> {<stmt>} <DEDENT>
           | <pipe>
 
-<ret> :: = <RET> <pipe>
+<ret> :: = "return" <pipe>
 
-# name: Type = something
-<bind> ::= <typedsym> <bindsym> <pipe>
-         | <typedsym>
-         | <SYM> <bindsym> <pipe>
 
-<bindsym> ::= <EQ> | <AEQ> | <SEQ> | <MEQ> | <DEQ> | <DDEQ> | <MOQ>
+# variables
+<bind> ::= <typedsym> <bindop> <pipe>
 
-# "name: Type" or "name"
-<typedsym> ::= <dot> <COLN> <typeanno>
-
-# "i64" or "Module.Type[5]" or "[pointer]" or "[ptr][10][10]"
-<typeanno> ::= <typeanno> <deref>
-             | <deref>
+<typedsym> ::= <dot> ":" <typeanno>
              | <dot>
 
+<bindop> ::= "=" | "+=" | "-=" | "*=" | "/=" | "//*" | "%="
+
+<typeanno> ::= "[" <typeanno> "]"
+             | <dot>
+
+
+# logic
+<pipe> ::= <logic> "|>" <pipe>
+         | <logic>
+
+<logic> ::= <eqcmp> ("and"|"or") <logic>
+          | <eqcmp>
+
+<eqcmp> ::= <difcmp> ("=="|"!=") <eqcmp>
+          | <difcmp>
+
+<difcmp> ::= <expr> ("<"|">"|"<="|">=") <difcmp>
+           | <expr>
+
+
 # maths
-<expr> ::= <term> {(<ADD>|<SUB>) <term>}
-<term> ::= <fact> {(<MUL>|<DIV>|<DDIV>|<MOD>) <fact>}
-<fact> ::= <LPAR> <pipe> <RPAR>
+<expr> ::= <term> {("+"|"-") <term>}
+
+<term> ::= <fact> {("*"|"/"|"//"|"%") <fact>}
+
+<fact> ::= "(" <pipe> ")"
          | <cast>
 
-# something as OtherType
-<cast> ::= <neg> <AS> <typeanno>
-         | <neg>
+<cast> ::= <not> "as" <typeanno>
+         | <not>
 
-# negate
-<neg> ::= "-" <not>
-        | <not>
+<not> ::= ("!"|"not") <neg>
+        | <neg>
 
-# "!something" or "not something"
-<not> ::= <NOT> <lit>
+<neg> ::= "-" <atom>
+        | <atom>
+
+<atom> ::= <call>
+         | <lit>
+
+
+# function calls
+<call> ::= <dot> [{<arg>}]
+<arg> ::= "(" <pipe> ")"
         | <lit>
 
 # constant literals
-<lit> ::= <call>
-        | <structinit>
-        | <arg>
-
-<structinit> ::= <DOT> <LCRL> <structfield> <RCRL>
-<structbody> ::= {<structfield> sepby <COMMA>}
-<structfield> ::= <SYM> <COLN> <pipe>
-
-# func_name arg1 arg2 ...
-<call> ::= <dot> [{<arg>}]
-<arg> ::= <LPAR> <pipe> <RPAR>
+<lit> ::= <arr>
         | <range>
         | <INT>
         | <FLT>
         | <STR>
         | <CHR>
-        | <deref>
-        | <arr>
         | <dot>
 
-# X to Y
-<range> ::= <INT> <TO> <INT>
+<arr> ::= "[" <pipe> sepby "," "]"
 
-# [expr]
-<deref> ::= <LBRC> <pipe> <RBRC>
+<range> ::= <INT> ".." <INT>
 
-# { pipe1, pipe2, ... }
-<arr> ::= <LCRL> {<pipe> sepby ","} <RCLR>
-
-# "type.field" or "type"
 <dot> ::= <SYM> "." <dot>
         | <SYM>

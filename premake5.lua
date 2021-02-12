@@ -1,9 +1,10 @@
 workspace "lord"
+	architecture "x64"
 	configurations { "debug", "release" }
 
-	architecture "x64"
 	toolset "clang"
 	warnings "extra"
+	cppdialect "C++17"
 
 	BASE_DIR = path.getabsolute(".")
 	targetdir (BASE_DIR .. "/bin")
@@ -25,7 +26,6 @@ workspace "lord"
 project "lp"
 	kind "SharedLib"
 	language "C++"
-	cppdialect "C++17"
 	pchheader "lp/lp.hh"
 
 	includedirs { INCLUDES }
@@ -34,7 +34,6 @@ project "lp"
 project "lc"
 	kind "SharedLib"
 	language "C++"
-	cppdialect "C++17"
 	pchheader "lc/lc.hh"
 
 	includedirs { INCLUDES }
@@ -43,7 +42,6 @@ project "lc"
 project "cli"
 	kind "ConsoleApp"
 	language "C++"
-	cppdialect "C++17"
 	targetname "lord"
 
 	includedirs { INCLUDES }

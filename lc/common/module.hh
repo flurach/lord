@@ -9,20 +9,13 @@ struct Module {
 	/* syntactic analysis */
 	std::string name;
 	std::string src = "";
-	Node *ast = NULL;
-
-	/* semantic analysis */
-	TypeMgr typemgr = TypeMgr();
-	std::unordered_map<std::string, Type*> structs;
-	std::unordered_map<std::string, Type*> fns;
-	Symgr symgr = Symgr();
+	Node ast;
 
 	/* constructor */
 	Module(Compiler *c, std::string name = "");
 
 	/* methods */
 	bool load_file(std::string fpath);
-	std::string genpy();
 
 	/* debugging */
 	void print();

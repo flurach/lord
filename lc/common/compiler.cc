@@ -1,30 +1,12 @@
 #include "lc.hh"
 
-Compiler::~Compiler()
+Module* Compiler::load_mod(std::string fpath, std::string name)
 {
-	for (auto m : mods)
-		delete m;
-}
+	Module m = Module(this, name);
 
-Module *Compiler::load_main(std::string fpath)
-{
-	Module *m = new Module(this, "__main__");
-
-	if (m->load_file(fpath)) {
+	if (m.load_file(fpath)) {
 		mods.push_back(m);
-		return mods.back();
-	}
-
-	return NULL;
-}
-
-Module *Compiler::load_mod(std::string fpath)
-{
-	Module *m = new Module(this);
-
-	if (m->load_file(fpath)) {
-		mods.push_back(m);
-		return mods.back();
+		return mods.end().base();
 	}
 
 	return NULL;
@@ -32,6 +14,6 @@ Module *Compiler::load_mod(std::string fpath)
 
 void Compiler::print()
 {
-	for (auto m : mods)
-		m->print();
+	for (auto& m : mods)
+		m.print();
 }

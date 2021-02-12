@@ -53,9 +53,8 @@ void parse_file(char *fpath)
 {
 	if (auto s = ftoa(fpath)) {
 		Lexer lexer = Lexer(*s);
-		Node *ast = parse(&lexer);
+		auto ast = parse(&lexer);
 		ast->print();
-		delete ast;
 	} else {
 		puts("failed to open file");
 	}
@@ -76,9 +75,8 @@ void parse_repl()
 		}
 
 		Lexer lexer = Lexer(src);
-		Node *ast = parse(&lexer);
+		auto ast = parse(&lexer);
 		ast->print();
-		delete ast;
 		free(src);
 	}
 }
@@ -87,7 +85,7 @@ void compile_file(char *fpath)
 {
 	Compiler c = Compiler();
 
-	if (!c.load_main(fpath)) {
+	if (!c.load_mod(fpath, "__main__")) {
 		puts("failed to open file");
 		return;
 	}
@@ -95,23 +93,11 @@ void compile_file(char *fpath)
 	c.print();
 }
 
-void genpy_file(char *fpath)
-{
-	Compiler c = Compiler();
-
-	if (!c.load_main(fpath)) {
-		puts("failed to open file");
-		return;
-	}
-
-	std::cout << c.mods[0]->genpy() << std::endl;
-}
-
 int main(int argc, char **argv)
 {
 	int opt = 0;
 
-	while ((opt = getopt(argc, argv, ":l:p:c:g:")) != -1) {
+	while ((opt = getopt(argc, argv, ":l:p:c:")) != -1) {
 		switch (opt) {
 		case 'l':
 			lex_file(optarg);
@@ -123,10 +109,6 @@ int main(int argc, char **argv)
 
 		case 'c':
 			compile_file(optarg);
-			break;
-
-		case 'g':
-			genpy_file(optarg);
 			break;
 
 		case ':': {

@@ -1,20 +1,21 @@
 #include "lp.hh"
 
-Node *parse(Lexer *lexer)
+std::optional<Node> parse(Lexer *lexer)
 {
-	Node *module = parse_many(lexer, parse_stmt);
-	module->token = T_MODULE;
-	return module;
+	if (auto modul = parse_many(lexer, parse_stmt)) {
+		modul->token = T_MODULE;
+		return modul;
+	}
+	return std::nullopt;
 }
 
-Node *parse_stmt(Lexer *lexer)
+std::optional<Node> parse_stmt(Lexer *lexer)
 {
 	return parse_either(lexer, {
 		parse_import,
 		parse_for,
 		parse_if,
-		parse_fdef,
-		parse_struct,
+		parse_fn,
 		parse_ret,
 		parse_bind,
 		parse_pipe,
@@ -24,275 +25,184 @@ Node *parse_stmt(Lexer *lexer)
 	});
 }
 
-Node *parse_import(Lexer *lexer)
+std::optional<Node> parse_import(Lexer *lexer)
 {
-	Node *imp, *sym;
+	std::optional<Node> import;
 
-	if ((imp = parse_IMPORT(lexer)) == NULL)
-		return NULL;
+	if (auto parsed = parse_IMPORT(lexer))
+		import = parsed;
+	else
+		return {};
 
-	if ((sym = parse_SYM(lexer)) != NULL)
-		imp->push(sym);
+	if (auto sym = parse_SYM(lexer))
+		import->push(*sym);
 
-	return imp;
+	return import;
 }
 
-Node *parse_for(Lexer *lexer)
+std::optional<Node> parse_for(Lexer *lexer)
 {
-	Node *_for, *forcond, *fbody;
+	std::optional<Node> _for;
 
-	if ((_for = parse_FOR(lexer)) == NULL)
-		return NULL;
+	if (auto parsed = parse_FOR(lexer))
+		_for = parsed;
+	else
+		return std::nullopt;
 
-	if ((forcond = parse_forcond(lexer)) == NULL)
+	if (auto forcond = parse_forcond(lexer))
+		_for->push(*forcond);
+	else
 		return _for;
-	_for->push(forcond);
 
-	if ((fbody = parse_fbody(lexer)) == NULL)
-		return _for;
-	_for->push(fbody);
+	if (auto fbody = parse_fbody(lexer))
+		_for->push(*fbody);
 
 	return _for;
 }
 
-Node *parse_forcond(Lexer *lexer)
+std::optional<Node> parse_forcond(Lexer *lexer)
 {
 	if (auto n = parse_seq(lexer, { parse_SYM, parse_IN, parse_range })) {
 		n->binarify();
 		return n;
 	}
-	return parse_sepby(lexer, parse_forlogic, parse_SEMI);
+	return parse_sepby(lexer, parse_forstmt, parse_SEMI);
 }
 
-Node *parse_forlogic(Lexer *lexer)
+std::optional<Node> parse_forstmt(Lexer *lexer)
 {
-	auto either = {
-		parse_bind,
-		parse_pipe
-	};
-
-	return parse_either(lexer, either);
+	return parse_either(lexer, { parse_bind, parse_pipe });
 }
 
-Node *parse_struct(Lexer *lexer)
+std::optional<Node> parse_if(Lexer *lexer)
 {
-	Node *type, *sym, *eq, *fbody;
+	std::optional<Node> _if;
 
-	if ((type = parse_STRUCT(lexer)) == NULL)
-		return NULL;
+	if (auto parsed = parse_IF(lexer))
+		_if = parsed;
+	else
+		return {};
 
-	if ((sym = parse_SYM(lexer)) == NULL)
-		return type;
-	type->push(sym);
-
-	if ((eq = parse_EQ(lexer)) == NULL)
-		return type;
-	type->push(eq);
-
-	if ((fbody = parse_fbody(lexer)) == NULL)
-		return type;
-	type->push(fbody);
-
-	return type;
-}
-
-Node *parse_if(Lexer *lexer)
-{
-	Node *_if, *pipe, *fbody, *_else;
-
-	if ((_if = parse_IF(lexer)) == NULL)
-		return NULL;
-
-	if ((pipe = parse_pipe(lexer)) == NULL)
+	if (auto pipe = parse_pipe(lexer))
+		_if->push(*pipe);
+	else
 		return _if;
-	_if->push(pipe);
 
-	if ((fbody = parse_fbody(lexer)) == NULL)
+	if (auto fbody = parse_fbody(lexer))
+		_if->push(*fbody);
+	else
 		return _if;
-	_if->push(fbody);
 
-	if ((_else = parse_else(lexer)) == NULL)
-		return _if;
-	_if->push(_else);
+	if (auto _else = parse_else(lexer))
+		_if->push(*_else);
 
 	return _if;
 }
 
-Node *parse_else(Lexer *lexer)
+std::optional<Node> parse_else(Lexer *lexer)
 {
-	Node *_else, *_if_or_fbody;
+	std::optional<Node> _else;
 
-	if ((_else = parse_ELSE(lexer)) == NULL)
-		return NULL;
+	if (auto parsed = parse_ELSE(lexer))
+		_else = parsed;
+	else
+		return {};
 
-	auto parsers = {
-		parse_if,
-		parse_fbody
-	};
-
-	if ((_if_or_fbody = parse_either(lexer, parsers)) == NULL)
-		return _else;
-	_else->push(_if_or_fbody);
+	auto parsers = { parse_if, parse_fbody };
+	if (auto _if_or_fbody = parse_either(lexer, parsers))
+		_else->push(*_if_or_fbody);
 
 	return _else;
 }
 
-Node *parse_ret(Lexer *lexer)
+std::optional<Node> parse_fn(Lexer *lexer)
 {
-	Node *ret, *pipe;
+	std::optional<Node> fn;
 
-	if ((ret = parse_RET(lexer)) == NULL)
-		return NULL;
+	if (auto parsed = parse_FN(lexer))
+		fn = parsed;
+	else
+		return std::nullopt;
 
-	if ((pipe = parse_pipe(lexer)) != NULL)
-		ret->push(pipe);
-
-	return ret;
-}
-
-Node *parse_pipe(Lexer *lexer)
-{
-	if (auto n = parse_seq(lexer, { parse_logic, parse_PIPE, parse_pipe })) {
-		n->binarify();
-		return n;
-	}
-
-	return parse_logic(lexer);
-}
-
-Node *parse_logic(Lexer *lexer)
-{
-	Node *eqcmp, *and_or_orr, *logic;
-
-	if ((eqcmp = parse_eqcmp(lexer)) == NULL)
-		return NULL;
-
-	auto parsers = {
-		parse_AND,
-		parse_ORR
-	};
-	if ((and_or_orr = parse_either(lexer, parsers)) == NULL)
-		return eqcmp;
-	and_or_orr->push(eqcmp);
-
-	if ((logic = parse_logic(lexer)) == NULL)
-		return and_or_orr;
-	and_or_orr->push(logic);
-
-	return and_or_orr;
-}
-
-Node *parse_eqcmp(Lexer *lexer)
-{
-	Node *difcmp, *eeq_or_neq, *eqcmp;
-
-	if ((difcmp = parse_difcmp(lexer)) == NULL)
-		return NULL;
-
-	auto parsers = {
-		parse_EEQ,
-		parse_NEQ
-	};
-	if ((eeq_or_neq = parse_either(lexer, parsers)) == NULL)
-		return difcmp;
-	eeq_or_neq->push(difcmp);
-
-	if ((eqcmp = parse_eqcmp(lexer)) == NULL)
-		return eeq_or_neq;
-	eeq_or_neq->push(eqcmp);
-
-	return eeq_or_neq;
-}
-
-Node *parse_difcmp(Lexer *lexer)
-{
-	Node *expr, *cmp, *difcmp;
-
-	if ((expr = parse_expr(lexer)) == NULL)
-		return NULL;
-
-	auto parsers = {
-		parse_LSS,
-		parse_GTR,
-		parse_LEQ,
-		parse_GEQ
-	};
-	if ((cmp = parse_either(lexer, parsers)) == NULL)
-		return expr;
-	cmp->push(expr);
-
-	if ((difcmp = parse_difcmp(lexer)) == NULL)
-		return cmp;
-	cmp->push(difcmp);
-
-	return cmp;
-}
-
-Node *parse_fdef(Lexer *lexer)
-{
-	Node *fn, *dot, *args, *eq, *fbody;
-
-	if ((fn = parse_FN(lexer)) == NULL)
-		return NULL;
-
-	if ((dot = parse_dot(lexer)) == NULL)
-		return NULL;
-	fn->push(dot);
-
-	args = parse_many(lexer, parse_SYM);
-	args->token = T_ARGS;
-	fn->push(args);
-
-	if ((eq = parse_EQ(lexer)) == NULL)
+	if (auto dot = parse_dot(lexer))
+		fn->push(*dot);
+	else
 		return fn;
-	fn->push(eq);
 
-	if ((fbody = parse_fbody(lexer)) == NULL)
-		return fbody;
-	fn->push(fbody);
+	auto args = parse_many(lexer, parse_SYM);
+	args->token = T_ARGS;
+	fn->push(*args);
+
+	if (auto eq = parse_EQ(lexer))
+		fn->push(*eq);
+	else
+		return fn;
+
+	if (auto fbody = parse_fbody(lexer))
+		fn->push(*fbody);
+	else
+		return fn;
 
 	return fn;
 }
 
-Node *parse_fbody(Lexer *lexer)
+std::optional<Node> parse_fbody(Lexer *lexer)
 {
-	Node *indent, *stmts, *dedent;
-
 	if (auto pipe = parse_pipe(lexer))
 		return pipe;
 
-	if ((indent = parse_INDENT(lexer)) == NULL)
-		return NULL;
-	delete indent;
+	if (auto indent = parse_INDENT(lexer)) {}
+	else { return std::nullopt; }
 
-	stmts = parse_many(lexer, parse_stmt);
+	auto stmts = parse_many(lexer, parse_stmt);
 	stmts->token = T_INDENT;
 
-	if ((dedent = parse_DEDENT(lexer)) != NULL)
-		delete dedent;
-
+	parse_DEDENT(lexer);
 	return stmts;
 }
 
-Node *parse_bind(Lexer *lexer)
+std::optional<Node> parse_ret(Lexer *lexer)
 {
-	if (auto n = parse_seq(lexer, { parse_typedsym, parse_bindsym, parse_pipe })) {
-		n->binarify();
-		return n;
-	}
+	std::optional<Node> ret;
 
-	if (auto n = parse_typedsym(lexer))
-		return n;
+	if (auto parsed = parse_RET(lexer))
+		ret = parsed;
+	else
+		return {};
 
-	if (auto n = parse_seq(lexer, { parse_SYM, parse_bindsym, parse_pipe })) {
-		n->binarify();
-		return n;
-	}
+	if (auto pipe = parse_pipe(lexer))
+		ret->push(*pipe);
 
-	return NULL;
+	return ret;
 }
 
-Node *parse_bindsym(Lexer *lexer)
+std::optional<Node> parse_bind(Lexer *lexer)
+{
+	if (auto n = parse_seq(lexer, { parse_typedsym, parse_bindop, parse_pipe })) {
+		n->binarify();
+		return n;
+	}
+
+	return {};
+}
+
+std::optional<Node> parse_typedsym(Lexer *lexer)
+{
+	std::optional<Node> n = parse_seq(lexer, {
+		parse_dot,
+		parse_COLN,
+		parse_typeanno
+	});
+
+	if (n)
+		n->binarify();
+	else
+		return parse_dot(lexer);
+
+	return n;
+}
+
+std::optional<Node> parse_bindop(Lexer *lexer)
 {
 	return parse_either(lexer, {
 		parse_EQ,
@@ -305,240 +215,279 @@ Node *parse_bindsym(Lexer *lexer)
 	});
 }
 
-Node *parse_typedsym(Lexer *lexer)
+std::optional<Node> parse_typeanno(Lexer *lexer)
 {
-	Node *n = parse_seq(lexer, {
-		parse_dot,
-		parse_COLN,
-		parse_typeanno
-	});
+	if (auto parsed = parse_seq(lexer, { parse_LBRC, parse_typeanno, parse_RBRC })) {
+		parsed->pop();
+		auto typeanno = parsed->pop();
+		auto lbrc = parsed->pop();
 
-	if (n == NULL)
-		return NULL;
-
-	n->binarify();
-	return n;
-}
-
-Node *parse_typeanno(Lexer *lexer)
-{
-	Node *ptr_or_dot;
-
-	if ((ptr_or_dot = parse_either(lexer, { parse_deref, parse_dot })) == NULL)
-		return NULL;
-
-	while (auto ptr = parse_deref(lexer)) {
-		auto arr = new Node(ptr_or_dot->range, T_TYPEANNO, "");
-		arr->push(ptr_or_dot);
-		arr->push(ptr);
-		ptr_or_dot = arr;
+		auto arr = Node(lbrc.range, T_ARR);
+		arr.push(typeanno);
+		return arr;
 	}
 
-	return ptr_or_dot;
+	return parse_dot(lexer);
 }
 
-Node *parse_expr(Lexer *lexer)
+std::optional<Node> parse_pipe(Lexer *lexer)
 {
-	Node *term, *op;
+	if (auto n = parse_seq(lexer, { parse_logic, parse_PIPE, parse_pipe })) {
+		n->binarify();
+		return n;
+	}
 
-	if ((term = parse_term(lexer)) == NULL)
-		return NULL;
+	return parse_logic(lexer);
+}
 
-	while (true) {
-		if ((op = parse_either(lexer, { parse_ADD, parse_SUB })) == NULL)
+std::optional<Node> parse_logic(Lexer *lexer)
+{
+	std::optional<Node> logic;
+
+	if (auto parsed = parse_eqcmp(lexer))
+		logic = parsed;
+	else
+		return {};
+
+	if (auto and_or_orr = parse_either(lexer, { parse_AND, parse_ORR })) {
+		and_or_orr->push(*logic);
+		logic = and_or_orr;
+	} else {
+		return logic;
+	}
+
+	if (auto l = parse_logic(lexer))
+		logic->push(*l);
+
+	return logic;
+}
+
+std::optional<Node> parse_eqcmp(Lexer *lexer)
+{
+	std::optional<Node> eqcmp;
+
+	if (auto difcmp = parse_difcmp(lexer))
+		eqcmp = difcmp;
+	else
+		return {};
+
+	if (auto eeq_or_neq = parse_either(lexer, { parse_EEQ, parse_NEQ })) {
+		eeq_or_neq->push(*eqcmp);
+		eqcmp = eeq_or_neq;
+	} else {
+		return eqcmp;
+	}
+
+	if (auto e = parse_eqcmp(lexer))
+		eqcmp->push(*e);
+
+	return eqcmp;
+}
+
+std::optional<Node> parse_difcmp(Lexer *lexer)
+{
+	std::optional<Node> difcmp;
+
+	if (auto expr = parse_expr(lexer))
+		difcmp = expr;
+	else
+		return {};
+
+	auto parsers = {
+		parse_LSS,
+		parse_GTR,
+		parse_LEQ,
+		parse_GEQ
+	};
+	if (auto cmp = parse_either(lexer, parsers)) {
+		cmp->push(*difcmp);
+		difcmp = cmp;
+	} else {
+		return difcmp;
+	}
+
+	if (auto d = parse_difcmp(lexer))
+		difcmp->push(*d);
+
+	return difcmp;
+}
+
+std::optional<Node> parse_expr(Lexer *lexer)
+{
+	std::optional<Node> expr;
+
+	if (auto term = parse_term(lexer))
+		expr = term;
+	else
+		return {};
+
+	while (auto op = parse_either(lexer, { parse_ADD, parse_SUB })) {
+		op->push(*expr);
+		expr = op;
+
+		if (auto term = parse_term(lexer))
+			expr->push(*term);
+		else
 			break;
-		op->push(term);
+	}
+
+	return expr;
+}
+
+std::optional<Node> parse_term(Lexer *lexer)
+{
+	std::optional<Node> term;
+
+	if (auto fact = parse_fact(lexer))
+		term = fact;
+	else
+		return {};
+
+	while (auto op = parse_either(lexer, { parse_MUL, parse_DIV, parse_DDIV, parse_MOD })) {
+		op->push(*term);
 		term = op;
 
-		if ((op = parse_term(lexer)) == NULL)
+		if (auto fact = parse_fact(lexer))
+			term->push(*fact);
+		else
 			break;
-		term->push(op);
 	}
 
 	return term;
 }
 
-Node *parse_term(Lexer *lexer)
+std::optional<Node> parse_fact(Lexer *lexer)
 {
-	Node *fact, *op;
-
-	if ((fact = parse_fact(lexer)) == NULL)
-		return NULL;
-
-	while (true) {
-		if ((op = parse_either(lexer, { parse_MUL, parse_DIV, parse_DDIV, parse_MOD })) == NULL)
-			break;
-		op->push(fact);
-		fact = op;
-
-		if ((op = parse_fact(lexer)) == NULL)
-			break;
-		fact->push(op);
+	if (auto n = parse_seq(lexer, { parse_LPAR, parse_pipe, parse_RPAR, })) {
+		n->pop();
+		auto pipe = n->pop();
+		n->pop();
+		return pipe;
 	}
-
-	return fact;
-}
-
-Node *parse_fact(Lexer *lexer)
-{
-	if (auto n = parse_seq(lexer, { parse_LPAR, parse_pipe, parse_RPAR, }))
-		return n;
 	return parse_cast(lexer);
 }
 
-Node *parse_cast(Lexer *lexer)
+std::optional<Node> parse_cast(Lexer *lexer)
 {
 	if (auto n = parse_seq(lexer, { parse_neg, parse_AS, parse_typeanno })) {
-		n->token = T_CAST;
+		n->binarify();
 		return n;
 	}
 	return parse_neg(lexer);
 }
 
-Node *parse_not(Lexer *lexer)
+std::optional<Node> parse_not(Lexer *lexer)
 {
-	if (auto n = parse_seq(lexer, { parse_NOT, parse_lit }))
-		return n;
+	if (auto n = parse_seq(lexer, { parse_NOT, parse_neg })) {
+		auto neg = n->pop();
+		auto _not = n->pop();
+		_not.push(neg);
+		return _not;
+	}
 	return parse_lit(lexer);
 }
 
-Node *parse_lit(Lexer *lexer)
+std::optional<Node> parse_neg(Lexer *lexer)
 {
-	return parse_either(lexer, {
-		parse_structinit,
-		parse_call,
-		parse_arg
-	});
-}
-
-Node *parse_structinit(Lexer *lexer)
-{
-	auto n = parse_seq(lexer, {
-		parse_dot,
-		parse_LCRL,
-		parse_structbody,
-		parse_RCRL
-	});
-
-	if (n != NULL)
-		n->token = T_STRUCTINIT;
-
-	return n;
-}
-
-Node *parse_structbody(Lexer *lexer)
-{
-	return parse_sepby(lexer, parse_structfield, parse_COMA);
-}
-
-Node *parse_structfield(Lexer *lexer)
-{
-	if (auto n = parse_seq(lexer, { parse_SYM, parse_COLN, parse_pipe })) {
-		n->binarify();
-		return n;
-	}
-	return NULL;
-}
-
-Node *parse_range(Lexer *lexer)
-{
-	if (auto n = parse_seq(lexer, { parse_INT, parse_TO, parse_INT })) {
-		n->binarify();
-		return n;
-	}
-	return NULL;
-}
-
-Node *parse_neg(Lexer *lexer)
-{
-	Node *sub, *_not;
+	std::optional<Node> neg;
 	Lexer backup = *lexer;
 
-	if ((sub = parse_SUB(lexer)) == NULL)
-		return parse_not(lexer);
+	if (auto sub = parse_SUB(lexer))
+		neg = sub;
+	else
+		return parse_atom(lexer);
 
-	if ((_not = parse_not(lexer)) == NULL ) {
+	if (auto atom = parse_atom(lexer)) {
+		neg->push(*atom);
+	} else {
 		*lexer = backup;
-		return NULL;
+		return {};
 	}
 
-	sub->push(_not);
-	return _not;
+	return neg;
 }
 
-Node *parse_deref(Lexer *lexer)
+std::optional<Node> parse_atom(Lexer *lexer)
 {
-	Node *result = parse_seq(lexer, {
-		parse_LBRC,
-		parse_logic,
-		parse_RBRC,
+	return parse_either(lexer, {
+		parse_call,
+		parse_lit
 	});
-	if (result == NULL)
-		return NULL;
-
-	result->token = T_DEREF;
-	return result;
 }
 
-Node *parse_arr(Lexer *lexer)
+std::optional<Node> parse_call(Lexer *lexer)
 {
-	Node *lcrl, *items, *rcrl;
+	std::optional<Node> call;
 
-	if ((lcrl = parse_LCRL(lexer)) == NULL)
-		return NULL;
-	Node *arr = new Node(lcrl->range, T_ARR);
-	arr->push(lcrl);
+	if (auto dot = parse_dot(lexer))
+		call = dot;
+	else
+		return {};
 
-	items = parse_sepby(lexer, parse_logic, parse_COMA);
-	arr->push(items);
+	auto c = Node(call->range, T_CALL);
+	c.push(*call);
+	*call = c;
 
-	if ((rcrl = parse_RCRL(lexer)) != NULL)
-		arr->push(rcrl);
-
-	return arr;
-}
-
-Node *parse_call(Lexer *lexer)
-{
-	Node *dot, *args;
-
-	if ((dot = parse_dot(lexer)) == NULL)
-		return NULL;
-	Node *call = new Node(dot->range, T_CALL);
-	call->push(dot);
-
-	args = parse_many(lexer, parse_arg);
+	auto args = parse_many(lexer, parse_arg);
 	args->token = T_ARGS;
-	call->push(args);
+	call->push(*args);
 
 	return call;
 }
 
-Node *parse_arg(Lexer *lexer)
+std::optional<Node> parse_arg(Lexer *lexer)
 {
 	auto res = parse_seq(lexer, {
 		parse_LPAR,
 		parse_pipe,
 		parse_RPAR
 	});
-	if (res != NULL) {
-		res->token = T_EXPR;
-		return res;
+
+	if (res) {
+		res->pop();
+		auto expr = res->pop();
+		res->pop();
+		return expr;
 	}
 
+	return parse_lit(lexer);
+}
+
+std::optional<Node> parse_lit(Lexer *lexer)
+{
 	return parse_either(lexer, {
+		parse_arr,
 		parse_range,
 		parse_INT,
 		parse_FLT,
 		parse_STR,
 		parse_CHR,
-		parse_deref,
-		parse_arr,
 		parse_dot,
 	});
 }
 
-Node *parse_dot(Lexer *lexer)
+std::optional<Node> parse_arr(Lexer *lexer)
+{
+	if (auto lcrl = parse_LCRL(lexer)) {}
+	else return {};
+
+	auto arr = parse_sepby(lexer, parse_logic, parse_COMA);
+	arr->token = T_ARR;
+
+	parse_RCRL(lexer);
+	return arr;
+}
+
+std::optional<Node> parse_range(Lexer *lexer)
+{
+	if (auto n = parse_seq(lexer, { parse_INT, parse_TO, parse_INT })) {
+		n->binarify();
+		return n;
+	}
+	return std::nullopt;
+}
+
+std::optional<Node> parse_dot(Lexer *lexer)
 {
 	if (auto n = parse_seq(lexer, { parse_SYM, parse_DOT, parse_dot })) {
 		n->binarify();
@@ -548,67 +497,62 @@ Node *parse_dot(Lexer *lexer)
 	return parse_SYM(lexer);
 }
 
-Node *parse_many(Lexer *lexer, Node *(*parser)(Lexer*))
+std::optional<Node> parse_many(Lexer *lexer, Parser p)
 {
-	Node *stmts = new Node((Range){0, 0}, T_STMTS);
+	Node stmts = Node((Range){0, 0}, T_STMTS);
 
-	Node *result = NULL;
-	while ((result = parser(lexer)) != NULL)
-		stmts->push(result);
+	while (auto result = p(lexer))
+		stmts.push(*result);
 
-	return stmts;
+	return std::optional<Node>{stmts};
 }
 
-Node *parse_sepby(Lexer *lexer, Node *(*parser)(Lexer*), Node *(*delim)(Lexer*))
+std::optional<Node> parse_sepby(Lexer *lexer, Parser p, Parser delim)
 {
-	Node *stmts = new Node((Range){0, 0}, T_STMTS);
+	Node stmts = Node((Range){0, 0}, T_STMTS);
 
-	Node *result = NULL;
-	while ((result = parser(lexer)) != NULL) {
-		stmts->push(result);
-		if ((result = delim(lexer)) == NULL)
-			break;
-		stmts->push(result);
+	while (auto result = p(lexer)) {
+		stmts.push(*result);
+		if (auto result = delim(lexer)) {}
+		else break;
 	}
 
 	return stmts;
 }
 
-Node *parse_either(Lexer *lexer, std::vector<Node *(*)(Lexer*)> parsers)
+std::optional<Node> parse_either(Lexer *lexer, std::vector<Parser> ps)
 {
-	for (auto p : parsers) {
-		Node *result = NULL;
-		if ((result = p(lexer)) != NULL)
+	for (auto p : ps) {
+		if (auto result = p(lexer))
 			return result;
 	}
-	return NULL;
+	return std::nullopt;
 }
 
-Node *parse_seq(Lexer *lexer, std::vector<Node *(*)(Lexer*)> parsers)
+std::optional<Node> parse_seq(Lexer *lexer, std::vector<Parser> ps)
 {
-	Node *seq = new Node((Range){0, 0}, T_STMTS);
+	Node seq = Node((Range){0, 0}, T_STMTS);
 	Lexer backup = *lexer;
 
-	for (auto p : parsers) {
-		Node *result = p(lexer);
-		if (result == NULL) {
+	for (auto p : ps) {
+		if (auto result = p(lexer)) {
+			seq.push(*result);
+		} else {
 			*lexer = backup;
-			delete seq;
-			return NULL;
+			return std::nullopt;
 		}
-		seq->push(result);
 	}
 
 	return seq;
 }
 
 #define X(t)\
-Node *parse_##t(Lexer *lexer)\
+std::optional<Node> parse_##t(Lexer *lexer)\
 {\
 	if (lexer->peek() != T_##t)\
-		return NULL;\
+		return std::nullopt;\
 	lexer->next();\
-	return new Node(lexer->range, lexer->token, lexer->val);\
+	return std::optional<Node>{Node(lexer->range, lexer->token, lexer->val)};\
 }
 	LORD_LP_TOKENS
 #undef X

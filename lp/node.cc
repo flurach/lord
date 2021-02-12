@@ -5,12 +5,12 @@ Node::Node(Range range, Token token, std::string val)
 {
 }
 
-void Node::push(Node *child)
+void Node::push(Node child)
 {
 	push_back(child);
 }
 
-Node *Node::pop()
+Node Node::pop()
 {
 	auto last = back();
 	pop_back();
@@ -26,9 +26,9 @@ bool Node::binarify()
 	auto snd = pop();
 	auto fst = pop();
 
-	snd->push(fst);
-	snd->push(trd);
-	*this = *snd;
+	snd.push(fst);
+	snd.push(trd);
+	*this = snd;
 
 	return true;
 }
@@ -52,5 +52,5 @@ void Node::print(size_t indent)
 		<< std::endl;
 
 	for (auto c : *this)
-		c->print(indent + 1);
+		c.print(indent + 1);
 }

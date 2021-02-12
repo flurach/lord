@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <optional>
 
 #include "token.hh"
 #include "lexer.hh"

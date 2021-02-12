@@ -2,12 +2,10 @@
 #define LORD_LC_COMMON_COMPILER_HH
 
 struct Compiler {
-	std::vector<Module*> mods = {};
+	std::vector<Module> mods;
 
-	~Compiler();
+	Module *load_mod(std::string fpath, std::string name = "__main__");
 
-	Module *load_main(std::string fpath);
-	Module *load_mod(std::string fpath);
 	void print();
 };
 
