@@ -21,6 +21,6 @@ public:
 	#undef X
 };
 
-void pipe_visitors(Node& n, std::vector<Visitor> visitors);
+void pipe_visitors(Node& n, std::vector<Visitor*> visitors);
 
 #endif

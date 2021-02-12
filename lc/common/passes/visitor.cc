@@ -17,8 +17,10 @@ void Visitor::visit(Node& n)
 	}
 }
 
-void pipe_visitors(Node& n, std::vector<Visitor> visitors)
+void pipe_visitors(Node& n, std::vector<Visitor*> visitors)
 {
-	for (auto v : visitors)
-		v.visit(n);
+	for (auto v : visitors) {
+		v->visit(n);
+		delete v;
+	}
 }

@@ -9,14 +9,7 @@ A complete list is presented here:
 - `DesugarVisitor`
 	- This is where we added things like implicit returns and resolve pipe operators.
 
-- `StructVisitor`
-	- This collects struct names declared and also creates types for them.
-
-- `StructFieldVisitor`
-	- This collects information about structs' fields whom were collected in `StructVisitor`.
-	- Also creates & adds those field types to respective structs.
-
-- `FnAndMethodVisitor`
+- `FnVisitor`
 	- This collects method & function names and also creates types for them.
 
 - `SymVisitor`

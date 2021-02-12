@@ -22,6 +22,10 @@ bool Module::load_file(std::string fpath)
 	auto l = Lexer(src);
 	ast = *parse(&l);
 
+	pipe_visitors(ast, {
+		new DesugarVisitor(*this)
+	});
+
 	return true;
 }
 
