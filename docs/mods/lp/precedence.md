@@ -3,15 +3,14 @@
 The higher it is, the more prominent it becomes.
 
 - .
-- ()
-- {}, []
-- - (negate), !, not
-- as
+- (), {}, []
 - f a b c
-- if-else, for
+- (negate), !, not
+- as
 - *, /, %
 - +, -
 - <, >, <=, >=
 - ==, !=
 - and, or
 - =, +=, -=, *=, /=, %=
+- if, else, for, fn
