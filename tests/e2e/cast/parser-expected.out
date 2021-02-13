@@ -1,27 +1,27 @@
--1 MODULE '' 0..0
-	-1 FN 'fn' 13..15
-		-1 SYM 'main' 16..20
-		-1 ARGS '' 0..0
-			-1 SYM 'args' 21..25
-		-1 INDENT '' 0..0
-			-1 EQ '=' 36..37
-				-1 SYM 'my_int' 29..35
-				-1 INT '5' 38..39
-			-1 EOL '' 39..41
-			-1 EQ '=' 50..51
-				-1 SYM 'my_float' 41..49
-				-1 FLT '10.0' 52..56
-			-1 EOL '' 56..58
-			-1 PIPE '|>' 83..85
-				-1 ADD '+' 72..73
-					-1 AS 'as' 65..67
-						-1 CALL '' 58..64
-							-1 SYM 'my_int' 58..64
-							-1 ARGS '' 0..0
-						-1 SYM 'f64' 68..71
-					-1 CALL '' 74..82
-						-1 SYM 'my_float' 74..82
-						-1 ARGS '' 0..0
-				-1 CALL '' 86..91
-					-1 SYM 'print' 86..91
-					-1 ARGS '' 0..0
+MODULE '' 0..0
+	FN 'fn' 13..15
+		SYM 'main' 16..20
+		ARGS '' 0..0
+			SYM 'args' 21..25
+		INDENT '' 0..0
+			EQ '=' 36..37
+				SYM 'my_int' 29..35
+				INT '5' 38..39
+			EOL '' 39..41
+			EQ '=' 50..51
+				SYM 'my_float' 41..49
+				FLT '10.0' 52..56
+			EOL '' 56..58
+			PIPE '|>' 83..85
+				ADD '+' 72..73
+					AS 'as' 65..67
+						CALL '' 58..64
+							SYM 'my_int' 58..64
+							ARGS '' 0..0
+						SYM 'f64' 68..71
+					CALL '' 74..82
+						SYM 'my_float' 74..82
+						ARGS '' 0..0
+				CALL '' 86..91
+					SYM 'print' 86..91
+					ARGS '' 0..0

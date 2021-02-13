@@ -1,33 +1,26 @@
--1 MODULE '' 0..0
-	-1 FN 'fn' 9..11
-		-1 SYM 'main' 12..16
-		-1 ARGS '' 0..0
-			-1 SYM 'args' 17..21
-		-1 INDENT '' 0..0
-			-1 EQ '=' 36..37
-				-1 SYM 'my_int_arr' 25..35
-				-1 ARR '' 0..0
-					-1 INT '0' 39..40
-					-1 INT '1' 42..43
-					-1 INT '2' 45..46
-					-1 INT '3' 48..49
-					-1 INT '4' 51..52
-					-1 INT '5' 54..55
-			-1 EOL '' 56..58
-			-1 EQ '=' 78..79
-				-1 COLN ':' 70..71
-					-1 SYM 'my_other_arr' 58..70
-					-1 ARR '' 72..73
-						-1 SYM 'i64' 73..76
-				-1 ARR '' 0..0
-			-1 EOL '' 82..84
-			-1 PIPE '|>' 100..102
-				-1 CALL '' 94..95
-					-1 DOT '.' 94..95
-						-1 SYM 'my_int_arr' 84..94
-						-1 SYM 'at' 95..97
-					-1 ARGS '' 0..0
-						-1 INT '1' 98..99
-				-1 CALL '' 103..108
-					-1 SYM 'print' 103..108
-					-1 ARGS '' 0..0
+MODULE '' 0..0
+	FN 'fn' 9..11
+		SYM 'main' 12..16
+		ARGS '' 0..0
+			SYM 'args' 17..21
+		INDENT '' 0..0
+			EQ '=' 36..37
+				SYM 'my_int_arr' 25..35
+				ARR '' 0..0
+					INT '0' 39..40
+					INT '1' 42..43
+					INT '2' 45..46
+					INT '3' 48..49
+					INT '4' 51..52
+					INT '5' 54..55
+			EOL '' 56..58
+			PIPE '|>' 74..76
+				CALL '' 68..69
+					DOT '.' 68..69
+						SYM 'my_int_arr' 58..68
+						SYM 'at' 69..71
+					ARGS '' 0..0
+						INT '1' 72..73
+				CALL '' 77..82
+					SYM 'print' 77..82
+					ARGS '' 0..0
