@@ -468,13 +468,13 @@ std::optional<Node> parse_lit(Lexer *lexer)
 
 std::optional<Node> parse_arr(Lexer *lexer)
 {
-	if (auto lcrl = parse_LCRL(lexer)) {}
+	if (auto lcrl = parse_LBRC(lexer)) {}
 	else return {};
 
 	auto arr = parse_sepby(lexer, parse_logic, parse_COMA);
 	arr->token = T_ARR;
 
-	parse_RCRL(lexer);
+	parse_RBRC(lexer);
 	return arr;
 }
 

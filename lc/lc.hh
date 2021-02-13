@@ -8,6 +8,7 @@
 
 #include "common/passes/visitor.hh"
 #include "common/passes/desugar.hh"
+#include "common/passes/infer.hh"
 
 #include "common/module.hh"
 #include "common/compiler.hh"

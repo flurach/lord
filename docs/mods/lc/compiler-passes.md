@@ -8,9 +8,8 @@ A complete list is presented here:
 
 - `DesugarVisitor`
 	- This is where we added things like implicit returns and resolve pipe operators.
+	- Plus, it also adds unstated types as `T_NONE` which comes in handy when verifying types.
 
-- `FnVisitor`
-	- This collects method & function names and also creates types for them.
-
-- `SymVisitor`
-	- This identifies symbols defined in methods/functions.
+- `InferVisitor`
+	- This is a non-context-aware type infering pass, very dumb but effective.
+	- Main goal is to make things easier for the more sophisticated type infering pass.

@@ -33,6 +33,27 @@ bool Node::binarify()
 	return true;
 }
 
+Node Node::toType() const
+{
+	if (token == T_SYM) {
+		return Node(range, T_SYM, val);
+	} else if (token == T_ARR) {
+		auto t = Node(range, T_ARR);
+		t.push(this->at(0).toType());
+		return t;
+	} else if (token == T_INT) {
+		return Node(range, T_SYM, "i64");
+	} else if (token == T_INT) {
+		return Node(range, T_SYM, "f64");
+	} else if (token == T_STR) {
+		return Node(range, T_SYM, "str");
+	} else if (token == T_DOT) {
+		return Node(range, T_SYM, "str");
+	}
+
+	return Node(range, T_NONE);
+}
+
 void Node::print(size_t indent) const
 {
 	size_t i = 0;
