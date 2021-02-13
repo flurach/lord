@@ -23,7 +23,7 @@ bool Module::load_file(std::string fpath)
 	ast = *parse(&l);
 
 	pipe_visitors(ast, {
-		new DesugarVisitor(*this)
+		new DesugarVisitor(*this),
 	});
 
 	return true;

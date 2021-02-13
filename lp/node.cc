@@ -33,15 +33,13 @@ bool Node::binarify()
 	return true;
 }
 
-void Node::print(size_t indent)
+void Node::print(size_t indent) const
 {
 	size_t i = 0;
 	while (i++ < indent)
 		putchar('\t');
 
 	std::cout
-		<< id
-		<< " "
 		<< Token_str[token]
 		<< " '"
 		<< val
@@ -53,4 +51,31 @@ void Node::print(size_t indent)
 
 	for (auto c : *this)
 		c.print(indent + 1);
+}
+
+bool Node::operator==(const Node& other) const
+{
+	if (range.begin != other.range.begin || range.end != other.range.end)
+		return false;
+
+	if (token != other.token)
+		return false;
+
+	if (val != other.val)
+		return false;
+
+	if (size() != other.size())
+		return false;
+
+	for (size_t i = 0; i < size(); i++) {
+		if ((*this)[i] != other[i])
+			return false;
+	}
+
+	return true;
+}
+
+bool Node::operator!=(const Node& other) const
+{
+	return !(*this == other);
 }

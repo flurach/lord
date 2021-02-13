@@ -11,6 +11,7 @@
 	X(DEDENT)\
 	\
 	/* types */\
+	X(NONE)\
 	X(SYM)\
 	X(INT)\
 	X(FLT)\

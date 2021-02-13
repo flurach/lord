@@ -3,7 +3,6 @@
 
 /* node class */
 struct Node : std::vector<Node> {
-	int id = -1;
 	Range range = {0, 0};
 	Token token = T_EOF;
 	std::string val = "";
@@ -17,7 +16,11 @@ struct Node : std::vector<Node> {
 	bool binarify();
 
 	/* debugging */
-	void print(size_t indent = 0);
+	void print(size_t indent = 0) const;
+
+	/* operators */
+	bool operator==(const Node& other) const;
+	bool operator!=(const Node& other) const;
 };
 
 #endif

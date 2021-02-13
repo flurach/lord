@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <fstream>
+#include <map>
 #include "lp.hh"
 
 #include "common/passes/visitor.hh"

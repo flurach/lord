@@ -6,7 +6,7 @@ struct Compiler;
 struct Module {
 	Compiler *c = NULL;
 
-	/* syntactic analysis */
+	/* parsed data */
 	std::string name;
 	std::string src = "";
 	Node ast;
