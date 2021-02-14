@@ -93,11 +93,23 @@ void compile_file(char *fpath)
 	c.print();
 }
 
+void gen_file(char *fpath)
+{
+	Compiler c = Compiler();
+
+	if (!c.load_mod(fpath, "__main__")) {
+		puts("failed to open file");
+		return;
+	}
+
+	c.gencc();
+}
+
 int main(int argc, char **argv)
 {
 	int opt = 0;
 
-	while ((opt = getopt(argc, argv, ":l:p:c:")) != -1) {
+	while ((opt = getopt(argc, argv, ":l:p:c:g:")) != -1) {
 		switch (opt) {
 		case 'l':
 			lex_file(optarg);
@@ -109,6 +121,10 @@ int main(int argc, char **argv)
 
 		case 'c':
 			compile_file(optarg);
+			break;
+
+		case 'g':
+			gen_file(optarg);
 			break;
 
 		case ':': {

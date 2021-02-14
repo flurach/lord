@@ -1,6 +1,6 @@
 #include "lc.hh"
 
-Module* Compiler::load_mod(std::string fpath, std::string name)
+Module *Compiler::load_mod(std::string fpath, std::string name)
 {
 	Module m = Module(this, name);
 
@@ -10,6 +10,15 @@ Module* Compiler::load_mod(std::string fpath, std::string name)
 	}
 
 	return NULL;
+}
+
+void Compiler::gencc()
+{
+	for (auto m : mods) {
+		GenccVisitor g(m);
+		g.visit(m.ast);
+		std::cout << g.buf << std::endl;
+	}
 }
 
 void Compiler::print()

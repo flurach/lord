@@ -16,4 +16,6 @@
 #include "common/module.hh"
 #include "common/compiler.hh"
 
+#include "cc/gencc.hh"
+
 #endif
