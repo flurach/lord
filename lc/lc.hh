@@ -6,9 +6,12 @@
 #include <map>
 #include "lp.hh"
 
+#include "common/scope.hh"
+
 #include "common/passes/visitor.hh"
 #include "common/passes/desugar.hh"
-#include "common/passes/infer.hh"
+#include "common/passes/pre-infer.hh"
+#include "common/passes/post-infer.hh"
 
 #include "common/module.hh"
 #include "common/compiler.hh"

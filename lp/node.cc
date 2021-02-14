@@ -47,8 +47,8 @@ Node Node::toType() const
 		return Node(range, T_SYM, "f64");
 	} else if (token == T_STR) {
 		return Node(range, T_SYM, "str");
-	} else if (token == T_DOT) {
-		return Node(range, T_SYM, "str");
+	} else if (size()) {
+		return at(0).toType();
 	}
 
 	return Node(range, T_NONE);

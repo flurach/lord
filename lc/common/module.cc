@@ -24,7 +24,8 @@ bool Module::load_file(std::string fpath)
 
 	pipe_visitors(ast, {
 		new DesugarVisitor(*this),
-		new InferVisitor(*this),
+		new PreInferVisitor(*this),
+		new PostInferVisitor(*this),
 	});
 
 	return true;

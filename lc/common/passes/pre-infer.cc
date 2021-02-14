@@ -1,11 +1,11 @@
 #include "lc.hh"
 
-InferVisitor::InferVisitor(Module& m)
+PreInferVisitor::PreInferVisitor(Module& m)
 	: Visitor(m)
 {
 }
 
-void InferVisitor::visit_EQ(Node& n)
+void PreInferVisitor::visit_EQ(Node& n)
 {
 	if (n[0][1].token != T_NONE)
 		return;
