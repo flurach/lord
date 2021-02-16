@@ -47,8 +47,8 @@
 
 <bindop> ::= "=" | "+=" | "-=" | "*=" | "/=" | "//*" | "%="
 
-<typeanno> ::= "[" <typeanno> "]"
-             | <dot>
+<typeanno> ::= "(" <typeanno> ")"
+             | <dot> {<typeanno>}
 
 
 # logic

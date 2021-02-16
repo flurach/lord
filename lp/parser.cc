@@ -217,17 +217,28 @@ std::optional<Node> parse_bindop(Lexer *lexer)
 
 std::optional<Node> parse_typeanno(Lexer *lexer)
 {
-	if (auto parsed = parse_seq(lexer, { parse_LBRC, parse_typeanno, parse_RBRC })) {
+	if (auto parsed = parse_seq(lexer, { parse_LPAR, parse_typeanno, parse_RPAR })) {
 		parsed->pop();
 		auto typeanno = parsed->pop();
-		auto lbrc = parsed->pop();
+		auto lpar = parsed->pop();
 
-		auto arr = Node(lbrc.range, T_ARR);
+		auto arr = Node(lpar.range, T_TYPEANNO);
 		arr.push(typeanno);
 		return arr;
 	}
 
-	return parse_dot(lexer);
+	if (auto dot = parse_dot(lexer)) {
+		auto subtypes = parse_many(lexer, parse_typeanno);
+		if (subtypes->size()) {
+			auto t = Node(dot->range, T_TYPEANNO);
+			t.push(*dot);
+			t.push(*subtypes);
+			return t;
+		}
+		return *dot;
+	} else {
+		return {};
+	}
 }
 
 std::optional<Node> parse_pipe(Lexer *lexer)

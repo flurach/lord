@@ -26,19 +26,6 @@ void DesugarVisitor::visit_FN(Node& n)
 		a = t;
 	}
 
-	// exceptions for the main function
-	if (m.name == "__main__" && n[0][0].val == "main") {
-		// return type
-		n[0][1] = Node(n[0][1].range, T_SYM, "i64");
-
-		// args
-		if (n[1].size() >= 1) {
-			auto t = Node(n[1][0].range, T_ARR);
-			t.push(Node(t.range, T_SYM, "str"));
-			n[1][0][1] = t;
-		}
-	}
-
 	// body
 	if (n[2].token != T_INDENT) {
 		auto body = Node(n[2].range, T_INDENT);
@@ -59,11 +46,14 @@ void DesugarVisitor::visit_INDENT(Node& n)
 	auto ret = Node(back.range, T_RET, "return");
 	ret.push(back);
 	n.push(ret);
+
+	for (auto& child : n)
+		visit(child);
 }
 
 void DesugarVisitor::visit_EQ(Node& n)
 {
-	if (n[0].token != T_SYM)
+	if (n[0].token == T_COLN)
 		return;
 
 	auto t = Node(n[0].range, T_COLN);

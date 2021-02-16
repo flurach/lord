@@ -1,4 +1,4 @@
 # arrays
-fn main args =
+fn main =
 	my_int_arr = [0, 1, 2, 3, 4, 5]
 	my_int_arr.at 1 |> print
