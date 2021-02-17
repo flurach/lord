@@ -18,4 +18,7 @@
 
 #include "cc/gencc.hh"
 
+#include "gas/strmgr.hh"
+#include "gas/gengas.hh"
+
 #endif

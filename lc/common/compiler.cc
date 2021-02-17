@@ -21,6 +21,15 @@ void Compiler::gencc()
 	}
 }
 
+void Compiler::gengas()
+{
+	for (auto m : mods) {
+		GenGasVisitor g(m);
+		g.visit(m.ast);
+		std::cout << g.buf << std::endl;
+	}
+}
+
 void Compiler::print()
 {
 	for (auto& m : mods)

@@ -6,6 +6,7 @@ public:
 	PreInferVisitor(Module& m);
 
 public:
+	void visit_FN(Node& n) override;
 	void visit_EQ(Node& n) override;
 };
 

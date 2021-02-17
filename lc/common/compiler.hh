@@ -7,6 +7,7 @@ struct Compiler {
 	Module *load_mod(std::string fpath, std::string name = "__main__");
 
 	void gencc();
+	void gengas();
 
 	void print();
 };

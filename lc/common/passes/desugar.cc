@@ -42,10 +42,12 @@ void DesugarVisitor::visit_INDENT(Node& n)
 	if (n.size() == 0)
 		return;
 
-	auto back = n.pop();
-	auto ret = Node(back.range, T_RET, "return");
-	ret.push(back);
-	n.push(ret);
+	if (n.back().token != T_RET) {
+		auto back = n.pop();
+		auto ret = Node(back.range, T_RET, "return");
+		ret.push(back);
+		n.push(ret);
+	}
 
 	for (auto& child : n)
 		visit(child);

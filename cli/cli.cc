@@ -5,6 +5,9 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+/* CLI state */
+std::string backend = "gas";
+
 /* helpers */
 std::optional<std::string> ftoa(char *fpath)
 {
@@ -81,7 +84,7 @@ void parse_repl()
 	}
 }
 
-void compile_file(char *fpath)
+void analyze_file(char *fpath)
 {
 	Compiler c = Compiler();
 
@@ -93,7 +96,7 @@ void compile_file(char *fpath)
 	c.print();
 }
 
-void gen_file(char *fpath)
+void compile_file(char *fpath)
 {
 	Compiler c = Compiler();
 
@@ -102,14 +105,19 @@ void gen_file(char *fpath)
 		return;
 	}
 
-	c.gencc();
+	if (backend == "gas")
+		c.gengas();
+	else if (backend == "cc")
+		c.gencc();
+	else
+		std::cout << "unknown backend '"  << backend << "'" << std::endl;
 }
 
 int main(int argc, char **argv)
 {
 	int opt = 0;
 
-	while ((opt = getopt(argc, argv, ":l:p:c:g:")) != -1) {
+	while ((opt = getopt(argc, argv, ":l:p:a:b:c:")) != -1) {
 		switch (opt) {
 		case 'l':
 			lex_file(optarg);
@@ -119,12 +127,16 @@ int main(int argc, char **argv)
 			parse_file(optarg);
 			break;
 
-		case 'c':
-			compile_file(optarg);
+		case 'a':
+			analyze_file(optarg);
 			break;
 
-		case 'g':
-			gen_file(optarg);
+		case 'b':
+			backend = optarg;
+			break;
+
+		case 'c':
+			compile_file(optarg);
 			break;
 
 		case ':': {

@@ -43,10 +43,16 @@ Node Node::toType() const
 		return t;
 	} else if (token == T_INT) {
 		return Node(range, T_SYM, "i64");
-	} else if (token == T_INT) {
+	} else if (token == T_FLT) {
 		return Node(range, T_SYM, "f64");
 	} else if (token == T_STR) {
 		return Node(range, T_SYM, "str");
+	} else if (token == T_INDENT) {
+		if (size() == 0)
+			return Node(range, T_NONE);
+		return back().toType();
+	} else if (token == T_RET) {
+		return at(0).toType();
 	} else if (size()) {
 		return at(0).toType();
 	}
