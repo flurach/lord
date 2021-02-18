@@ -8,7 +8,7 @@ A complete list is presented here:
 
 - `DesugarVisitor`
 	- This is where we added things like implicit returns and resolve pipe operators.
-	- Plus, it also adds unstated types as `T_NONE` which comes in handy when verifying types.
+	- This pass is also responsible for collecting defined symbols.
 
 - WIP `ToplevelCheckVisitor`
 	- Checks top level code. Only functions are allowed! (for now)

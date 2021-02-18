@@ -1,9 +1,3 @@
 # TODO
 
-- [X] collect struct names
-- [X] collect struct field names, types
-
-- [X] collect struct method names, bodies
-- [X] collect/identify struct method sym names
-
-- [ ] type-infer struct method bodies
+- [ ] compile a fibonacci program to GNU assembly

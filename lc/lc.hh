@@ -4,9 +4,12 @@
 #include <algorithm>
 #include <fstream>
 #include <map>
+#include <set>
 #include "lp.hh"
 
 #include "common/scope.hh"
+#include "common/fn.hh"
+#include "gas/strmgr.hh"
 
 #include "common/passes/visitor.hh"
 #include "common/passes/desugar.hh"
@@ -17,8 +20,6 @@
 #include "common/compiler.hh"
 
 #include "cc/gencc.hh"
-
-#include "gas/strmgr.hh"
 #include "gas/gengas.hh"
 
 #endif

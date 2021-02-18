@@ -28,8 +28,14 @@ Token Lexer::next()
 
 	this->range.begin = this->i;
 
+	/* trailing dedents */
+	if (i_len == 0 && i_dep != 0) {
+		this->token = T_DEDENT;
+		i_dep--;
+	}
+
 	/* comments */
-	if (curr() == '#') {
+	else if (curr() == '#') {
 		while (curr() != '\n' && curr() != '\0')
 			ch();
 		ch();
@@ -288,9 +294,9 @@ Token Lexer::peek()
 	if (this->cached)
 		return this->cache;
 
-	size_t i = this->i;
+	Lexer backup = *this;
 	Token token = next();
-	this->i = i;
+	*this = backup;
 
 	this->cached = true;
 	this->cache = token;

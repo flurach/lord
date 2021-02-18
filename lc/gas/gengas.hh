@@ -14,6 +14,7 @@ public:
 	;
 
 public:
+	Fn *f = NULL;
 	StrMgr strmgr = StrMgr();
 
 public:
@@ -27,6 +28,10 @@ public:
 
 	void visit_CALL(Node& n);
 
+	void visit_ADD(Node& n);
+	void visit_SUB(Node& n);
+
+	void visit_SYM(Node& n);
 	void visit_INT(Node& n);
 	void visit_STR(Node& n);
 };

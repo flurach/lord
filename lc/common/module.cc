@@ -3,6 +3,10 @@
 Module::Module(Compiler *c, std::string name)
 	: c(c), name(name)
 {
+	/* add standard functions */
+	auto fn_puts = Fn(true);
+	fn_puts.make_arg("s", 8);
+	fns["puts"] = fn_puts;
 }
 
 bool Module::load_file(std::string fpath)

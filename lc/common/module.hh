@@ -11,6 +11,9 @@ struct Module {
 	std::string src = "";
 	Node ast;
 
+	/* collected data */
+	std::map<std::string, Fn> fns;
+
 	/* constructor */
 	Module(Compiler *c, std::string name = "");
 

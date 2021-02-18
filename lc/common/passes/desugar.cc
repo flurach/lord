@@ -15,15 +15,27 @@ void DesugarVisitor::visit_FN(Node& n)
 		n[0] = t;
 	}
 
-	// argument types
-	for (auto& a : n[1]) {
-		if (a.token != T_SYM)
-			return;
+	m.fns[n[0][0].val] = Fn();
+	f = &m.fns[n[0][0].val];
 
-		auto t = Node(n[0].range, T_COLN);
-		t.push(a);
-		t.push(Node(n[0].range, T_NONE));
-		a = t;
+	// argument types
+	auto& args = n[1];
+	for (size_t i = 0; i < args.size(); i++) {
+		auto arg_token = args[i].token;
+
+		if (arg_token == T_SYM) {
+			auto sym = args[i];
+			auto none = Node(sym.range, T_NONE);
+
+			auto t = Node(none.range, T_COLN);
+			t.push(sym);
+			t.push(none);
+
+			args[i] = t;
+		}
+
+		// TODO pass type size
+		f->make_arg(args[i][0].val, 8);
 	}
 
 	// body
@@ -55,13 +67,25 @@ void DesugarVisitor::visit_INDENT(Node& n)
 
 void DesugarVisitor::visit_EQ(Node& n)
 {
-	if (n[0].token == T_COLN)
-		return;
+	if (n[0].token != T_COLN) {
+		auto t = Node(n[0].range, T_COLN);
+		t.push(n[0]);
+		t.push(Node(n[0].range, T_NONE));
+		n[0] = t;
+	}
 
-	auto t = Node(n[0].range, T_COLN);
-	t.push(n[0]);
-	t.push(Node(n[0].range, T_NONE));
-	n[0] = t;
+	f->make_local(n[0][0].val, 8);
+}
+
+void DesugarVisitor::visit_CALL(Node& n)
+{
+	bool in_locals = (f->locals.find(n[0].val) != f->locals.end());
+	bool has_no_args = n[1].size() == 0;
+
+	if (in_locals && has_no_args)
+		n = n[0];
+	else
+		visit(n[1]);
 }
 
 void DesugarVisitor::visit_PIPE(Node& n)
