@@ -1,30 +1,36 @@
 #include "lc.hh"
 
-const std::vector<std::string> regs = {
+std::vector<std::string> regs = {
 	"rax",
 	"rbx",
 	"rcx"
 };
 
-GenGasVisitor::GenGasVisitor(Module& m)
+GenGasX86_64::GenGasX86_64(Module& m)
 	: Visitor(m)
 {
 }
 
-void GenGasVisitor::visit_MODULE(Node& n)
+void GenGasX86_64::visit_MODULE(Node& n)
 {
-	for (auto& thing : n)
-		visit(thing);
-
-	for (size_t id = 0; id < strmgr.size(); id++) {
-		strs += ".S" + std::to_string(id) + ":\n";
-		strs += "\t.string \"" + strmgr[id] + "\"\n";
+	// compile strings
+	buf += "\t.section .rodata\n";
+	size_t idx = 0;
+	for (auto& s : m.strs) {
+		buf += ".S" + std::to_string(idx) + ":\n";
+		buf += "\t.string \"" + s + "\"\n";
+		idx++;
 	}
 
-	buf = strs + buf;
+	// compile instructions
+	buf += "\t.text\n";
+	buf += "\t.extern puts\n";
+	buf += "\t.globl main\n";
+	for (auto& thing : n)
+		visit(thing);
 }
 
-void GenGasVisitor::visit_FN(Node& n)
+void GenGasX86_64::visit_FN(Node& n)
 {
 	// store ref
 	f = &m.fns[n[0][0].val];
@@ -48,7 +54,7 @@ void GenGasVisitor::visit_FN(Node& n)
 	}
 }
 
-void GenGasVisitor::visit_RET(Node& n)
+void GenGasX86_64::visit_RET(Node& n)
 {
 	// eval what to return
 	visit(n[0]);
@@ -58,7 +64,7 @@ void GenGasVisitor::visit_RET(Node& n)
 	buf += "\tret\n";
 }
 
-void GenGasVisitor::visit_CALL(Node& n)
+void GenGasX86_64::visit_CALL(Node& n)
 {
 	// load arguments to stack
 	size_t arg = 0;
@@ -78,7 +84,7 @@ void GenGasVisitor::visit_CALL(Node& n)
 	buf += '\n';
 }
 
-void GenGasVisitor::visit_ADD(Node& n)
+void GenGasX86_64::visit_ADD(Node& n)
 {
 	visit(n[0]);
 	buf += "\tpushq %rax\n";
@@ -87,7 +93,7 @@ void GenGasVisitor::visit_ADD(Node& n)
 	buf += "\taddq %rbx, %rax\n";
 }
 
-void GenGasVisitor::visit_SUB(Node& n)
+void GenGasX86_64::visit_SUB(Node& n)
 {
 	visit(n[0]);
 	buf += "\tpushq %rax\n";
@@ -96,19 +102,18 @@ void GenGasVisitor::visit_SUB(Node& n)
 	buf += "\tsubq %rbx, %rax\n";
 }
 
-void GenGasVisitor::visit_SYM(Node& n)
+void GenGasX86_64::visit_SYM(Node& n)
 {
 	auto pair = f->get_local(n.val);
 	buf += "\tmovq -" + std::to_string(pair.first + pair.second) + "(%rbp), %rax\n";
 }
 
-void GenGasVisitor::visit_INT(Node& n)
+void GenGasX86_64::visit_INT(Node& n)
 {
 	buf += "\tmovq $" + n.val + ", %rax\n";
 }
 
-void GenGasVisitor::visit_STR(Node& n)
+void GenGasX86_64::visit_STRREF(Node& n)
 {
-	auto id = strmgr.make(n.val);
-	buf += "\tleaq .S" + std::to_string(id) + "(%rip), %rdi\n";
+	buf += "\tleaq .S" + n.val + "(%rip), %rdi\n";
 }

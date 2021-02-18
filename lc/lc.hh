@@ -5,21 +5,16 @@
 #include <fstream>
 #include <map>
 #include <set>
+#include <unordered_set>
 #include "lp.hh"
 
-#include "common/scope.hh"
-#include "common/fn.hh"
-#include "gas/strmgr.hh"
+#include "scope.hh"
+#include "fn.hh"
+#include "visitor.hh"
+#include "module.hh"
+#include "compiler.hh"
 
-#include "common/passes/visitor.hh"
-#include "common/passes/desugar.hh"
-#include "common/passes/pre-infer.hh"
-#include "common/passes/post-infer.hh"
-
-#include "common/module.hh"
-#include "common/compiler.hh"
-
-#include "cc/gencc.hh"
-#include "gas/gengas.hh"
+#include "passes/all.hh"
+#include "backends/all.hh"
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef LORD_LC_COMMON_SCOPE_HH
-#define LORD_LC_COMMON_SCOPE_HH
+#ifndef LORD_LC_SCOPE_HH
+#define LORD_LC_SCOPE_HH
 
 struct Scope {
 	std::vector<std::map<Node, Node*>> syms;

@@ -6,7 +6,7 @@
 #include <readline/history.h>
 
 /* CLI state */
-std::string backend = "gas";
+std::string backend = "gas-x86_64";
 
 /* helpers */
 std::optional<std::string> ftoa(char *fpath)
@@ -87,30 +87,28 @@ void parse_repl()
 void analyze_file(char *fpath)
 {
 	Compiler c = Compiler();
+	c.backend = backend;
 
 	if (!c.load_mod(fpath, "__main__")) {
 		puts("failed to open file");
 		return;
 	}
 
-	c.print();
+	c.analyze();
 }
 
 void compile_file(char *fpath)
 {
 	Compiler c = Compiler();
+	c.backend = backend;
 
 	if (!c.load_mod(fpath, "__main__")) {
 		puts("failed to open file");
 		return;
 	}
 
-	if (backend == "gas")
-		c.gengas();
-	else if (backend == "cc")
-		c.gencc();
-	else
-		std::cout << "unknown backend '"  << backend << "'" << std::endl;
+	auto out = c.compile();
+	std::cout << out << std::endl;
 }
 
 int main(int argc, char **argv)

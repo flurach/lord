@@ -1,5 +1,5 @@
-#ifndef LORD_LC_COMMON_FNMGR_HH
-#define LORD_LC_COMMON_FNMGR_HH
+#ifndef LORD_LC_FN_HH
+#define LORD_LC_FN_HH
 
 struct Fn {
 	bool plt;

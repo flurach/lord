@@ -1,5 +1,5 @@
-#ifndef LORD_LC_COMMON_MODULE_HH
-#define LORD_LC_COMMON_MODULE_HH
+#ifndef LORD_LC_MODULE_HH
+#define LORD_LC_MODULE_HH
 
 struct Compiler;
 
@@ -12,6 +12,7 @@ struct Module {
 	Node ast;
 
 	/* collected data */
+	std::unordered_set<std::string> strs;
 	std::map<std::string, Fn> fns;
 
 	/* constructor */
