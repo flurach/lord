@@ -10,6 +10,8 @@
 
 #include "scope.hh"
 #include "fn.hh"
+#include "insset.hh"
+
 #include "visitor.hh"
 #include "module.hh"
 #include "compiler.hh"
