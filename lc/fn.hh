@@ -1,17 +1,19 @@
 #ifndef LORD_LC_FN_HH
 #define LORD_LC_FN_HH
 
-struct Fn {
-	bool plt;
-	std::unordered_map<std::string, size_t> args;
-	std::unordered_map<std::string, size_t> locals;
+struct FnLocal {
+	size_t starts_at;
+	size_t has_size;
+};
 
-	Fn(bool plt = false);
+struct Fn {
+	std::unordered_map<std::string, size_t> args;
+	std::unordered_map<std::string, FnLocal> locals;
+
+	void make_arg(std::string name, size_t s);
+	void make_local(std::string name, size_t s);
 
 	size_t frame_size();
-	std::pair<size_t, size_t> make_arg(std::string name, size_t s);
-	std::pair<size_t, size_t> make_local(std::string name, size_t s);
-	std::pair<size_t, size_t> get_local(std::string name);
 };
 
 #endif

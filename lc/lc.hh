@@ -8,15 +8,13 @@
 #include <unordered_set>
 #include "lp.hh"
 
+#include "ins.hh"
 #include "scope.hh"
 #include "fn.hh"
-#include "insset.hh"
 
 #include "visitor.hh"
 #include "module.hh"
-#include "compiler.hh"
 
 #include "passes/all.hh"
-#include "backends/all.hh"
 
 #endif

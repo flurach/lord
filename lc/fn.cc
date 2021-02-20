@@ -1,49 +1,34 @@
 #include "lc.hh"
 
-Fn::Fn(bool plt)
-	: plt(plt)
-{
-}
-
 size_t Fn::frame_size()
 {
 	size_t start = 0;
 
-	for (auto& pair : locals)
-		start += pair.second;
+	if (locals.size())
+		start = locals.end()->second.starts_at;
 
 	return start;
 }
 
-std::pair<size_t, size_t> Fn::make_arg(std::string name, size_t s)
+void Fn::make_arg(std::string name, size_t s)
 {
-	args[name] = s;
-	return make_local(name, s);
+	args[name] = s; // TODO: no two arguments must have the same name
+			// check this beforehand with another pass
+	make_local(name, s);
 }
 
-std::pair<size_t, size_t> Fn::make_local(std::string name, size_t s)
+void Fn::make_local(std::string name, size_t s)
 {
-	size_t start = 0;
+	auto already_exists = locals.find(name) != locals.end();
+	if (already_exists)
+		return;
 
-	for (auto& pair : locals) {
-		if (pair.first == name)
-			return std::make_pair(start, s);
-		start += pair.second;
-	}
+	size_t start = s;
+	if (locals.size())
+		start = locals.end()->second.starts_at + s;
 
-	locals[name] = s;
-	return std::make_pair(start, s);
-}
-
-std::pair<size_t, size_t> Fn::get_local(std::string name)
-{
-	size_t start = 0;
-
-	for (auto& pair : locals) {
-		if (pair.first == name)
-			return std::make_pair(start, pair.second);
-		start += pair.second;
-	}
-
-	return std::make_pair(start, 0);
+	locals[name] = (FnLocal){
+		.starts_at = start,
+		.has_size = s
+	};
 }

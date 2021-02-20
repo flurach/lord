@@ -84,38 +84,38 @@ void parse_repl()
 	}
 }
 
-void analyze_file(char *fpath)
+void analyse_file(char *fpath)
 {
-	Compiler c = Compiler();
-	c.backend = backend;
+	Module m = Module();
 
-	if (!c.load_mod(fpath, "__main__")) {
+	if (!m.load_file(fpath)) {
 		puts("failed to open file");
 		return;
 	}
 
-	c.analyze();
+	m.print_analysed();
 }
 
-void compile_file(char *fpath)
-{
-	Compiler c = Compiler();
-	c.backend = backend;
+// void compile_file(char *fpath)
+// {
+// 	Compiler c = Compiler();
+// 	c.backend = backend;
 
-	if (!c.load_mod(fpath, "__main__")) {
-		puts("failed to open file");
-		return;
-	}
+// 	if (!c.load_mod(fpath, "__main__")) {
+// 		puts("failed to open file");
+// 		return;
+// 	}
 
-	auto out = c.compile();
-	std::cout << out << std::endl;
-}
+// 	auto out = c.compile();
+// 	std::cout << out << std::endl;
+// }
 
 int main(int argc, char **argv)
 {
 	int opt = 0;
 
-	while ((opt = getopt(argc, argv, ":l:p:a:b:c:")) != -1) {
+	// while ((opt = getopt(argc, argv, ":l:p:a:b:c:")) != -1) {
+	while ((opt = getopt(argc, argv, ":l:p:a:")) != -1) {
 		switch (opt) {
 		case 'l':
 			lex_file(optarg);
@@ -126,16 +126,17 @@ int main(int argc, char **argv)
 			break;
 
 		case 'a':
-			analyze_file(optarg);
+			analyse_file(optarg);
 			break;
 
-		case 'b':
-			backend = optarg;
-			break;
+		// TODO: got this out for now
+		// case 'b':
+		// 	backend = optarg;
+		// 	break;
 
-		case 'c':
-			compile_file(optarg);
-			break;
+		// case 'c':
+		// 	compile_file(optarg);
+		// 	break;
 
 		case ':': {
 			switch (optopt) {

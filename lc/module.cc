@@ -1,18 +1,8 @@
 #include "lc.hh"
 
-Module::Module(Compiler *c, std::string name)
-	: c(c), name(name)
-{
-	/* add standard functions */
-	auto fn_puts = Fn(true);
-	fn_puts.make_arg("s", 8);
-	fns["puts"] = fn_puts;
-}
-
 bool Module::load_file(std::string fpath)
 {
-	if (!name.length())
-		name = fpath;
+	name = fpath;
 
 	std::ifstream ifs(fpath);
 	if (ifs.is_open() == false)
@@ -28,18 +18,23 @@ bool Module::load_file(std::string fpath)
 
 	pipe_visitors(ast, {
 		new DesugarVisitor(*this),
-		new StrVisitor(*this),
 		new PreInferVisitor(*this),
 		new PostInferVisitor(*this),
+		// new GenVisitor(*this), // TODO
 	});
 
 	return true;
 }
 
-void Module::print()
+void Module::print_analysed()
 {
 	std::cout << "=== MODULE '" << name << "' ===" << std::endl;
 
 	std::cout << " => AST " << std::endl;
 	ast.print(1);
+
+	// TODO: print this
+	// std::cout << " => FNS " << std::endl;
+	// for (auto& fn : fns)
+	// 	fn.print(1);
 }
