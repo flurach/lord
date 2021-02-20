@@ -3,6 +3,7 @@
 
 /* node class */
 struct Node : std::vector<Node> {
+	Node *type = NULL;
 	Range range = {0, 0};
 	Token token = T_EOF;
 	std::string val = "";

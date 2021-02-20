@@ -1,5 +1,16 @@
 #include "lc.hh"
 
+Constraint::Constraint(Range range, Node *lhop, Node *rhop)
+	: range(range), lhop(lhop), rhop(rhop)
+{
+}
+
+Module::~Module()
+{
+	for (auto t : left_over_types)
+		delete t;
+}
+
 bool Module::load_file(std::string fpath)
 {
 	name = fpath;
@@ -18,8 +29,7 @@ bool Module::load_file(std::string fpath)
 
 	pipe_visitors(ast, {
 		new DesugarVisitor(*this),
-		new PreInferVisitor(*this),
-		new PostInferVisitor(*this),
+		new InferVisitor(*this),
 		// new GenVisitor(*this), // TODO
 	});
 
@@ -33,7 +43,10 @@ void Module::print_analysed()
 	std::cout << " => AST " << std::endl;
 	ast.print(1);
 
-	// TODO: print this
+	std::cout << " => CONSTRAINTS " << std::endl;
+	for (auto& c : constraints)
+		std::cout << '\t' << c.lhop << " " << c.rhop << std::endl;
+
 	// std::cout << " => FNS " << std::endl;
 	// for (auto& fn : fns)
 	// 	fn.print(1);

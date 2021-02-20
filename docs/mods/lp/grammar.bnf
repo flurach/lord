@@ -42,13 +42,16 @@
 # variables
 <bind> ::= <typedsym> <bindop> <pipe>
 
-<typedsym> ::= <dot> ":" <typeanno>
-             | <dot>
+<typedsym> ::= "(" <typedsym> ")"
+             | <sym> ":" <typeanno>
+             | <sym>
 
 <bindop> ::= "=" | "+=" | "-=" | "*=" | "/=" | "//*" | "%="
 
-<typeanno> ::= "(" <typeanno> ")"
-             | <dot> {<typeanno>}
+<typeanno> ::= <dot> {<subtype>}
+
+<subtype> ::= "(" <typeanno> ")"
+            | <dot>
 
 
 # logic

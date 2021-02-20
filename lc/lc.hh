@@ -9,7 +9,6 @@
 #include "lp.hh"
 
 #include "ins.hh"
-#include "scope.hh"
 #include "fn.hh"
 
 #include "visitor.hh"

@@ -24,6 +24,7 @@ std::optional<Node> parse_bind(Lexer *lexer);
 std::optional<Node> parse_typedsym(Lexer *lexer);
 std::optional<Node> parse_bindop(Lexer *lexer);
 std::optional<Node> parse_typeanno(Lexer *lexer);
+std::optional<Node> parse_subtype(Lexer *lexer);
 
 std::optional<Node> parse_pipe(Lexer *lexer);
 std::optional<Node> parse_logic(Lexer *lexer);

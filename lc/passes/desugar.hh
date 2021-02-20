@@ -6,6 +6,7 @@ struct Fn;
 class DesugarVisitor : public Visitor {
 public:
 	Fn *f = NULL;
+	std::set<std::string> locals;
 
 public:
 	DesugarVisitor(Module& m);

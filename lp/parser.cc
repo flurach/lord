@@ -1,4 +1,5 @@
 #include "lp.hh"
+#include "parser.hh"
 
 std::optional<Node> parse(Lexer *lexer)
 {
@@ -122,21 +123,20 @@ std::optional<Node> parse_fn(Lexer *lexer)
 	if (auto parsed = parse_FN(lexer))
 		fn = parsed;
 	else
-		return std::nullopt;
+		return {};
 
-	if (auto dot = parse_dot(lexer))
-		fn->push(*dot);
-	else
+	if (auto sym = parse_SYM(lexer)) {
+		fn->val = sym->val;
+	} else {
 		return fn;
+	}
 
-	auto args = parse_many(lexer, parse_SYM);
+	auto args = parse_many(lexer, parse_typedsym);
 	args->token = T_ARGS;
 	fn->push(*args);
 
-	if (auto eq = parse_EQ(lexer))
-		{}
-	else
-		return fn;
+	if (auto eq = parse_EQ(lexer)) {}
+	else return fn;
 
 	if (auto fbody = parse_fbody(lexer))
 		fn->push(*fbody);
@@ -152,7 +152,7 @@ std::optional<Node> parse_fbody(Lexer *lexer)
 		return pipe;
 
 	if (auto indent = parse_INDENT(lexer)) {}
-	else { return std::nullopt; }
+	else { return {}; }
 
 	auto stmts = parse_many(lexer, parse_stmt);
 	stmts->token = T_INDENT;
@@ -188,18 +188,19 @@ std::optional<Node> parse_bind(Lexer *lexer)
 
 std::optional<Node> parse_typedsym(Lexer *lexer)
 {
-	std::optional<Node> n = parse_seq(lexer, {
-		parse_dot,
-		parse_COLN,
-		parse_typeanno
-	});
+	std::optional<Node> n;
 
+	n = parse_seq(lexer, { parse_LPAR, parse_typedsym, parse_RPAR });
 	if (n)
-		n->binarify();
-	else
-		return parse_dot(lexer);
+		return n->at(1);
 
-	return n;
+	n = parse_seq(lexer, { parse_dot, parse_COLN, parse_typeanno });
+	if (n) {
+		n->binarify();
+		return n;
+	}
+
+	return parse_dot(lexer);
 }
 
 std::optional<Node> parse_bindop(Lexer *lexer)
@@ -217,28 +218,27 @@ std::optional<Node> parse_bindop(Lexer *lexer)
 
 std::optional<Node> parse_typeanno(Lexer *lexer)
 {
-	if (auto parsed = parse_seq(lexer, { parse_LPAR, parse_typeanno, parse_RPAR })) {
-		parsed->pop();
-		auto typeanno = parsed->pop();
-		auto lpar = parsed->pop();
+	Node typeanno;
 
-		auto arr = Node(lpar.range, T_TYPEANNO);
-		arr.push(typeanno);
-		return arr;
-	}
-
-	if (auto dot = parse_dot(lexer)) {
-		auto subtypes = parse_many(lexer, parse_typeanno);
-		if (subtypes->size()) {
-			auto t = Node(dot->range, T_TYPEANNO);
-			t.push(*dot);
-			t.push(*subtypes);
-			return t;
-		}
-		return *dot;
-	} else {
+	if (auto parsed = parse_dot(lexer))
+		typeanno = *parsed;
+	else
 		return {};
-	}
+
+	auto subtypes = parse_many(lexer, parse_subtype);
+	if (subtypes->size())
+		typeanno.insert(typeanno.end(), subtypes->begin(), subtypes->end());
+
+	return typeanno;
+}
+
+std::optional<Node> parse_subtype(Lexer *lexer)
+{
+	auto n = parse_seq(lexer, { parse_LPAR, parse_typeanno, parse_RPAR });
+	if (n)
+		return n->at(1);
+
+	return parse_dot(lexer);
 }
 
 std::optional<Node> parse_pipe(Lexer *lexer)

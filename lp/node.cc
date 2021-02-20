@@ -67,6 +67,8 @@ void Node::print(size_t indent) const
 		putchar('\t');
 
 	std::cout
+		<< type
+		<< " "
 		<< Token_str[token]
 		<< " '"
 		<< val
