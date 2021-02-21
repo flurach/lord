@@ -82,6 +82,17 @@ void Node::print(size_t indent) const
 		c.print(indent + 1);
 }
 
+void Node::printType() const
+{
+	std::cout << val;
+
+	for (auto c : *this) {
+		if (c.size()) std::cout << "(";
+		c.printType();
+		if (c.size()) std::cout << ")";
+	}
+}
+
 bool Node::operator==(const Node& other) const
 {
 	if (range.begin != other.range.begin || range.end != other.range.end)

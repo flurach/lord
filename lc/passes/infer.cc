@@ -5,6 +5,25 @@ InferVisitor::InferVisitor(Module& m)
 {
 }
 
+void InferVisitor::visit_MODULE(Node& n)
+{
+	// first visit all children
+	for (auto& child : n)
+		visit(child);
+
+	// next get rid of unnecessary constraints
+	// e.g when references are the same
+	std::vector<Constraint> new_constraints;
+	for (auto c : m.constraints) {
+		if (c.lhop != c.rhop)
+			new_constraints.push_back(c);
+	}
+	m.constraints = new_constraints;
+
+	// then start the unification algorithm
+	unif(m.constraints);
+}
+
 void InferVisitor::visit_FN(Node& n)
 {
 	// create a type for function

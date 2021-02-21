@@ -10,6 +10,8 @@ public:
 	InferVisitor(Module& m);
 
 public:
+	void visit_MODULE(Node& n) override;
+
 	void visit_FN(Node& n) override;
 	void visit_RET(Node& n) override;
 

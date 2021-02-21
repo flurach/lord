@@ -44,8 +44,13 @@ void Module::print_analysed()
 	ast.print(1);
 
 	std::cout << " => CONSTRAINTS " << std::endl;
-	for (auto& c : constraints)
-		std::cout << '\t' << c.lhop << " " << c.rhop << std::endl;
+	for (auto& c : constraints) {
+		std::cout << '\t';
+		c.lhop->printType();
+		std::cout << " = ";
+		c.rhop->printType();
+		std::cout << std::endl;
+	}
 
 	// std::cout << " => FNS " << std::endl;
 	// for (auto& fn : fns)

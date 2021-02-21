@@ -15,5 +15,6 @@
 #include "module.hh"
 
 #include "passes/all.hh"
+#include "unif.hh"
 
 #endif

@@ -12,7 +12,7 @@ void DesugarVisitor::visit_FN(Node& n)
 	// body
 	if (n[1].token != T_INDENT) {
 		auto body = Node(n[1].range, T_INDENT);
-		body.push(n[2]);
+		body.push(n[1]);
 		n[1] = body;
 	}
 

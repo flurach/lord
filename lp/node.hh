@@ -19,6 +19,7 @@ struct Node : std::vector<Node> {
 
 	/* debugging */
 	void print(size_t indent = 0) const;
+	void printType() const;
 
 	/* operators */
 	bool operator==(const Node& other) const;
