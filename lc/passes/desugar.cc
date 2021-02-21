@@ -9,6 +9,14 @@ void DesugarVisitor::visit_FN(Node& n)
 {
 	f = &m.fns[n.val];
 
+	// arguments
+	for (auto& arg : n[0]) {
+		if (arg.token == T_SYM)
+			locals.insert(arg.val);
+		else if (arg.token == T_COLN)
+			locals.insert(arg[0].val);
+	}
+
 	// body
 	if (n[1].token != T_INDENT) {
 		auto body = Node(n[1].range, T_INDENT);

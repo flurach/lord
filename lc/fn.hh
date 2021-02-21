@@ -7,6 +7,8 @@ struct FnLocal {
 };
 
 struct Fn {
+	Node *type = NULL;
+
 	std::unordered_map<std::string, size_t> args;
 	std::unordered_map<std::string, FnLocal> locals;
 
