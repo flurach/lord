@@ -40,6 +40,8 @@ void Node::print(size_t indent) const
 		putchar('\t');
 
 	std::cout
+		<< "%r" << reg_index
+		<< "(" << reg_size << ") "
 		<< Token_str[token]
 		<< " '"
 		<< val

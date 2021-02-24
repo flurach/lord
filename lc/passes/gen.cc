@@ -5,10 +5,7 @@ void GenVisitor(Module& m, Node& n)
 	switch (n.token) {
 
 	case T_FN: {
-		m.ins.push_back(Ins::Label {
-			.name = n.val,
-			.frame_size = 0
-		});
+		m.ins.push_back(Ins::Label { .name = n.val });
 
 		// visit body
 		GenVisitor(m, n[1]);
@@ -19,9 +16,9 @@ void GenVisitor(Module& m, Node& n)
 		GenVisitor(m, n[0]);
 		GenVisitor(m, n[1]);
 		m.ins.push_back(Ins::Add {
-			.left = Ins::Register { .index = 0, .size = 8 },
-			.right = Ins::Register { .index = 0, .size = 8 },
-			.into = Ins::Register { .index = 0, .size = 8 }
+			.left = Ins::Register { .index = n[0].reg_index, .size = n[0].reg_size },
+			.right = Ins::Register { .index = n[1].reg_index, .size = n[1].reg_size },
+			.into = Ins::Register { .index = n.reg_index, .size = n.reg_size }
 		});
 		break;
 	}
@@ -29,10 +26,10 @@ void GenVisitor(Module& m, Node& n)
 	case T_SUB: {
 		GenVisitor(m, n[0]);
 		GenVisitor(m, n[1]);
-		m.ins.push_back(Ins::Add {
-			.left = Ins::Register { .index = 0, .size = 8 },
-			.right = Ins::Register { .index = 0, .size = 8 },
-			.into = Ins::Register { .index = 0, .size = 8 }
+		m.ins.push_back(Ins::Sub {
+			.left = Ins::Register { .index = n[0].reg_index, .size = n[0].reg_size },
+			.right = Ins::Register { .index = n[1].reg_index, .size = n[1].reg_size },
+			.into = Ins::Register { .index = n.reg_index, .size = n.reg_size }
 		});
 		break;
 	}
@@ -40,10 +37,10 @@ void GenVisitor(Module& m, Node& n)
 	case T_MUL: {
 		GenVisitor(m, n[0]);
 		GenVisitor(m, n[1]);
-		m.ins.push_back(Ins::Add {
-			.left = Ins::Register { .index = 0, .size = 8 },
-			.right = Ins::Register { .index = 0, .size = 8 },
-			.into = Ins::Register { .index = 0, .size = 8 }
+		m.ins.push_back(Ins::Mul {
+			.left = Ins::Register { .index = n[0].reg_index, .size = n[0].reg_size },
+			.right = Ins::Register { .index = n[1].reg_index, .size = n[1].reg_size },
+			.into = Ins::Register { .index = n.reg_index, .size = n.reg_size }
 		});
 		break;
 	}
@@ -51,10 +48,10 @@ void GenVisitor(Module& m, Node& n)
 	case T_DIV: {
 		GenVisitor(m, n[0]);
 		GenVisitor(m, n[1]);
-		m.ins.push_back(Ins::Add {
-			.left = Ins::Register { .index = 0, .size = 8 },
-			.right = Ins::Register { .index = 0, .size = 8 },
-			.into = Ins::Register { .index = 0, .size = 8 }
+		m.ins.push_back(Ins::Div {
+			.left = Ins::Register { .index = n[0].reg_index, .size = n[0].reg_size },
+			.right = Ins::Register { .index = n[1].reg_index, .size = n[1].reg_size },
+			.into = Ins::Register { .index = n.reg_index, .size = n.reg_size }
 		});
 		break;
 	}
@@ -62,15 +59,16 @@ void GenVisitor(Module& m, Node& n)
 	case T_INT: {
 		m.ins.push_back(Ins::Mov {
 			.from = Ins::Literal { .value = std::stoi(n.val) },
-			.to = Ins::Register { .index = 0, .size = 8 }
+			.to = Ins::Register { .index = n.reg_index, .size = n.reg_size }
 		});
 		break;
 	}
 
-	default:
+	default: {
 		for (auto& child : n)
 			GenVisitor(m, child);
 		break;
+	}
 
 	}
 }

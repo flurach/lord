@@ -2,7 +2,9 @@
 
 std::ostream& operator<<(std::ostream& stream, const Ins::Register& self)
 {
-	return stream << "%r" << self.index;
+	return stream
+		<< "%r" << self.index
+		<< "(" << self.size << ")";
 }
 
 std::ostream& operator<<(std::ostream& stream, const Ins::Literal& self)

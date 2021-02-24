@@ -3,4 +3,5 @@
  * how they are meant to be applied to the AST
  */
 
+void RegAllocVisitor(Module& m, Node& n, size_t curr_reg = 0);
 void GenVisitor(Module& m, Node& n);

@@ -2,6 +2,11 @@
 #define LORD_LP_NODE_HH
 
 struct Node : std::vector<Node> {
+	/* register data */
+	size_t reg_index = 0;
+	size_t reg_size = 0;
+
+	/* token data */
 	Range range = {0, 0};
 	Token token = T_EOF;
 	std::string val = "";

@@ -86,10 +86,12 @@ void parse_repl()
 
 void compile_file(char *fpath)
 {
-	if (auto m = load_module(fpath)) {
-		GenVisitor(*m, m->ast);
+	if (auto maybe_m = load_module(fpath)) {
+		auto m = *maybe_m;
+		RegAllocVisitor(m, m.ast);
+		GenVisitor(m, m.ast);
 
-		for (auto& ins : m->ins)
+		for (auto& ins : m.ins)
 			std::cout << ins << std::endl;
 	} else {
 		puts("failed to open file");

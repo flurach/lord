@@ -23,7 +23,6 @@ namespace Ins {
 	// instructions
 	struct Label {
 		std::string name;
-		size_t frame_size;
 	};
 
 	struct Add {
