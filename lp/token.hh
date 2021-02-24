@@ -80,7 +80,7 @@
 	X(TYPEANNO)\
 	X(CALL)\
 	X(ARGS)\
-	X(STRREF)\
+	X(LOCALS)\
 	\
 	X(LAST)
 

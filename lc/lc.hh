@@ -6,15 +6,13 @@
 #include <map>
 #include <set>
 #include <unordered_set>
+#include <variant>
+#include <ostream>
 #include "lp.hh"
 
 #include "ins.hh"
-#include "fn.hh"
 
-#include "visitor.hh"
 #include "module.hh"
-
 #include "passes/all.hh"
-#include "unif.hh"
 
 #endif

@@ -1,61 +1,86 @@
 #ifndef LORD_LC_INS_HH
 #define LORD_LC_INS_HH
 
-// the four constructs below simply represent this:
-// ins ($|:|.L)num(size) ($|:|.L)num(size)
+namespace Ins {
 
-#define LORD_LC_INS_INSOPTYPES\
-	X(STR)\
-	X(LIT)\
-	X(REG)
+	// memory places
+	struct Register {
+		size_t index;
+		size_t size;
+	};
 
-enum InsOpType {
-	#define X(op) IOT_##op,
-		LORD_LC_INS_INSOPTYPES
-	#undef X
-};
+	struct Literal {
+		int value;
+	};
 
-static const char *InsOpType_str[] = {
-	#define X(op) #op,
-		LORD_LC_INS_INSOPTYPES
-	#undef X
-};
+	struct LabelRef {
+		std::string value;
+	};
 
-struct InsOp {
-	InsOpType type;
-	std::string payload;
-	int size; // in bytes
+	using Mem = std::variant<Register, Literal, LabelRef>;
 
-	InsOp(InsOpType type, std::string payload = "", int size = 0);
-	void print();
-};
 
-#define LORD_LC_INS_INSTYPES\
-	X(LABEL)\
-	X(RET)\
-	\
-	X(MOV)\
-	X(PUSH)\
-	X(POP)
+	// instructions
+	struct Label {
+		std::string name;
+		size_t frame_size;
+	};
 
-enum InsType {
-	#define X(op) IT_##op,
-		LORD_LC_INS_INSTYPES
-	#undef X
-};
+	struct Add {
+		Mem left;
+		Mem right;
+		Mem into;
+	};
 
-static const char *InsType_str[] = {
-	#define X(op) #op,
-		LORD_LC_INS_INSTYPES
-	#undef X
-};
+	struct Sub {
+		Mem left;
+		Mem right;
+		Mem into;
+	};
 
-struct Ins {
-	InsType type;
-	std::vector<InsOp> ops;
+	struct Mul {
+		Mem left;
+		Mem right;
+		Mem into;
+	};
 
-	Ins(InsType type, std::vector<InsOp> ops = {});
-	void print();
-};
+	struct Div {
+		Mem left;
+		Mem right;
+		Mem into;
+	};
+
+	struct Mov {
+		Mem from;
+		Mem to;
+	};
+
+	struct Ret {};
+
+	using Ins = std::variant<
+		Label,
+		Add,
+		Sub,
+		Mul,
+		Div,
+		Mov,
+		Ret
+	>;
+
+}
+
+std::ostream& operator<<(std::ostream& stream, const Ins::Register& self);
+std::ostream& operator<<(std::ostream& stream, const Ins::Literal& self);
+std::ostream& operator<<(std::ostream& stream, const Ins::LabelRef& self);
+std::ostream& operator<<(std::ostream& stream, const Ins::Mem& self);
+
+std::ostream& operator<<(std::ostream& stream, const Ins::Label& self);
+std::ostream& operator<<(std::ostream& stream, const Ins::Add& self);
+std::ostream& operator<<(std::ostream& stream, const Ins::Sub& self);
+std::ostream& operator<<(std::ostream& stream, const Ins::Mul& self);
+std::ostream& operator<<(std::ostream& stream, const Ins::Div& self);
+std::ostream& operator<<(std::ostream& stream, const Ins::Mov& self);
+std::ostream& operator<<(std::ostream& stream, const Ins::Ret& self);
+std::ostream& operator<<(std::ostream& stream, const Ins::Ins& self);
 
 #endif

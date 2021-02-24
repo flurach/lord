@@ -1,23 +1,76 @@
 #include "lc.hh"
 
-GenVisitor::GenVisitor(Module& m)
-	: Visitor(m)
+void GenVisitor(Module& m, Node& n)
 {
-}
+	switch (n.token) {
 
-void GenVisitor::visit_FN(Node& n)
-{
-	auto fname = n[0][0].val;
-	f = &m.fns[fname];
+	case T_FN: {
+		m.ins.push_back(Ins::Label {
+			.name = n.val,
+			.frame_size = 0
+		});
 
-	// create function
-	m.ins.push_back(Ins(IT_LABEL, {
-		InsOp(IOT_LIT, n[0][0].val),                  // function name
-		InsOp(IOT_LIT, "frame-size", f->frame_size()) // space for local vars
-	}));
+		// visit body
+		GenVisitor(m, n[1]);
+		break;
+	}
 
-	// TODO: load arguments from regs to stack
+	case T_ADD: {
+		GenVisitor(m, n[0]);
+		GenVisitor(m, n[1]);
+		m.ins.push_back(Ins::Add {
+			.left = Ins::Register { .index = 0, .size = 8 },
+			.right = Ins::Register { .index = 0, .size = 8 },
+			.into = Ins::Register { .index = 0, .size = 8 }
+		});
+		break;
+	}
 
-	// TODO: then
-	visit(/* body */ n[2]);
+	case T_SUB: {
+		GenVisitor(m, n[0]);
+		GenVisitor(m, n[1]);
+		m.ins.push_back(Ins::Add {
+			.left = Ins::Register { .index = 0, .size = 8 },
+			.right = Ins::Register { .index = 0, .size = 8 },
+			.into = Ins::Register { .index = 0, .size = 8 }
+		});
+		break;
+	}
+
+	case T_MUL: {
+		GenVisitor(m, n[0]);
+		GenVisitor(m, n[1]);
+		m.ins.push_back(Ins::Add {
+			.left = Ins::Register { .index = 0, .size = 8 },
+			.right = Ins::Register { .index = 0, .size = 8 },
+			.into = Ins::Register { .index = 0, .size = 8 }
+		});
+		break;
+	}
+
+	case T_DIV: {
+		GenVisitor(m, n[0]);
+		GenVisitor(m, n[1]);
+		m.ins.push_back(Ins::Add {
+			.left = Ins::Register { .index = 0, .size = 8 },
+			.right = Ins::Register { .index = 0, .size = 8 },
+			.into = Ins::Register { .index = 0, .size = 8 }
+		});
+		break;
+	}
+
+	case T_INT: {
+		m.ins.push_back(Ins::Mov {
+			.from = Ins::Literal { .value = std::stoi(n.val) },
+			.to = Ins::Register { .index = 0, .size = 8 }
+		});
+		break;
+	}
+
+	default:
+		for (auto& child : n)
+			GenVisitor(m, child);
+		break;
+
+	}
 }

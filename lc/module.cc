@@ -1,65 +1,21 @@
 #include "lc.hh"
 
-Constraint::Constraint(Range range, Node *lhop, Node *rhop)
-	: range(range), lhop(lhop), rhop(rhop)
+std::optional<Module> load_module(std::string fpath)
 {
-}
-
-Module::~Module()
-{
-	for (auto t : left_over_types)
-		delete t;
-}
-
-bool Module::load_file(std::string fpath)
-{
-	name = fpath;
-
 	std::ifstream ifs(fpath);
 	if (ifs.is_open() == false)
-		return false;
+		return {};
 
-	src = std::string(
+	auto src = std::string(
 		(std::istreambuf_iterator<char>(ifs)),
 		(std::istreambuf_iterator<char>())
 	);
-
 	auto l = Lexer(src);
-	ast = *parse(&l);
+	auto ast = *parse(&l);
 
-	pipe_visitors(ast, {
-		new DesugarVisitor(*this),
-		new InferVisitor(*this),
-		// new GenVisitor(*this), // TODO
-	});
-
-	return true;
-}
-
-void Module::print_analysed()
-{
-	std::cout << "=== MODULE '" << name << "' ===" << std::endl;
-
-	std::cout << " => AST " << std::endl;
-	ast.print(1);
-
-	std::cout << " => CONSTRAINTS " << constraints.size() << std::endl;
-	for (auto& c : constraints) {
-		std::cout << '\t';
-		std::cout << c.lhop << " = " << c.rhop;
-
-		std::cout << " --> ";
-
-		if (c.lhop)
-			c.lhop->printType();
-		std::cout << " = ";
-		if (c.rhop)
-			c.rhop->printType();
-		std::cout << std::endl;
-	}
-
-	// TODO: make functions printable
-	// std::cout << " => FNS " << std::endl;
-	// for (auto& fn : fns)
-	// 	fn.print(1);
+	return Module {
+		.name = fpath,
+		.src = src,
+		.ast = ast
+	};
 }

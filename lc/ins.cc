@@ -1,41 +1,109 @@
 #include "lc.hh"
 
-InsOp::InsOp(InsOpType type, std::string payload, int size)
-	: type(type), payload(payload), size(size)
+std::ostream& operator<<(std::ostream& stream, const Ins::Register& self)
 {
+	return stream << "%r" << self.index;
 }
 
-void InsOp::print()
+std::ostream& operator<<(std::ostream& stream, const Ins::Literal& self)
 {
-	switch (type)
-	{
-	case IOT_STR:
-		std::cout << ".L";
-		break;
-
-	case IOT_LIT:
-		std::cout << "$";
-		break;
-
-	case IOT_REG:
-		std::cout << ":";
-		break;
-	}
-
-	std::cout << payload << "(" << size << ")";
+	return stream << "$" << self.value;
 }
 
-Ins::Ins(InsType type, std::vector<InsOp> ops)
-	: type(type), ops(ops)
+std::ostream& operator<<(std::ostream& stream, const Ins::LabelRef& self)
 {
+	return stream << "." << self.value;
 }
 
-void Ins::print()
+std::ostream& operator<<(std::ostream& stream, const Ins::Mem& self)
 {
-	std::cout << InsType_str[type];
-	for (auto& op : ops) {
-		std::cout << " ";
-		op.print();
-	}
-	std::cout << std::endl;
+	if (auto s = std::get_if<Ins::Register>(&self))
+		stream << *s;
+	else if (auto s = std::get_if<Ins::Literal>(&self))
+		stream << *s;
+	else if (auto s = std::get_if<Ins::LabelRef>(&self))
+		stream << *s;
+	return stream;
+}
+
+std::ostream& operator<<(std::ostream& stream, const Ins::Label& self)
+{
+	return stream
+		<< "Label { "
+		<< "name = " << '"' << self.name << '"'
+		<< " }";
+}
+
+std::ostream& operator<<(std::ostream& stream, const Ins::Add& self)
+{
+	return stream
+		<< "Add { "
+		<< "left = " << self.left << ", "
+		<< "right = " << self.right << ", "
+		<< "into = " << self.into
+		<< " }";
+}
+
+std::ostream& operator<<(std::ostream& stream, const Ins::Sub& self)
+{
+	return stream
+		<< "Sub { "
+		<< "left = " << self.left << ", "
+		<< "right = " << self.right << ", "
+		<< "into = " << self.into
+		<< " }";
+}
+
+std::ostream& operator<<(std::ostream& stream, const Ins::Mul& self)
+{
+	return stream
+		<< "Mul { "
+		<< "left = " << self.left << ", "
+		<< "right = " << self.right << ", "
+		<< "into = " << self.into
+		<< " }";
+}
+
+std::ostream& operator<<(std::ostream& stream, const Ins::Div& self)
+{
+	return stream
+		<< "Div { "
+		<< "left = " << self.left << ", "
+		<< "right = " << self.right << ", "
+		<< "into = " << self.into
+		<< " }";
+}
+
+std::ostream& operator<<(std::ostream& stream, const Ins::Mov& self)
+{
+	return stream
+		<< "Mov { "
+		<< "from = " << self.from << ", "
+		<< "to = " << self.to
+		<< " }";
+}
+
+std::ostream& operator<<(std::ostream& stream, const Ins::Ret& self)
+{
+	(void)self;
+	return stream << "Ret";
+}
+
+std::ostream& operator<<(std::ostream& stream, const Ins::Ins& self)
+{
+	if (auto s = std::get_if<Ins::Label>(&self))
+		stream << *s;
+	else if (auto s = std::get_if<Ins::Add>(&self))
+		stream << *s;
+	else if (auto s = std::get_if<Ins::Sub>(&self))
+		stream << *s;
+	else if (auto s = std::get_if<Ins::Mul>(&self))
+		stream << *s;
+	else if (auto s = std::get_if<Ins::Div>(&self))
+		stream << *s;
+	else if (auto s = std::get_if<Ins::Mov>(&self))
+		stream << *s;
+	else if (auto s = std::get_if<Ins::Ret>(&self))
+		stream << *s;
+	return stream;
 }
