@@ -6,7 +6,7 @@
 #include <readline/history.h>
 
 /* CLI state */
-std::string backend = "gas-x86_64";
+std::string backend = "gas-x86_64-intel";
 
 /* helpers */
 std::optional<std::string> ftoa(char *fpath)
@@ -88,10 +88,7 @@ void analyse_file(char *fpath)
 {
 	if (auto maybe_m = load_module(fpath)) {
 		auto m = *maybe_m;
-		DesugarVisitor(m, m.ast);
-		RegAllocVisitor(m, m.ast);
-		GenVisitor(m, m.ast);
-
+		pipe_all_passes(m);
 		m.ast.print();
 	} else {
 		puts("failed to open file");
@@ -102,12 +99,14 @@ void compile_file(char *fpath)
 {
 	if (auto maybe_m = load_module(fpath)) {
 		auto m = *maybe_m;
-		DesugarVisitor(m, m.ast);
-		RegAllocVisitor(m, m.ast);
-		GenVisitor(m, m.ast);
+		pipe_all_passes(m);
 
-		for (auto& ins : m.ins)
-			std::cout << ins << std::endl;
+		if (backend == "raw") {
+			for (auto& ins : m.ins)
+				std::cout << ins << std::endl;
+		} else if (backend == "gas-x86_64-intel") {
+			std::cout << GasX86_64_Intel(m.ins) << std::endl;
+		}
 	} else {
 		puts("failed to open file");
 	}
@@ -117,7 +116,7 @@ int main(int argc, char **argv)
 {
 	int opt = 0;
 
-	while ((opt = getopt(argc, argv, ":l:p:a:c:")) != -1) {
+	while ((opt = getopt(argc, argv, ":l:p:a:c:b:")) != -1) {
 		switch (opt) {
 		case 'l':
 			lex_file(optarg);
@@ -133,6 +132,10 @@ int main(int argc, char **argv)
 
 		case 'c':
 			compile_file(optarg);
+			break;
+
+		case 'b':
+			backend = optarg;
 			break;
 
 		case ':': {

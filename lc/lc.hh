@@ -11,8 +11,9 @@
 #include "lp.hh"
 
 #include "ins.hh"
-
 #include "module.hh"
+
 #include "passes/all.hh"
+#include "backends/all.hh"
 
 #endif
