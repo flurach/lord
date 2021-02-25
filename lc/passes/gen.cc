@@ -45,7 +45,8 @@ void GenVisitor(Module& m, Node& n)
 		break;
 	}
 
-	case T_DIV: {
+	case T_DIV:
+	case T_DDIV: {
 		GenVisitor(m, n[0]);
 		GenVisitor(m, n[1]);
 		m.ins.push_back(Ins::Div {

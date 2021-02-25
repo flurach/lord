@@ -20,7 +20,7 @@ namespace GasX86_64_Intel {
 	std::string mem(Ins::Mem m)
 	{
 		if (auto s = std::get_if<Ins::Register>(&m))
-			return std::string("%") + regs.find(s->size)->second[s->index];
+			return regs.find(s->size)->second[s->index];
 		else if (auto s = std::get_if<Ins::Literal>(&m))
 			return std::to_string(s->value);
 		else if (auto s = std::get_if<Ins::LabelRef>(&m))
@@ -33,7 +33,7 @@ namespace GasX86_64_Intel {
 		std::string gen =
 			".global main\n"
 			".section .text\n"
-			".intel_syntax\n\n"
+			".intel_syntax noprefix\n\n"
 		;
 
 		for (auto& i : ins) {
@@ -45,8 +45,16 @@ namespace GasX86_64_Intel {
 				gen += "\tsub " + mem(s->left) + ", " + mem(s->right) + "\n";
 			else if (auto s = std::get_if<Ins::Mul>(&i))
 				gen += "\timul " + mem(s->left) + ", " + mem(s->right) + "\n";
-			else if (auto s = std::get_if<Ins::Div>(&i))
-				gen += "\tdiv " + mem(s->left) + ", " + mem(s->right) + "\n";
+			else if (auto s = std::get_if<Ins::Div>(&i)) {
+				auto reg = mem(Ins::Register { .index = 0, .size = 8 });
+				gen +=
+					"\tpush " + reg + "\n" +
+					"\tmov " + reg + ", " + mem(s->left) + "\n" +
+					"\tcqo\n" + // TODO: fix this, this is size dependent
+					"\tidiv " + mem(s->right) + "\n" +
+					"\tmov " + mem(s->left) + ", " + reg + "\n" +
+					"\tpop " + reg + "\n";
+			}
 			else if (auto s = std::get_if<Ins::Mov>(&i))
 				gen += "\tmov " + mem(s->to) + ", " + mem(s->from) + "\n";
 			else if (auto s = std::get_if<Ins::Ret>(&i))
