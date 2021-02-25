@@ -26,6 +26,7 @@ namespace Ins {
 		IT_SUB,
 		IT_MUL,
 		IT_DIV,
+		IT_MOD,
 		IT_MOV,
 		IT_RET,
 	};

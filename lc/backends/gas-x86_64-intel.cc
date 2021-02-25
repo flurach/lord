@@ -1,4 +1,5 @@
 #include "lc.hh"
+#include <utility>
 
 namespace GasX86_64_Intel {
 
@@ -17,6 +18,22 @@ namespace GasX86_64_Intel {
 		std::make_pair(1, std::vector<const char*>({ "al", "bl", "cl", "dl", "sil", "dil", "r8b", "r9b", "r10b", "r11b", "r12b", "r13b", "r14b", "r15b" })),
 	};
 
+	// mov operators
+	static const std::map<size_t, const char*> movops = {
+		std::make_pair(8, "cqo"),
+		std::make_pair(4, "cdq"),
+		std::make_pair(2, "cdq"),
+		std::make_pair(1, "cdq"),
+	};
+
+	// division operators
+	static const std::map<size_t, const char*> divops = {
+		std::make_pair(8, "cqo"),
+		std::make_pair(4, "cdq"),
+		std::make_pair(2, "cdq"),
+		std::make_pair(1, "cqo"),
+	};
+
 	std::string mem(Ins::Mem m)
 	{
 		switch (m.type) {
@@ -31,6 +48,77 @@ namespace GasX86_64_Intel {
 		}
 	}
 
+	std::string transpile_single(Ins::Ins i)
+	{
+		std::string gen = "";
+
+		switch (i.type) {
+		case Ins::IT_LABEL:
+			gen += i.name + ":\n";
+			break;
+
+		case Ins::IT_ADD:
+			gen += "\tadd " + mem(i.ops[0]) + ", " + mem(i.ops[1]) + "\n";
+			break;
+
+		case Ins::IT_SUB:
+			gen += "\tsub " + mem(i.ops[0]) + ", " + mem(i.ops[1]) + "\n";
+			break;
+
+		case Ins::IT_MUL:
+			gen += "\timul " + mem(i.ops[0]) + ", " + mem(i.ops[1]) + "\n";
+			break;
+
+		case Ins::IT_DIV: {
+			auto reg = mem(Ins::Mem { .type = Ins::MT_REG, .index = 0, .size = i.ops[0].size });
+			auto mem0 = mem(i.ops[0]);
+			auto is_eq = (reg != mem0);
+			if (is_eq) {
+				gen += "\tpush " + reg + "\n";
+				gen += "\tmov " + reg + ", " + mem0 + "\n";
+			}
+			gen += std::string("\t") + divops.find(i.ops[0].size)->second + "\n";
+			gen += "\tidiv " + mem(i.ops[1]) + "\n";
+			if (is_eq) {
+				gen += "\tmov " + mem0 + ", " + reg + "\n";
+				gen += "\tpop " + reg + "\n";
+			}
+			break;
+		}
+
+		case Ins::IT_MOD: {
+			auto reg = mem(Ins::Mem { .type = Ins::MT_REG, .index = 0, .size = i.ops[0].size });
+			auto mem0 = mem(i.ops[0]);
+			auto is_eq = (reg != mem0);
+			if (is_eq) {
+				gen += "\tpush " + reg + "\n";
+				gen += "\tmov " + reg + ", " + mem0 + "\n";
+			}
+			gen += std::string("\t") + divops.find(i.ops[0].size)->second + "\n";
+			gen += "\tidiv " + mem(i.ops[1]) + "\n";
+
+			auto remainder = mem(Ins::Mem { .type = Ins::MT_REG, .index = 3, .size = i.ops[0].size });
+			gen += "\tmov " + mem0 + ", " + remainder + "\n";
+
+			if (is_eq) {
+				gen += "\tmov " + mem0 + ", " + reg + "\n";
+				gen += "\tpop " + reg + "\n";
+			}
+			break;
+		}
+
+		case Ins::IT_MOV:
+			gen += "\tmov " + mem(i.ops[1]) + ", " + mem(i.ops[0]) + "\n";
+			break;
+
+		case Ins::IT_RET:
+			gen += "\tret\n";
+			break;
+		}
+
+		return gen;
+	}
+
 	std::string transpile(std::vector<Ins::Ins> ins)
 	{
 		std::string gen =
@@ -39,45 +127,8 @@ namespace GasX86_64_Intel {
 			".intel_syntax noprefix\n\n"
 		;
 
-		for (auto& i : ins) {
-			switch (i.type) {
-			case Ins::IT_LABEL:
-				gen += i.name + ":\n";
-				break;
-
-			case Ins::IT_ADD:
-				gen += "\tadd " + mem(i.ops[0]) + ", " + mem(i.ops[1]) + "\n";
-				break;
-
-			case Ins::IT_SUB:
-				gen += "\tsub " + mem(i.ops[0]) + ", " + mem(i.ops[1]) + "\n";
-				break;
-
-			case Ins::IT_MUL:
-				gen += "\timul " + mem(i.ops[0]) + ", " + mem(i.ops[1]) + "\n";
-				break;
-
-			case Ins::IT_DIV: {
-				auto reg = mem(Ins::Mem { .type = Ins::MT_REG, .index = 0, .size = 8 });
-				gen +=
-					"\tpush " + reg + "\n" +
-					"\tmov " + reg + ", " + mem(i.ops[0]) + "\n" +
-					"\tcqo\n" + // TODO: fix this, this is size dependent
-					"\tidiv " + mem(i.ops[1]) + "\n" +
-					"\tmov " + mem(i.ops[0]) + ", " + reg + "\n" +
-					"\tpop " + reg + "\n";
-				break;
-			}
-
-			case Ins::IT_MOV:
-				gen += "\tmov " + mem(i.ops[1]) + ", " + mem(i.ops[0]) + "\n";
-				break;
-
-			case Ins::IT_RET:
-				gen += "\tret\n";
-				break;
-			}
-		}
+		for (auto& i : ins)
+			gen += transpile_single(i);
 
 		return gen;
 	}

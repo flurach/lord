@@ -4,7 +4,7 @@
 - [ ] have the parser generate CST
 - [ ] convert CST to AST afterwards
 
-- [ ] fully implement arithmetic operators (for i64's)
+- [x] fully implement arithmetic operators (for i64's)
 - [ ] fully implement arithmetic operators (for f64's)
 - [ ] fully implement arithmetic operators (for u64's)
 - [ ] fully implement logic operators

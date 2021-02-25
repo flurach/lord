@@ -9,7 +9,8 @@ void RegAllocVisitor(Module& m, Node& n, size_t curr_reg)
 	case T_SUB:
 	case T_MUL:
 	case T_DIV:
-	case T_DDIV: {
+	case T_DDIV:
+	case T_MOD: {
 		RegAllocVisitor(m, n[0], curr_reg);
 		RegAllocVisitor(m, n[1], curr_reg + 1);
 		n.reg_index = curr_reg;
@@ -27,7 +28,7 @@ void RegAllocVisitor(Module& m, Node& n, size_t curr_reg)
 
 	case T_INT: {
 		n.reg_index = curr_reg;
-		n.reg_size = 8;
+		n.reg_size = 4;
 		break;
 	}
 

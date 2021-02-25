@@ -112,6 +112,36 @@ void compile_file(char *fpath)
 	}
 }
 
+void compile_repl()
+{
+	while (1) {
+		char *src = readline(" > ");
+		if (src && *src)
+			add_history(src);
+		else
+			break;
+
+		if (strcmp(src, "exit") == 0) {
+			free(src);
+			break;
+		}
+
+		auto m = Module();
+		m.src = src;
+		auto l = Lexer(m.src);
+		m.ast = *parse(&l);
+		pipe_all_passes(m);
+
+		if (backend == "raw") {
+			for (auto& ins : m.ins)
+				std::cout << ins << std::endl;
+		} else if (backend == "gas-x86_64-intel") {
+			std::cout << GasX86_64_Intel::transpile(m.ins) << std::endl;
+		}
+		free(src);
+	}
+}
+
 int main(int argc, char **argv)
 {
 	int opt = 0;
@@ -147,6 +177,10 @@ int main(int argc, char **argv)
 
 			case 'p':
 				parse_repl();
+				break;
+
+			case 'c':
+				compile_repl();
 				break;
 
 			default:

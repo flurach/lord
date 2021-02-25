@@ -58,6 +58,14 @@ std::ostream& operator<<(std::ostream& stream, const Ins::Ins& self)
 			<< "into = " << self.ops[2]
 			<< " }";
 
+	case Ins::IT_MOD:
+		return stream
+			<< "Mod { "
+			<< "left = " << self.ops[0] << ", "
+			<< "right = " << self.ops[1] << ", "
+			<< "into = " << self.ops[2]
+			<< " }";
+
 	case Ins::IT_MOV:
 		return stream
 			<< "Mov { "
