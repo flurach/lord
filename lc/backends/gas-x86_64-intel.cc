@@ -19,13 +19,16 @@ namespace GasX86_64_Intel {
 
 	std::string mem(Ins::Mem m)
 	{
-		if (auto s = std::get_if<Ins::Register>(&m))
-			return regs.find(s->size)->second[s->index];
-		else if (auto s = std::get_if<Ins::Literal>(&m))
-			return std::to_string(s->value);
-		else if (auto s = std::get_if<Ins::LabelRef>(&m))
-			return s->value;
-		return "";
+		switch (m.type) {
+		case Ins::MT_REG:
+			return regs.find(m.size)->second[m.index];
+
+		case Ins::MT_LIT:
+			return std::to_string(m.value);
+
+		case Ins::MT_LABEL:
+			return m.name;
+		}
 	}
 
 	std::string transpile(std::vector<Ins::Ins> ins)
@@ -37,28 +40,43 @@ namespace GasX86_64_Intel {
 		;
 
 		for (auto& i : ins) {
-			if (auto s = std::get_if<Ins::Label>(&i))
-				gen += s->name + ":\n";
-			else if (auto s = std::get_if<Ins::Add>(&i))
-				gen += "\tadd " + mem(s->left) + ", " + mem(s->right) + "\n";
-			else if (auto s = std::get_if<Ins::Sub>(&i))
-				gen += "\tsub " + mem(s->left) + ", " + mem(s->right) + "\n";
-			else if (auto s = std::get_if<Ins::Mul>(&i))
-				gen += "\timul " + mem(s->left) + ", " + mem(s->right) + "\n";
-			else if (auto s = std::get_if<Ins::Div>(&i)) {
-				auto reg = mem(Ins::Register { .index = 0, .size = 8 });
+			switch (i.type) {
+			case Ins::IT_LABEL:
+				gen += i.name + ":\n";
+				break;
+
+			case Ins::IT_ADD:
+				gen += "\tadd " + mem(i.ops[0]) + ", " + mem(i.ops[1]) + "\n";
+				break;
+
+			case Ins::IT_SUB:
+				gen += "\tsub " + mem(i.ops[0]) + ", " + mem(i.ops[1]) + "\n";
+				break;
+
+			case Ins::IT_MUL:
+				gen += "\timul " + mem(i.ops[0]) + ", " + mem(i.ops[1]) + "\n";
+				break;
+
+			case Ins::IT_DIV: {
+				auto reg = mem(Ins::Mem { .type = Ins::MT_REG, .index = 0, .size = 8 });
 				gen +=
 					"\tpush " + reg + "\n" +
-					"\tmov " + reg + ", " + mem(s->left) + "\n" +
+					"\tmov " + reg + ", " + mem(i.ops[0]) + "\n" +
 					"\tcqo\n" + // TODO: fix this, this is size dependent
-					"\tidiv " + mem(s->right) + "\n" +
-					"\tmov " + mem(s->left) + ", " + reg + "\n" +
+					"\tidiv " + mem(i.ops[1]) + "\n" +
+					"\tmov " + mem(i.ops[0]) + ", " + reg + "\n" +
 					"\tpop " + reg + "\n";
+				break;
 			}
-			else if (auto s = std::get_if<Ins::Mov>(&i))
-				gen += "\tmov " + mem(s->to) + ", " + mem(s->from) + "\n";
-			else if (auto s = std::get_if<Ins::Ret>(&i))
+
+			case Ins::IT_MOV:
+				gen += "\tmov " + mem(i.ops[1]) + ", " + mem(i.ops[0]) + "\n";
+				break;
+
+			case Ins::IT_RET:
 				gen += "\tret\n";
+				break;
+			}
 		}
 
 		return gen;
