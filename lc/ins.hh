@@ -54,7 +54,9 @@ namespace Ins {
 		Mem to;
 	};
 
-	struct Ret {};
+	struct Ret {
+		Mem value;
+	};
 
 	using Ins = std::variant<
 		Label,

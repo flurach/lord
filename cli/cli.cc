@@ -84,10 +84,25 @@ void parse_repl()
 	}
 }
 
+void analyse_file(char *fpath)
+{
+	if (auto maybe_m = load_module(fpath)) {
+		auto m = *maybe_m;
+		DesugarVisitor(m, m.ast);
+		RegAllocVisitor(m, m.ast);
+		GenVisitor(m, m.ast);
+
+		m.ast.print();
+	} else {
+		puts("failed to open file");
+	}
+}
+
 void compile_file(char *fpath)
 {
 	if (auto maybe_m = load_module(fpath)) {
 		auto m = *maybe_m;
+		DesugarVisitor(m, m.ast);
 		RegAllocVisitor(m, m.ast);
 		GenVisitor(m, m.ast);
 
@@ -102,7 +117,7 @@ int main(int argc, char **argv)
 {
 	int opt = 0;
 
-	while ((opt = getopt(argc, argv, ":l:p:c:")) != -1) {
+	while ((opt = getopt(argc, argv, ":l:p:a:c:")) != -1) {
 		switch (opt) {
 		case 'l':
 			lex_file(optarg);
@@ -110,6 +125,10 @@ int main(int argc, char **argv)
 
 		case 'p':
 			parse_file(optarg);
+			break;
+
+		case 'a':
+			analyse_file(optarg);
 			break;
 
 		case 'c':

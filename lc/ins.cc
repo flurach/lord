@@ -87,8 +87,10 @@ std::ostream& operator<<(std::ostream& stream, const Ins::Mov& self)
 
 std::ostream& operator<<(std::ostream& stream, const Ins::Ret& self)
 {
-	(void)self;
-	return stream << "Ret";
+	return stream
+		<< "Ret { "
+		<< "value = " << self.value
+		<< " } ";
 }
 
 std::ostream& operator<<(std::ostream& stream, const Ins::Ins& self)

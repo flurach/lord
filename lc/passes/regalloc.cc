@@ -16,6 +16,14 @@ void RegAllocVisitor(Module& m, Node& n, size_t curr_reg)
 		break;
 	}
 
+	case T_RET:
+	case T_IMP_RET: {
+		RegAllocVisitor(m, n[0], curr_reg);
+		n.reg_index = curr_reg;
+		n.reg_size = n[0].reg_size;
+		break;
+	}
+
 	case T_INT: {
 		n.reg_index = curr_reg;
 		n.reg_size = 8;

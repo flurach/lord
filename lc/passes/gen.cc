@@ -56,6 +56,15 @@ void GenVisitor(Module& m, Node& n)
 		break;
 	}
 
+	case T_RET:
+	case T_IMP_RET: {
+		GenVisitor(m, n[0]);
+		m.ins.push_back(Ins::Ret {
+			.value = Ins::Register { .index = n[0].reg_index, .size = n[0].reg_size },
+		});
+		break;
+	}
+
 	case T_INT: {
 		m.ins.push_back(Ins::Mov {
 			.from = Ins::Literal { .value = std::stoi(n.val) },

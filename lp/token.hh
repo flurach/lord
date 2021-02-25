@@ -30,6 +30,7 @@
 	X(TO)\
 	X(STRUCT)\
 	X(AS)\
+	X(IMP_RET)\
 	X(RET)\
 	\
 	/* operators */\
