@@ -4,6 +4,9 @@
 - [ ] have the parser generate CST
 - [ ] convert CST to AST afterwards
 
+- [ ] fully implement arithmetic operators
+- [ ] fully implement logic operators
+
 - [ ] have a pass to validate AST
 - [X] infer types
 - [ ] type-check
