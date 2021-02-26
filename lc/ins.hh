@@ -28,6 +28,7 @@ namespace Ins {
 		IT_DIV,
 		IT_MOD,
 		IT_MOV,
+		IT_CALL,
 		IT_RET,
 	};
 

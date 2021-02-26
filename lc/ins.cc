@@ -73,6 +73,12 @@ std::ostream& operator<<(std::ostream& stream, const Ins::Ins& self)
 			<< "to = " << self.ops[1]
 			<< " }";
 
+	case Ins::IT_CALL:
+		return stream
+			<< "Call { "
+			<< "fn = " << self.name
+			<< " }";
+
 	case Ins::IT_RET:
 		return stream
 			<< "Ret { "

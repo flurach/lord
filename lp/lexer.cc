@@ -107,8 +107,13 @@ Token Lexer::next()
 		val.push_back(ch());
 	}
 	else if (curr() == '.') {
-		token = T_DOT;
 		val.push_back(ch());
+		if (curr() == '>') {
+			val.push_back(ch());
+			token = T_DDOT;
+		} else {
+			token = T_DOT;
+		}
 	}
 	else if (curr() == '|') {
 		val.push_back(ch());

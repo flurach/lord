@@ -96,16 +96,16 @@ std::optional<Node> parse_if(Lexer *lexer)
 
 std::optional<Node> parse_else(Lexer *lexer)
 {
-	std::optional<Node> _else;
+	Node _else;
 
 	if (auto parsed = parse_ELSE(lexer))
-		_else = parsed;
+		_else = *parsed;
 	else
 		return {};
 
 	auto parsers = { parse_if, parse_expr };
 	if (auto parsed = parse_either(lexer, parsers))
-		_else->push(*parsed);
+		_else.push(*parsed);
 
 	return _else;
 }
@@ -272,12 +272,8 @@ std::optional<Node> parse_term(Lexer *lexer)
 
 std::optional<Node> parse_fact(Lexer *lexer)
 {
-	if (auto n = parse_seq(lexer, { parse_LPAR, parse_pipe, parse_RPAR, })) {
-		n->pop();
-		auto pipe = n->pop();
-		n->pop();
-		return pipe;
-	}
+	if (auto n = parse_seq(lexer, { parse_LPAR, parse_pipe, parse_RPAR }))
+		return n->at(1);
 	return parse_not(lexer);
 }
 
@@ -289,27 +285,18 @@ std::optional<Node> parse_not(Lexer *lexer)
 		_not.push(neg);
 		return _not;
 	}
-	return parse_lit(lexer);
+	return parse_neg(lexer);
 }
 
 std::optional<Node> parse_neg(Lexer *lexer)
 {
-	std::optional<Node> neg;
-	Lexer backup = *lexer;
-
-	if (auto sub = parse_SUB(lexer))
-		neg = sub;
-	else
-		return parse_atom(lexer);
-
-	if (auto atom = parse_atom(lexer)) {
-		neg->push(*atom);
-	} else {
-		*lexer = backup;
-		return {};
+	if (auto n = parse_seq(lexer, { parse_SUB, parse_atom })) {
+		auto neg = n->pop();
+		auto sub = n->pop();
+		sub.push(neg);
+		return sub;
 	}
-
-	return neg;
+	return parse_atom(lexer);
 }
 
 std::optional<Node> parse_atom(Lexer *lexer)
@@ -322,20 +309,20 @@ std::optional<Node> parse_atom(Lexer *lexer)
 
 std::optional<Node> parse_call(Lexer *lexer)
 {
-	std::optional<Node> call;
+	Node call;
 
 	if (auto dot = parse_dot(lexer))
-		call = dot;
+		call = *dot;
 	else
 		return {};
 
-	auto c = Node(call->range, T_CALL);
-	c.push(*call);
-	*call = c;
+	auto dot = call;
+	call = Node(call.range, T_CALL);
+	call.push(dot);
 
 	auto args = parse_many(lexer, parse_arg);
 	args->token = T_ARGS;
-	call->push(*args);
+	call.push(*args);
 
 	return call;
 }
@@ -385,7 +372,7 @@ std::optional<Node> parse_arr(Lexer *lexer)
 
 std::optional<Node> parse_range(Lexer *lexer)
 {
-	if (auto n = parse_seq(lexer, { parse_INT, parse_TO, parse_INT })) {
+	if (auto n = parse_seq(lexer, { parse_INT, parse_DDOT, parse_INT })) {
 		n->binarify();
 		return n;
 	}
