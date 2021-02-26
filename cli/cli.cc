@@ -95,6 +95,30 @@ void analyse_file(char *fpath)
 	}
 }
 
+void analyse_repl()
+{
+	while (1) {
+		char *src = readline(" > ");
+		if (src && *src)
+			add_history(src);
+		else
+			break;
+
+		if (strcmp(src, "exit") == 0) {
+			free(src);
+			break;
+		}
+
+		auto m = Module();
+		m.src = src;
+		auto l = Lexer(m.src);
+		m.ast = *parse(&l);
+		pipe_all_passes(m);
+		m.ast.print();
+		free(src);
+	}
+}
+
 void compile_file(char *fpath)
 {
 	if (auto maybe_m = load_module(fpath)) {
@@ -177,6 +201,10 @@ int main(int argc, char **argv)
 
 			case 'p':
 				parse_repl();
+				break;
+
+			case 'a':
+				analyse_repl();
 				break;
 
 			case 'c':
