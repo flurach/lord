@@ -1,0 +1,38 @@
+Label { name = "test_add_sub" }
+Mov { from = $1, to = %r0(4) }
+Mov { from = $2, to = %r1(4) }
+Add { left = %r0(4), right = %r1(4), into = %r0(4) }
+Mov { from = $3, to = %r1(4) }
+Sub { left = %r0(4), right = %r1(4), into = %r0(4) }
+Ret { value = %r0(0) } 
+Label { name = "test_mul_div_mod" }
+Mov { from = $1, to = %r0(4) }
+Mov { from = $2, to = %r1(4) }
+Mul { left = %r0(4), right = %r1(4), into = %r0(4) }
+Mov { from = $3, to = %r1(4) }
+Div { left = %r0(4), right = %r1(4), into = %r0(4) }
+Mov { from = $4, to = %r1(4) }
+Mod { left = %r0(4), right = %r1(4), into = %r0(4) }
+Ret { value = %r0(0) } 
+Label { name = "test_mul_div_mod_2" }
+Mov { from = $1, to = %r0(4) }
+Mov { from = $2, to = %r1(4) }
+Mov { from = $3, to = %r2(4) }
+Div { left = %r1(4), right = %r2(4), into = %r1(4) }
+Mul { left = %r0(4), right = %r1(4), into = %r0(4) }
+Mov { from = $4, to = %r1(4) }
+Mod { left = %r0(4), right = %r1(4), into = %r0(4) }
+Ret { value = %r0(0) } 
+Label { name = "test_all" }
+Mov { from = $1, to = %r0(4) }
+Mov { from = $2, to = %r1(4) }
+Add { left = %r0(4), right = %r1(4), into = %r0(4) }
+Mov { from = $3, to = %r1(4) }
+Mov { from = $4, to = %r2(4) }
+Mul { left = %r1(4), right = %r2(4), into = %r1(4) }
+Mov { from = $5, to = %r2(4) }
+Div { left = %r1(4), right = %r2(4), into = %r1(4) }
+Mov { from = $6, to = %r2(4) }
+Mod { left = %r1(4), right = %r2(4), into = %r1(4) }
+Sub { left = %r0(4), right = %r1(4), into = %r0(4) }
+Ret { value = %r0(0) } 

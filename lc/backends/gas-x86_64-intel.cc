@@ -69,29 +69,33 @@ namespace GasX86_64_Intel {
 			gen += "\timul " + mem(i.ops[0]) + ", " + mem(i.ops[1]) + "\n";
 			break;
 
+		// TODO: refactor this
 		case Ins::IT_DIV: {
+			auto temp = mem(Ins::Mem { .type = Ins::MT_REG, .index = 0, .size = 8 });
 			auto reg = mem(Ins::Mem { .type = Ins::MT_REG, .index = 0, .size = i.ops[0].size });
 			auto mem0 = mem(i.ops[0]);
 			auto is_eq = (reg != mem0);
 			if (is_eq) {
-				gen += "\tpush " + reg + "\n";
+				gen += "\tpush " + temp + "\n";
 				gen += "\tmov " + reg + ", " + mem0 + "\n";
 			}
 			gen += std::string("\t") + divops.find(i.ops[0].size)->second + "\n";
 			gen += "\tidiv " + mem(i.ops[1]) + "\n";
 			if (is_eq) {
 				gen += "\tmov " + mem0 + ", " + reg + "\n";
-				gen += "\tpop " + reg + "\n";
+				gen += "\tpop " + temp + "\n";
 			}
 			break;
 		}
 
+		// TODO: refactor this
 		case Ins::IT_MOD: {
+			auto temp = mem(Ins::Mem { .type = Ins::MT_REG, .index = 0, .size = 8 });
 			auto reg = mem(Ins::Mem { .type = Ins::MT_REG, .index = 0, .size = i.ops[0].size });
 			auto mem0 = mem(i.ops[0]);
 			auto is_eq = (reg != mem0);
 			if (is_eq) {
-				gen += "\tpush " + reg + "\n";
+				gen += "\tpush " + temp + "\n";
 				gen += "\tmov " + reg + ", " + mem0 + "\n";
 			}
 			gen += std::string("\t") + divops.find(i.ops[0].size)->second + "\n";
@@ -100,10 +104,8 @@ namespace GasX86_64_Intel {
 			auto remainder = mem(Ins::Mem { .type = Ins::MT_REG, .index = 3, .size = i.ops[0].size });
 			gen += "\tmov " + mem0 + ", " + remainder + "\n";
 
-			if (is_eq) {
-				gen += "\tmov " + mem0 + ", " + reg + "\n";
-				gen += "\tpop " + reg + "\n";
-			}
+			if (is_eq)
+				gen += "\tpop " + temp + "\n";
 			break;
 		}
 

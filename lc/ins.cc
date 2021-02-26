@@ -23,7 +23,7 @@ std::ostream& operator<<(std::ostream& stream, const Ins::Ins& self)
 	case Ins::IT_LABEL:
 		return stream
 			<< "Label { "
-			<< "name = " << '"' << self.ops[0] << '"'
+			<< "name = " << '"' << self.name << '"'
 			<< " }";
 
 	case Ins::IT_ADD:

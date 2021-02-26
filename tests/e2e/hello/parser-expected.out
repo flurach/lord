@@ -1,9 +1,0 @@
-MODULE '' 0..0
-	FN 'fn' 22..24
-		SYM 'main' 25..29
-		ARGS '' 0..0
-		CALL '' 32..37
-			SYM 'print' 32..37
-			ARGS '' 0..0
-				STR 'Hail the Lord' 38..53
-	EOL '' 53..54

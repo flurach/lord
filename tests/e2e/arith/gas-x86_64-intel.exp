@@ -1,0 +1,63 @@
+.global main
+.section .text
+.intel_syntax noprefix
+
+test_add_sub:
+	mov eax, 1
+	mov ebx, 2
+	add eax, ebx
+	mov ebx, 3
+	sub eax, ebx
+	ret
+test_mul_div_mod:
+	mov eax, 1
+	mov ebx, 2
+	imul eax, ebx
+	mov ebx, 3
+	cdq
+	idiv ebx
+	mov ebx, 4
+	cdq
+	idiv ebx
+	mov eax, edx
+	ret
+test_mul_div_mod_2:
+	mov eax, 1
+	mov ebx, 2
+	mov ecx, 3
+	push rax
+	mov eax, ebx
+	cdq
+	idiv ecx
+	mov ebx, eax
+	pop rax
+	imul eax, ebx
+	mov ebx, 4
+	cdq
+	idiv ebx
+	mov eax, edx
+	ret
+test_all:
+	mov eax, 1
+	mov ebx, 2
+	add eax, ebx
+	mov ebx, 3
+	mov ecx, 4
+	imul ebx, ecx
+	mov ecx, 5
+	push rax
+	mov eax, ebx
+	cdq
+	idiv ecx
+	mov ebx, eax
+	pop rax
+	mov ecx, 6
+	push rax
+	mov eax, ebx
+	cdq
+	idiv ecx
+	mov ebx, edx
+	pop rax
+	sub eax, ebx
+	ret
+

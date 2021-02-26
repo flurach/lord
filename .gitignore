@@ -8,5 +8,5 @@ Makefile
 tags
 
 # tests
-tests/**/*result.out
+tests/**/*.out
 tests/pg/

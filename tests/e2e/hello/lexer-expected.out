@@ -1,6 +1,0 @@
-FN 'fn' 22..24
-SYM 'main' 25..29
-EQ '=' 30..31
-SYM 'print' 32..37
-STR 'Hail the Lord' 38..53
-EOL '' 53..54
