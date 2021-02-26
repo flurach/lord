@@ -191,7 +191,7 @@ std::optional<Node> parse_eqcmp(Lexer *lexer)
 	else
 		return {};
 
-	while (auto op = parse_either(lexer, { parse_ADD, parse_ORR })) {
+	while (auto op = parse_either(lexer, { parse_EEQ, parse_NEQ })) {
 		op->push(eqcmp);
 		eqcmp = *op;
 
@@ -213,7 +213,7 @@ std::optional<Node> parse_difcmp(Lexer *lexer)
 	else
 		return {};
 
-	while (auto op = parse_either(lexer, { parse_ADD, parse_ORR })) {
+	while (auto op = parse_either(lexer, { parse_LSS, parse_GTR, parse_LEQ, parse_GEQ })) {
 		op->push(difcmp);
 		difcmp = *op;
 

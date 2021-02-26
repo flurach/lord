@@ -1,16 +1,13 @@
 # Operator Precedence List
 
-The higher it is, the more prominent it becomes.
-
 - .
 - (), {}, []
 - f a b c
-- (negate), !, not
-- as
-- *, /, %
+- (negate) -, !, not
+- *, /, //, %
 - +, -
 - <, >, <=, >=
 - ==, !=
 - and, or
-- =, +=, -=, *=, /=, %=
-- if, else, for, fn
+- =
+- if, let

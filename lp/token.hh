@@ -57,8 +57,12 @@
 	X(AND)\
 	X(ORR)\
 	X(NOT)\
+	X(EEQ)\
+	X(NEQ)\
 	X(LSS)\
 	X(GTR)\
+	X(LEQ)\
+	X(GEQ)\
 	\
 	/* AST specific */\
 	X(MODULE)\
