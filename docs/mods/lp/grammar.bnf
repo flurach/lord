@@ -1,13 +1,6 @@
 # top level declarations
 <stmt> ::= <import>
-         | <for>
-         | <if>
          | <fn>
-         | <ret>
-         | <bind>
-         | <logic>
-         | <PASS>
-         | <EOL>
          | <ERR>
 
 
@@ -15,68 +8,40 @@
 <import> ::= <IMPORT> <SYM>
 
 
-# loops
-<for> ::= <FOR> <forcond> <fbody>
+# functions
+<fn> ::= <SYM> {<SYM>} "=" <expr>
 
-<forcond> ::= <forstmt> sepby ";"
-            | <SYM> "in" <range>
-
-<forstmt> ::= <bind> | <pipe>
+<expr> ::= <if>
+         | <let>
+	 | <pipe>
 
 
 # conditional branching
-<if> ::= <IF> <pipe> <fbody> [<else>]
+<if> ::= "if" <expr> <expr> [<else>]
 
-<else> ::= <ELSE> (<if>|<fbody>)
-
-
-# functions
-<fn> ::= "fn" <dot> {<typedsym>} "=" <fbody>
-
-<fbody> ::= <INDENT> {<stmt>} <DEDENT>
-          | <pipe>
-
-<ret> :: = "return" <pipe>
+<else> ::= "else" (<if>|<expr>)
 
 
-# variables
-<bind> ::= <typedsym> <bindop> <pipe>
-
-<typedsym> ::= "(" <typedsym> ")"
-             | <sym> ":" <typeanno>
-             | <sym>
-
-<bindop> ::= "=" | "+=" | "-=" | "*=" | "/=" | "//*" | "%="
-
-<typeanno> ::= <dot> {<subtype>}
-
-<subtype> ::= "(" <typeanno> ")"
-            | <dot>
+# symbol binds
+<let> ::= "let" <SYM> "=" <expr> ["in" <expr>]
 
 
 # logic
-<pipe> ::= <logic> "|>" <pipe>
-         | <logic>
+<pipe> ::= <logic> {"|>" <logic>}
 
-<logic> ::= <eqcmp> ("and"|"or") <logic>
-          | <eqcmp>
+<logic> ::= <eqcmp> {("and"|"or") <eqcmp>}
 
-<eqcmp> ::= <difcmp> ("=="|"!=") <eqcmp>
-          | <difcmp>
+<eqcmp> ::= <difcmp> {("=="|"!=") <difcmp>}
 
-<difcmp> ::= <expr> ("<"|">"|"<="|">=") <difcmp>
-           | <expr>
+<difcmp> ::= <math> {("<"|">"|"<="|">=") <math>}
 
 
 # maths
-<expr> ::= <term> {("+"|"-") <term>}
+<math> ::= <term> {("+"|"-") <term>}
 
 <term> ::= <fact> {("*"|"/"|"//"|"%") <fact>}
 
 <fact> ::= "(" <pipe> ")"
-         | <cast>
-
-<cast> ::= <not> "as" <typeanno>
          | <not>
 
 <not> ::= ("!"|"not") <neg>
@@ -93,6 +58,7 @@
 <call> ::= <dot> [{<arg>}]
 <arg> ::= "(" <pipe> ")"
         | <lit>
+
 
 # constant literals
 <lit> ::= <arr>

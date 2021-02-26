@@ -21,17 +21,13 @@
 	\
 	/* keywords */\
 	X(IMPORT)\
-	X(PASS)\
 	X(FN)\
 	X(IF)\
+	X(THEN)\
 	X(ELSE)\
-	X(FOR)\
+	X(LET)\
 	X(IN)\
 	X(TO)\
-	X(STRUCT)\
-	X(AS)\
-	X(IMP_RET)\
-	X(RET)\
 	\
 	/* operators */\
 	X(EQ)\
@@ -56,32 +52,19 @@
 	X(DIV)\
 	X(DDIV)\
 	X(MOD)\
-	X(AEQ)\
-	X(SEQ)\
-	X(MEQ)\
-	X(DEQ)\
-	X(DDEQ)\
-	X(MOQ)\
 	\
 	/* logic */\
 	X(AND)\
 	X(ORR)\
 	X(NOT)\
-	X(NEQ)\
-	X(EEQ)\
 	X(LSS)\
 	X(GTR)\
-	X(LEQ)\
-	X(GEQ)\
 	\
 	/* AST specific */\
 	X(MODULE)\
 	X(STMTS)\
-	X(BIND)\
-	X(TYPEANNO)\
 	X(CALL)\
 	X(ARGS)\
-	X(LOCALS)\
 	\
 	X(LAST)
 

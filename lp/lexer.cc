@@ -23,47 +23,17 @@ Token Lexer::next()
 	this->val = "";
 
 	/* skip whitespace */
-	while (curr() == '\t' || curr() == ' ' || (curr() == '\n' && i_bypass))
+	while (isspace(curr()))
 		ch();
 
 	this->range.begin = this->i;
 
-	/* trailing dedents */
-	if (i_len == 0 && i_dep != 0) {
-		this->token = T_DEDENT;
-		i_dep--;
-	}
-
 	/* comments */
-	else if (curr() == '#') {
+	if (curr() == '#') {
 		while (curr() != '\n' && curr() != '\0')
 			ch();
 		ch();
 		return next();
-	}
-
-	/* indentation */
-	else if (curr() == '\n') {
-		while (curr() == '\n')
-			ch();
-
-		size_t new_i_len = 0;
-		while (curr() == '\t' || curr() == ' ') {
-			ch();
-			new_i_len++;
-		}
-
-		if (new_i_len > this->i_len) {
-			this->token = T_INDENT;
-			this->i_dep++;
-		} else if (new_i_len < this->i_len) {
-			this->token = T_DEDENT;
-			this->i_dep--;
-		} else {
-			this->token = T_EOL;
-		}
-
-		this->i_len = new_i_len;
 	}
 
 	/* keywords, logic & symbols */
@@ -73,32 +43,26 @@ Token Lexer::next()
 
 		if (this->val == "import")
 			this->token = T_IMPORT;
-		else if (this->val == "pass")
-			this->token = T_PASS;
 		else if (this->val == "fn")
 			this->token = T_FN;
 		else if (this->val == "if")
 			this->token = T_IF;
+		else if (this->val == "then")
+			this->token = T_THEN;
 		else if (this->val == "else")
 			this->token = T_ELSE;
-		else if (this->val == "for")
-			this->token = T_FOR;
+		else if (this->val == "let")
+			this->token = T_LET;
 		else if (this->val == "in")
 			this->token = T_IN;
 		else if (this->val == "to")
 			this->token = T_TO;
-		else if (this->val == "struct")
-			this->token = T_STRUCT;
-		else if (this->val == "as")
-			this->token = T_AS;
 		else if (this->val == "and")
 			this->token = T_AND;
 		else if (this->val == "or")
 			this->token = T_ORR;
 		else if (this->val == "not")
 			this->token = T_NOT;
-		else if (this->val == "return")
-			this->token = T_RET;
 		else
 			this->token = T_SYM;
 	}
@@ -126,13 +90,8 @@ Token Lexer::next()
 
 	/* operators */
 	else if (curr() == '=') {
+		this->token = T_EQ;
 		this->val.push_back(ch());
-		if (curr() == '=') {
-			this->token = T_EEQ;
-			this->val.push_back(ch());
-		} else {
-			this->token = T_EQ;
-		}
 	}
 	else if (curr() == '[') {
 		this->token = T_LBRC;
@@ -143,8 +102,8 @@ Token Lexer::next()
 		this->val.push_back(ch());
 	}
 	else if (curr() == '.') {
-		this->val.push_back(ch());
 		this->token = T_DOT;
+		this->val.push_back(ch());
 	}
 	else if (curr() == '|') {
 		this->val.push_back(ch());
@@ -158,22 +117,18 @@ Token Lexer::next()
 
 	/* punctuation */
 	else if (curr() == '(') {
-		i_bypass++;
 		this->token = T_LPAR;
 		this->val.push_back(ch());
 	}
 	else if (curr() == ')') {
-		i_bypass--;
 		this->token = T_RPAR;
 		this->val.push_back(ch());
 	}
 	else if (curr() == '{') {
-		i_bypass++;
 		this->token = T_LCRL;
 		this->val.push_back(ch());
 	}
 	else if (curr() == '}') {
-		i_bypass--;
 		this->token = T_RCRL;
 		this->val.push_back(ch());
 	}
@@ -192,97 +147,48 @@ Token Lexer::next()
 
 	/* maths */
 	else if (curr() == '+') {
+		this->token = T_ADD;
 		this->val.push_back(ch());
-		if (curr() == '=') {
-			this->token = T_AEQ;
-			this->val.push_back(ch());
-		} else {
-			this->token = T_ADD;
-		}
 	}
 	else if (curr() == '-') {
+		this->token = T_SUB;
 		this->val.push_back(ch());
-		if (curr() == '=') {
-			this->token = T_SEQ;
-			this->val.push_back(ch());
-		} else {
-			this->token = T_SUB;
-		}
 	}
 	else if (curr() == '*') {
+		this->token = T_MUL;
 		this->val.push_back(ch());
-		if (curr() == '=') {
-			this->token = T_MEQ;
-			this->val.push_back(ch());
-		} else {
-			this->token = T_MUL;
-		}
 	}
 	else if (curr() == '/') {
 		this->val.push_back(ch());
 		if (curr() == '/') {
-			this->val.push_back(ch());
-			if (curr() == '=') {
-				this->token = T_DDEQ;
-				this->val.push_back(ch());
-			} else {
-				this->token = T_DDIV;
-			}
-		} else if (curr() == '=') {
-			this->token = T_DEQ;
+			this->token = T_DDIV;
 			this->val.push_back(ch());
 		} else {
 			this->token = T_DIV;
 		}
 	}
 	else if (curr() == '%') {
+		this->token = T_MOD;
 		this->val.push_back(ch());
-		if (curr() == '=') {
-			this->token = T_MOQ;
-			this->val.push_back(ch());
-		} else {
-			this->token = T_MOD;
-		}
 	}
 
 	/* logic */
 	else if (curr() == '!') {
+		this->token = T_NOT;
 		this->val.push_back(ch());
-		if (curr() == '=') {
-			this->token = T_NEQ;
-			this->val.push_back(ch());
-		} else {
-			this->token = T_NOT;
-		}
 	}
 	else if (curr() == '<') {
+		this->token = T_LSS;
 		this->val.push_back(ch());
-		if (curr() == '=') {
-			this->token = T_LEQ;
-			this->val.push_back(ch());
-		} else {
-			this->token = T_LSS;
-		}
 	}
 	else if (curr() == '>') {
+		this->token = T_GTR;
 		this->val.push_back(ch());
-		if (curr() == '=') {
-			this->token = T_GEQ;
-			this->val.push_back(ch());
-		} else {
-			this->token = T_GTR;
-		}
 	}
 
 	/* end of file */
 	else if (curr() == '\0') {
-		/* leading dedents */
-		if (this->i_dep != 0) {
-			this->token = T_DEDENT;
-			this->i_dep--;
-		} else {
-			this->token = T_EOF;
-		}
+		this->token = T_EOF;
 	}
 
 	this->range.end = this->i;

@@ -9,32 +9,22 @@ std::optional<Node> parse_stmt(Lexer *lexer);
 
 std::optional<Node> parse_import(Lexer *lexer);
 
-std::optional<Node> parse_for(Lexer *lexer);
-std::optional<Node> parse_forcond(Lexer *lexer);
-std::optional<Node> parse_forstmt(Lexer *lexer);
+std::optional<Node> parse_fn(Lexer *lexer);
+std::optional<Node> parse_expr(Lexer *lexer);
 
 std::optional<Node> parse_if(Lexer *lexer);
 std::optional<Node> parse_else(Lexer *lexer);
 
-std::optional<Node> parse_fn(Lexer *lexer);
-std::optional<Node> parse_fbody(Lexer *lexer);
-std::optional<Node> parse_ret(Lexer *lexer);
-
-std::optional<Node> parse_bind(Lexer *lexer);
-std::optional<Node> parse_typedsym(Lexer *lexer);
-std::optional<Node> parse_bindop(Lexer *lexer);
-std::optional<Node> parse_typeanno(Lexer *lexer);
-std::optional<Node> parse_subtype(Lexer *lexer);
+std::optional<Node> parse_let(Lexer *lexer);
 
 std::optional<Node> parse_pipe(Lexer *lexer);
 std::optional<Node> parse_logic(Lexer *lexer);
 std::optional<Node> parse_eqcmp(Lexer *lexer);
 std::optional<Node> parse_difcmp(Lexer *lexer);
 
-std::optional<Node> parse_expr(Lexer *lexer);
+std::optional<Node> parse_math(Lexer *lexer);
 std::optional<Node> parse_term(Lexer *lexer);
 std::optional<Node> parse_fact(Lexer *lexer);
-std::optional<Node> parse_cast(Lexer *lexer);
 std::optional<Node> parse_not(Lexer *lexer);
 std::optional<Node> parse_neg(Lexer *lexer);
 std::optional<Node> parse_atom(Lexer *lexer);
