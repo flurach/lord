@@ -89,7 +89,15 @@ void analyse_file(char *fpath)
 	if (auto maybe_m = load_module(fpath)) {
 		auto m = *maybe_m;
 		pipe_all_passes(m);
-		m.ast.print();
+
+		std::cout << "AST:" << std::endl;
+		m.ast.print(1);
+
+		std::cout << "\nFNS:" << std::endl;
+		for (auto& pair : m.fns) {
+			std::cout << '\t' << pair.first << ":" << std::endl;
+			pair.second.print(2);
+		}
 	} else {
 		puts("failed to open file");
 	}
@@ -114,7 +122,16 @@ void analyse_repl()
 		auto l = Lexer(m.src);
 		m.ast = *parse(&l);
 		pipe_all_passes(m);
-		m.ast.print();
+
+		std::cout << "AST:" << std::endl;
+		m.ast.print(1);
+
+		std::cout << "\nFNS:" << std::endl;
+		for (auto& pair : m.fns) {
+			std::cout << pair.first << ":" << std::endl;
+			pair.second.print(1);
+		}
+
 		free(src);
 	}
 }
