@@ -5,6 +5,18 @@ void RegAllocVisitor(Module& m, Node& n, size_t curr_reg)
 	switch (n.token)
 	{
 
+	case T_FN: {
+		RegAllocVisitor(m, m.fns[n.val].type, 0);
+
+		// TODO: visit args
+		// int reg_acc = 0;
+		// for (auto& pair : m.fns[n.val].args)
+		// 	RegAllocVisitor(m, pair.second, reg_acc++);
+
+		RegAllocVisitor(m, n[1], curr_reg);
+		break;
+	}
+
 	case T_ADD:
 	case T_SUB:
 	case T_MUL:

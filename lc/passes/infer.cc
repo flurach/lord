@@ -11,7 +11,8 @@ Node *InferVisitor(Module& m, Node& n, Fn *f)
 		// TODO: visit arguments
 
 		auto ret = InferVisitor(m, n[1], f);
-		f->type = ret;
+		if (ret)
+			f->type = *ret;
 		return ret;
 	}
 
@@ -26,7 +27,7 @@ Node *InferVisitor(Module& m, Node& n, Fn *f)
 	}
 
 	case T_INT: {
-		return new Node(Range {0, 0}, T_SYM, "Int");
+		return new Node(Range {0, 0}, T_INT, "Int");
 	}
 
 	default: {

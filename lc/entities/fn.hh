@@ -3,12 +3,9 @@
 
 
 struct Fn {
-	using Type = Node;
+	Node type = Node(Range {0, 0}, T_NONE);
+	std::map<std::string, Node> locals;
 
-	Type *type = NULL;
-	std::map<std::string, Type*> locals;
-
-	~Fn();
 	void print(size_t i = 0);
 };
 

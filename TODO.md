@@ -4,6 +4,9 @@
 - [ ] have the parser generate CST
 - [ ] convert CST to AST afterwards
 
+- [ ] add a way annotate types of functions
+- [ ] refactor the parser (eol)
+
 - [X] fully implement arithmetic operators (for Ints)
 - [ ] type inference
 - [ ] type checking
