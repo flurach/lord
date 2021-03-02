@@ -39,8 +39,8 @@ std::optional<Node> parse_import(Lexer *lexer)
 std::optional<Node> parse_typedec(Lexer *lexer)
 {
 	if (auto parsed = parse_seq(lexer, { parse_SYM, parse_COLN, parse_type })) {
-		parsed->token = T_TYPEDEC;
 		parsed->binarify();
+		parsed->token = T_TYPEDEC;
 		return parsed;
 	}
 
@@ -49,18 +49,29 @@ std::optional<Node> parse_typedec(Lexer *lexer)
 
 std::optional<Node> parse_type(Lexer *lexer)
 {
-	if (auto parsed = parse_seq(lexer, { parse_typeanno, parse_ARROW, parse_type })) {
-		parsed->token = T_TYPEDEC;
-		parsed->binarify();
-		return parsed;
+	auto arrow = Node(Range {0, 0}, T_ARROW);
+
+	if (auto initial = parse_typeanno(lexer))
+		arrow.push(*initial);
+	else
+		return {};
+
+	while (auto _ = parse_ARROW(lexer)) {
+		if (auto anno = parse_typeanno(lexer))
+			arrow.push(*anno);
+		else
+			break;
 	}
+
+	if (arrow.size())
+		return arrow;
 
 	return parse_typeanno(lexer);
 }
 
 std::optional<Node> parse_typeanno(Lexer *lexer)
 {
-	if (auto parsed = parse_seq(lexer, { parse_LPAR, parse_typeanno, parse_RPAR }))
+	if (auto parsed = parse_seq(lexer, { parse_LPAR, parse_type, parse_RPAR }))
 		return parsed->at(1);
 
 	std::optional<Node> type;
@@ -69,7 +80,7 @@ std::optional<Node> parse_typeanno(Lexer *lexer)
 	else
 		return {};
 
-	auto subtypes = parse_many(lexer, parse_SYM);
+	auto subtypes = parse_many(lexer, parse_typeanno);
 	if (subtypes->size()) {
 		auto anno = Node(type->range, T_TYPEANNO);
 		anno.push(*type);

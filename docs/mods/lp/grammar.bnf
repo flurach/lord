@@ -13,11 +13,12 @@
 # types
 <typedec> ::= <SYM> ":" <type>
 
-<type> ::= <typeanno> "->" <type>
+<type> ::= <typeanno> {"->" <typeanno>}
          | <typeanno>
 
-<typeanno> ::= "(" <typeanno> ")"
-             | <SYM> {<SYM>}
+<typeanno> ::= "(" <type> ")"
+             | <SYM> {<typeanno>}
+	     | <SYM>
 
 
 # functions
