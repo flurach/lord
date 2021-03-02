@@ -5,6 +5,11 @@ Node *InferVisitor(Module& m, Node& n, Fn *f)
 	switch (n.token)
 	{
 
+	// skip these
+	case T_TYPEDEC: {
+		break;
+	}
+
 	case T_FN: {
 		f = &m.fns[n.val];
 		// TODO: visit arguments
@@ -23,6 +28,15 @@ Node *InferVisitor(Module& m, Node& n, Fn *f)
 		auto ret = InferVisitor(m, n[0], f);
 		InferVisitor(m, n[1], f);
 		return ret;
+	}
+
+	case T_SYM: {
+		if (f->args.find(n.val) != f->args.end()) {
+			auto copy = new Node();
+			*copy = f->args[n.val];
+			return copy;
+		}
+		break;
 	}
 
 	case T_INT: {

@@ -4,6 +4,14 @@
 namespace GasX86_64_Intel {
 
 	// registers
+	static const std::map<size_t, std::vector<const char*>> arg_regs = {
+		// 64 bit
+		std::make_pair(8, std::vector<const char*>{ "rdi", "rsi", "rdx", "rcx", "r8" }),
+
+		// 32 bit
+		std::make_pair(4, std::vector<const char*>{ "edi", "esi", "edx", "ecx", "r8d" }),
+	};
+
 	static const std::map<size_t, std::vector<const char*>> regs = {
 		// 64 bit
 		std::make_pair(8, std::vector<const char*>({ "rax", "rbx", "rcx", "rdx", "rsi", "rdi", "r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15" })),
@@ -55,6 +63,10 @@ namespace GasX86_64_Intel {
 		switch (i.type) {
 		case Ins::IT_LABEL:
 			gen += i.name + ":\n";
+			break;
+
+		case Ins::IT_CALL:
+			gen += "\tcall" + i.name + "\n";
 			break;
 
 		case Ins::IT_ADD:

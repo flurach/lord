@@ -1,18 +1,31 @@
 #include "lc.hh"
 
-void RegAllocVisitor(Module& m, Node& n, size_t curr_reg)
+void RegAllocVisitorInner(Module& m, Node& n, size_t curr_reg, Fn *f)
 {
 	switch (n.token)
 	{
 
+	// skip these
+	case T_TYPEDEC: {
+		break;
+	}
+
 	case T_FN: {
-		RegAllocVisitor(m, m.fns[n.val].type, 0);
+		f = &m.fns[n.val];
+		RegAllocVisitorInner(m, f->type, 0, f);
 
 		int reg_acc = 0;
 		for (auto& pair : m.fns[n.val].args)
-			RegAllocVisitor(m, pair.second, reg_acc++);
+			RegAllocVisitorInner(m, pair.second, reg_acc++, f);
 
-		RegAllocVisitor(m, n[1], curr_reg);
+		RegAllocVisitorInner(m, n[1], curr_reg, f);
+		break;
+	}
+
+	case T_ARGS: {
+		size_t reg_idx = 0;
+		for (auto& arg : f->args)
+			RegAllocVisitorInner(m, arg.second, reg_idx++, f);
 		break;
 	}
 
@@ -22,10 +35,23 @@ void RegAllocVisitor(Module& m, Node& n, size_t curr_reg)
 	case T_DIV:
 	case T_DDIV:
 	case T_MOD: {
-		RegAllocVisitor(m, n[0], curr_reg);
-		RegAllocVisitor(m, n[1], curr_reg + 1);
+		RegAllocVisitorInner(m, n[0], curr_reg, f);
+		RegAllocVisitorInner(m, n[1], curr_reg + 1, f);
 		n.reg_index = curr_reg;
 		n.reg_size = n[0].reg_size;
+		break;
+	}
+
+	case T_SYM: {
+		if (n.val == "Int") {
+			n.token = T_INT;
+			RegAllocVisitorInner(m, n, curr_reg, f);
+			return;
+		}
+
+		RegAllocVisitorInner(m, f->args[n.val], curr_reg, f);
+		n.reg_index = f->args[n.val].reg_index;
+		n.reg_size = f->args[n.val].reg_size;
 		break;
 	}
 
@@ -37,9 +63,15 @@ void RegAllocVisitor(Module& m, Node& n, size_t curr_reg)
 
 	default: {
 		for (auto& child : n)
-			RegAllocVisitor(m, child, curr_reg);
+			RegAllocVisitorInner(m, child, curr_reg, f);
 		break;
 	}
 
 	}
+}
+
+// wrapper
+void RegAllocVisitor(Module& m, Node& n)
+{
+	RegAllocVisitorInner(m, n, 0, NULL);
 }

@@ -5,12 +5,27 @@ void GenVisitor(Module& m, Node& n)
 	switch (n.token) {
 
 	case T_FN: {
+		// label
 		m.ins.push_back({ .type = Ins::IT_LABEL, .name = n.val });
+
+		// body
 		GenVisitor(m, n[1]);
+
+		// return
+		auto f = m.fns[n.val];
 		m.ins.push_back({ .type = Ins::IT_RET, .ops = {
-			{ .type = Ins::MT_REG, .index = n[0].reg_index, .size = n[0].reg_size },
+			{ .type = Ins::MT_REG, .index = f.type.reg_index, .size = f.type.reg_size },
 		}});
 		break;
+	}
+
+	case T_ARGS: {
+		for (auto& arg : n) {
+			m.ins.push_back({ .type = Ins::IT_MOV, .ops = {
+				{ .type = Ins::MT_REG, .index = arg.reg_index, .size = arg.reg_size },
+			}});
+			// TODO: move these to stack later
+		}
 	}
 
 	case T_ADD: {
