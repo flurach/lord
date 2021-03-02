@@ -12,15 +12,14 @@ void Fn::print(size_t i)
 	x = 0;
 	while (x++ < i)
 		putchar('\t');
-	std::cout << "locals:" << std::endl;
-	for (auto& pair : locals) {
+	std::cout << "args:" << std::endl;
+	for (auto& pair : args) {
 		x = 0;
 		while (x++ < i)
 			putchar('\t');
 		putchar('\t');
-		putchar('\t');
 
 		std::cout << pair.first << std::endl;
-		pair.second.print(i + 3);
+		pair.second.print(i + 2);
 	}
 }

@@ -161,8 +161,13 @@ Token Lexer::next()
 		val.push_back(ch());
 	}
 	else if (curr() == '-') {
-		token = T_SUB;
 		val.push_back(ch());
+		if (curr() == '>') {
+			token = T_ARROW;
+			val.push_back(ch());
+		} else {
+			token = T_SUB;
+		}
 	}
 	else if (curr() == '*') {
 		token = T_MUL;

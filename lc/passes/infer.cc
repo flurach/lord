@@ -6,7 +6,6 @@ Node *InferVisitor(Module& m, Node& n, Fn *f)
 	{
 
 	case T_FN: {
-		m.fns[n.val] = Fn();
 		f = &m.fns[n.val];
 		// TODO: visit arguments
 

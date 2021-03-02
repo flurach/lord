@@ -36,6 +36,7 @@
 	X(DOT)\
 	X(DDOT)\
 	X(PIPE)\
+	X(ARROW)\
 	\
 	/* punctuation */\
 	X(LPAR)\
@@ -68,6 +69,8 @@
 	/* AST specific */\
 	X(MODULE)\
 	X(STMTS)\
+	X(TYPEDEC)\
+	X(TYPEANNO)\
 	X(CALL)\
 	X(ARGS)\
 	\

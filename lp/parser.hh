@@ -9,6 +9,10 @@ std::optional<Node> parse_stmt(Lexer *lexer);
 
 std::optional<Node> parse_import(Lexer *lexer);
 
+std::optional<Node> parse_typedec(Lexer *lexer);
+std::optional<Node> parse_type(Lexer *lexer);
+std::optional<Node> parse_typeanno(Lexer *lexer);
+
 std::optional<Node> parse_fn(Lexer *lexer);
 std::optional<Node> parse_expr(Lexer *lexer);
 

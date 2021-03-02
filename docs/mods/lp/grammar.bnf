@@ -1,6 +1,8 @@
 # top level declarations
 <stmt> ::= <import>
+         | <typedec>
          | <fn>
+         | <SEMI>
          | <ERR>
 
 
@@ -8,12 +10,22 @@
 <import> ::= <IMPORT> <SYM>
 
 
+# types
+<typedec> ::= <SYM> ":" <type>
+
+<type> ::= <typeanno> "->" <type>
+         | <typeanno>
+
+<typeanno> ::= "(" <typeanno> ")"
+             | <SYM> {<SYM>}
+
+
 # functions
 <fn> ::= <SYM> {<SYM>} "=" <expr>
 
 <expr> ::= <if>
          | <let>
-	 | <pipe>
+         | <pipe>
 
 
 # conditional branching
