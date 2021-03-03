@@ -146,7 +146,7 @@ void compile_file(char *fpath)
 			for (auto& ins : m.ins)
 				std::cout << ins << std::endl;
 		} else if (backend == "gas-x86_64-intel") {
-			std::cout << GasX86_64_Intel::transpile(m.ins) << std::endl;
+			std::cout << GasX86_64_Intel::transpile(m) << std::endl;
 		}
 	} else {
 		puts("failed to open file");
@@ -177,7 +177,7 @@ void compile_repl()
 			for (auto& ins : m.ins)
 				std::cout << ins << std::endl;
 		} else if (backend == "gas-x86_64-intel") {
-			std::cout << GasX86_64_Intel::transpile(m.ins) << std::endl;
+			std::cout << GasX86_64_Intel::transpile(m) << std::endl;
 		}
 		free(src);
 	}

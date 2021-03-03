@@ -142,15 +142,20 @@ namespace GasX86_64_Intel {
 		return gen;
 	}
 
-	std::string transpile(std::vector<Ins::Ins> ins)
+	std::string transpile(Module& m)
 	{
-		std::string gen =
-			".global main\n"
+		std::string gen = "";
+
+		// NOTE: export all functions (for now)
+		for (auto& f : m.fns)
+			gen += ".global " + f.first + "\n";
+
+		gen +=
 			".section .text\n"
 			".intel_syntax noprefix\n\n"
 		;
 
-		for (auto& i : ins)
+		for (auto& i : m.ins)
 			gen += transpile_single(i);
 
 		return gen;
