@@ -1,4 +1,7 @@
-.global main
+.global test_add_sub
+.global test_all
+.global test_mul_div_mod
+.global test_mul_div_mod_2
 .section .text
 .intel_syntax noprefix
 

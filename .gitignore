@@ -9,4 +9,5 @@ tags
 
 # tests
 tests/**/*.out
+tests/**/program
 tests/pg/

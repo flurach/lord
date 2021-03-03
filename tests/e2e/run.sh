@@ -80,6 +80,25 @@ for d in tests/e2e/*/; do
 	fi
 done
 
+echo -e "\n => suite lc (gas-x86_64-intel + gcc)"
+for d in tests/e2e/*/; do
+	dir="${d}"
+
+	mv $dir/gas-x86_64-intel.out $dir/gas-x86_64-intel.s
+	gcc $dir/gas-x86_64-intel.s $dir/code.c -o $dir/program
+	mv $dir/gas-x86_64-intel.s $dir/gas-x86_64-intel.out
+
+	$dir/program > $dir/bin.out
+	cmp $dir/bin.exp $dir/bin.out > /dev/null
+
+	if [ $? -eq "0" ]; then
+		echo -e " -$GREEN passed$RESET $(basename $d)"
+	else
+		echo -e " -$RED failed$RESET $(basename $d)"
+		all="0"
+	fi
+done
+
 if [ $all -eq "1" ]; then
 	echo -e "$GREEN \nALL TESTS PASSED...$RESET"
 else

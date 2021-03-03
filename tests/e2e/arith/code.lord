@@ -10,8 +10,3 @@ test_mul_div_mod_2 =
 
 test_all =
 	1 + 2 - 3 * 4 // 5 % 6
-
-
-# TODO: add a main function to print the results
-# after implementing function calls (also a standard library)
-# + also compile, run & test the output of that code too

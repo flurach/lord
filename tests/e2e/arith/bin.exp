@@ -1,0 +1,4 @@
+test_add_sub = 0
+test_mul_div_mod = 0
+test_mul_div_mod_2 = 0
+test_all = 1
