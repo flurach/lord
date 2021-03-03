@@ -1,6 +1,6 @@
 #include "lc.hh"
 
-void FnVisitorPre(Module& m, Node& n, Fn *f = NULL)
+void FnVisitorPre(Module& m, Node& n, Fn *f)
 {
 	switch (n.token)
 	{
@@ -49,7 +49,7 @@ void FnVisitorPre(Module& m, Node& n, Fn *f = NULL)
 void FnVisitor(Module& m, Node& n)
 {
 	// firstly, collect functions
-	FnVisitorPre(m, n);
+	FnVisitorPre(m, n, NULL);
 
 	// then if a function has type declaration,
 	// copy them over to args, change return type etc.change return type etc.
