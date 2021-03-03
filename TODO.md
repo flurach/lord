@@ -8,6 +8,7 @@
 - [ ] refactor the parser (eol)
 
 - [X] fully implement arithmetic operators (for Ints)
+- [ ] update tests to include code generation
 - [ ] type inference
 - [ ] type checking
 - [ ] fully implement arithmetic operators (for Floats)
