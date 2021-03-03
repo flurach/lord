@@ -8,6 +8,7 @@ namespace Ins {
 		MT_REG,
 		MT_LABEL,
 		MT_LIT,
+		MT_STACK,
 	};
 
 	struct Mem {
@@ -22,6 +23,7 @@ namespace Ins {
 	// instructions
 	enum InsType {
 		IT_LABEL,
+		IT_ARG,
 		IT_ADD,
 		IT_SUB,
 		IT_MUL,
@@ -35,6 +37,7 @@ namespace Ins {
 	struct Ins {
 		InsType type;
 		std::string name;
+		size_t frame_size;
 		std::vector<Mem> ops;
 	};
 

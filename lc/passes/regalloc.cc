@@ -11,21 +11,21 @@ void RegAllocVisitorInner(Module& m, Node& n, size_t curr_reg, Fn *f)
 	}
 
 	case T_FN: {
+		// return
 		f = &m.fns[n.val];
 		RegAllocVisitorInner(m, f->type, 0, f);
 
+		// args
 		int reg_acc = 0;
-		for (auto& pair : m.fns[n.val].args)
-			RegAllocVisitorInner(m, pair.second, reg_acc++, f);
+		for (auto& pair : f->args) {
+			RegAllocVisitorInner(m, pair.second, reg_acc, f);
+			n[0][reg_acc].reg_index = pair.second.reg_index;
+			n[0][reg_acc].reg_size = pair.second.reg_size;
+			reg_acc++;
+		}
 
+		// body
 		RegAllocVisitorInner(m, n[1], curr_reg, f);
-		break;
-	}
-
-	case T_ARGS: {
-		size_t reg_idx = 0;
-		for (auto& arg : f->args)
-			RegAllocVisitorInner(m, arg.second, reg_idx++, f);
 		break;
 	}
 

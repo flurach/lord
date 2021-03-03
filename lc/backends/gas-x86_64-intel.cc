@@ -53,6 +53,9 @@ namespace GasX86_64_Intel {
 
 		case Ins::MT_LABEL:
 			return m.name;
+
+		case Ins::MT_STACK:
+			return "[%rsp - " + std::to_string(m.index) + "]";
 		}
 	}
 
@@ -64,6 +67,12 @@ namespace GasX86_64_Intel {
 		case Ins::IT_LABEL:
 			gen += i.name + ":\n";
 			break;
+
+		case Ins::IT_ARG: {
+			auto& m = i.ops[0];
+			gen += "\tmov " + mem(i.ops[1]) + ", " + arg_regs.find(m.size)->second[m.index] + "\n";
+			break;
+		}
 
 		case Ins::IT_CALL:
 			gen += "\tcall" + i.name + "\n";

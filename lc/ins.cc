@@ -14,6 +14,9 @@ std::ostream& operator<<(std::ostream& stream, const Ins::Mem& self)
 
         case Ins::MT_LABEL:
 		return stream << "." << self.value;
+
+	case Ins::MT_STACK:
+		return stream << "(%sp -" << self.index << ")";
         }
 }
 
@@ -23,7 +26,15 @@ std::ostream& operator<<(std::ostream& stream, const Ins::Ins& self)
 	case Ins::IT_LABEL:
 		return stream
 			<< "Label { "
-			<< "name = " << '"' << self.name << '"'
+			<< "name = " << '"' << self.name << "\" "
+			<< "frame_size = " << self.frame_size
+			<< " }";
+
+	case Ins::IT_ARG:
+		return stream
+			<< "Arg { "
+			<< "from = " << self.ops[0] << ", "
+			<< "to = " << self.ops[1]
 			<< " }";
 
 	case Ins::IT_ADD:
