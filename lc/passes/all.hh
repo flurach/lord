@@ -4,8 +4,9 @@
  * the function below does this for you
  */
 
-void pipe_all_passes(Module& m);
+bool pipe_all_passes(Module& m);
 
+bool SyntacticVisitor(Module &m, Node& n);
 void DesugarVisitor(Module& m, Node& n);
 void FnVisitor(Module& m, Node& n);
 Node *InferVisitor(Module& m, Node& n, Fn *f = NULL);

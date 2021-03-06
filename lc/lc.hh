@@ -10,6 +10,7 @@
 #include <ostream>
 #include "lp.hh"
 
+#include "err.hh"
 #include "entities/all.hh"
 #include "ins.hh"
 #include "module.hh"

@@ -88,9 +88,14 @@ void analyse_file(char *fpath)
 {
 	if (auto maybe_m = load_module(fpath)) {
 		auto m = *maybe_m;
-		pipe_all_passes(m);
 
-		std::cout << "AST:" << std::endl;
+		if (pipe_all_passes(m) == false) {
+			std::cout << "ERR:" << std::endl;
+			for (auto& err : m.errs)
+				print_err(m.src, err, 1);
+		}
+
+		std::cout << "\nAST:" << std::endl;
 		m.ast.print(1);
 
 		std::cout << "\nFNS:" << std::endl;
@@ -121,9 +126,14 @@ void analyse_repl()
 		m.src = src;
 		auto l = Lexer(m.src);
 		m.ast = *parse(&l);
-		pipe_all_passes(m);
 
-		std::cout << "AST:" << std::endl;
+		if (pipe_all_passes(m) == false) {
+			std::cout << "ERR:" << std::endl;
+			for (auto& err : m.errs)
+				print_err(m.src, err, 1);
+		}
+
+		std::cout << "\nAST:" << std::endl;
 		m.ast.print(1);
 
 		std::cout << "\nFNS:" << std::endl;
@@ -140,7 +150,11 @@ void compile_file(char *fpath)
 {
 	if (auto maybe_m = load_module(fpath)) {
 		auto m = *maybe_m;
-		pipe_all_passes(m);
+		if (pipe_all_passes(m) == false) {
+			for (auto& err : m.errs)
+				print_err(m.src, err);
+			return;
+		}
 
 		if (backend == "raw") {
 			for (auto& ins : m.ins)
@@ -171,7 +185,11 @@ void compile_repl()
 		m.src = src;
 		auto l = Lexer(m.src);
 		m.ast = *parse(&l);
-		pipe_all_passes(m);
+		if (pipe_all_passes(m) == false) {
+			for (auto& err : m.errs)
+				print_err(m.src, err);
+			return;
+		}
 
 		if (backend == "raw") {
 			for (auto& ins : m.ins)

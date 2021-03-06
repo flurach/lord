@@ -6,6 +6,8 @@ struct Module {
 	std::string src = "";
 	Node ast;
 
+	std::vector<Err> errs;
+
 	std::map<std::string, Fn> fns;
 
 	std::vector<Ins::Ins> ins;

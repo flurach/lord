@@ -1,3 +1,4 @@
+
 AST:
 	%r0(0) MODULE '' 0..0
 		%r0(0) FN 'test_add_sub' 9..21
